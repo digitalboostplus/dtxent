@@ -1,76 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DTX Entertainment Explorer</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
-  <header class="hero">
-    <div class="hero__overlay"></div>
-    <div class="hero__content">
-      <h1>Discover the Best of Dallas–Fort Worth</h1>
-      <p>Hand-curated venues, events, restaurants and nightlife in one place so you can make the most of every trip.</p>
-      <div class="hero__search">
-        <input id="searchInput" type="search" placeholder="Search for venues, events, cuisines, neighborhoods..." />
-        <button id="searchButton" type="button">Search</button>
-      </div>
-      <div class="hero__tags" id="trendingTags"></div>
-    </div>
-  </header>
-
-  <main>
-    <section class="filters">
-      <div class="filters__group">
-        <label for="categoryFilter" class="filters__label">Categories</label>
-        <div class="filters__chips" id="categoryFilter"></div>
-      </div>
-      <div class="filters__group">
-        <label for="ratingFilter" class="filters__label">Minimum Rating</label>
-        <div class="filters__rating">
-          <input type="range" id="ratingFilter" min="3" max="5" step="0.1" value="4" />
-          <span id="ratingValue">4.0+</span>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DTX Entertainment Explorer</title>
+    <meta
+      name="description"
+      content="Discover Dallas–Fort Worth experiences with curated guides, immersive visuals, and live filters."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles/globals.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <div class="hero__overlay"></div>
+      <div class="hero__canvas" aria-hidden="true"></div>
+      <div class="hero__content">
+        <h1 class="hero__heading">Discover the Best of Dallas–Fort Worth</h1>
+        <p>
+          Hand-curated venues, events, restaurants and nightlife in one place so you can make the most of every trip.
+        </p>
+        <div class="hero__search">
+          <input
+            type="search"
+            placeholder="Search for venues, events, cuisines, neighborhoods..."
+            aria-label="Search for experiences"
+            data-search-input
+          />
+          <button type="button" data-search-button>Search</button>
         </div>
+        <div class="hero__tags" role="list" data-trending-tags></div>
       </div>
-      <div class="filters__group">
-        <label for="neighborhoodFilter" class="filters__label">Neighborhood</label>
-        <select id="neighborhoodFilter">
-          <option value="all">All</option>
-        </select>
+    </header>
+
+    <main>
+      <section class="filters" aria-label="Filters">
+        <div class="filters__group">
+          <span class="filters__label">Categories</span>
+          <div class="filters__chips" data-category-container></div>
+        </div>
+
+        <div class="filters__group">
+          <label class="filters__label" for="ratingFilter">Minimum Rating</label>
+          <div class="filters__rating">
+            <input
+              id="ratingFilter"
+              type="range"
+              min="3"
+              max="5"
+              step="0.1"
+              value="4"
+              data-rating-input
+            />
+            <span id="ratingValue" data-rating-value>4.0+</span>
+          </div>
+        </div>
+
+        <div class="filters__group">
+          <label class="filters__label" for="neighborhoodFilter">Neighborhood</label>
+          <select id="neighborhoodFilter" data-neighborhood-select></select>
+        </div>
+      </section>
+
+      <section class="results" aria-live="polite">
+        <div class="results__summary" data-results-summary></div>
+        <div class="results__grid" data-results-grid></div>
+      </section>
+
+      <section class="highlights">
+        <h2>Curated itineraries</h2>
+        <div class="highlights__grid" data-highlights></div>
+      </section>
+
+      <section class="cta">
+        <h2>Plan unforgettable nights in DTX</h2>
+        <p>
+          Save your favorites, build itineraries in minutes, and unlock exclusive offers for the hottest events in the metroplex.
+        </p>
+        <button type="button">Request early access</button>
+      </section>
+    </main>
+
+    <footer>
+      <div class="footer__brand">DTX Entertainment Explorer</div>
+      <div class="footer__links">
+        <a href="#">Experiences</a>
+        <a href="#">Guides</a>
+        <a href="#">Contact</a>
       </div>
-    </section>
+      <p>&copy; <span data-current-year></span> DTX Entertainment. Crafted with love for Dallas–Fort Worth adventures.</p>
+    </footer>
 
-    <section class="results">
-      <div class="results__summary" id="resultsSummary"></div>
-      <div class="results__grid" id="resultsGrid"></div>
-    </section>
-
-    <section class="highlights" id="highlightsSection">
-      <h2>Plan an unforgettable stay</h2>
-      <div class="highlights__grid" id="highlightsGrid"></div>
-    </section>
-
-    <section class="cta">
-      <h2>Build your personal itinerary</h2>
-      <p>Save favorites, share plans with your travel group, and get real-time updates on upcoming events.</p>
-      <button type="button">Sign up for early access</button>
-    </section>
-  </main>
-
-  <footer>
-    <div class="footer__brand">DTX Entertainment</div>
-    <div class="footer__links">
-      <a href="#">About</a>
-      <a href="#">Contact</a>
-      <a href="#">Submit a Venue</a>
-    </div>
-    <p class="footer__copy">Curated by locals. Updated daily.</p>
-  </footer>
-
-  <script src="app.js" type="module"></script>
-</body>
+    <script type="module" src="./scripts/main.js"></script>
+  </body>
 </html>
