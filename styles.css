@@ -119,9 +119,9 @@ h3 {
 
 .text-gradient {
     background: linear-gradient(135deg,
-        var(--primary) 0%,
-        var(--secondary) 50%,
-        var(--primary) 100%);
+            var(--primary) 0%,
+            var(--secondary) 50%,
+            var(--primary) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -130,9 +130,12 @@ h3 {
 }
 
 @keyframes gradientShift {
-    0%, 100% {
+
+    0%,
+    100% {
         background-position: 0% center;
     }
+
     50% {
         background-position: 100% center;
     }
@@ -347,6 +350,7 @@ h3 {
         opacity: 0.3;
         transform: scale(1);
     }
+
     100% {
         opacity: 0.6;
         transform: scale(1.1);
@@ -385,6 +389,7 @@ h3 {
     0% {
         text-shadow: 0 0 80px rgba(255, 204, 0, 0.3);
     }
+
     100% {
         text-shadow: 0 0 100px rgba(255, 204, 0, 0.5);
     }
@@ -426,6 +431,7 @@ h3 {
     0% {
         transform: scale(1);
     }
+
     100% {
         transform: scale(1.1);
     }
@@ -520,8 +526,8 @@ h3 {
     right: 0;
     bottom: 0;
     background: linear-gradient(135deg,
-        rgba(255, 204, 0, 0.03) 0%,
-        transparent 50%);
+            rgba(255, 204, 0, 0.03) 0%,
+            transparent 50%);
     opacity: 0;
     transition: var(--transition);
     pointer-events: none;
@@ -718,9 +724,9 @@ h3 {
 /* Contact */
 .contact {
     background: linear-gradient(to bottom,
-        var(--dark-bg) 0%,
-        #1a1508 50%,
-        #2e260b 100%);
+            var(--dark-bg) 0%,
+            #1a1508 50%,
+            #2e260b 100%);
     position: relative;
     overflow: hidden;
 }
@@ -733,8 +739,8 @@ h3 {
     right: 0;
     height: 200px;
     background: radial-gradient(circle at 50% 0%,
-        rgba(255, 204, 0, 0.1),
-        transparent 70%);
+            rgba(255, 204, 0, 0.1),
+            transparent 70%);
     pointer-events: none;
 }
 
@@ -796,6 +802,33 @@ h3 {
 .footer {
     padding: 4rem 0;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Event Schedule */
+.event-schedule {
+    margin-bottom: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.schedule-item {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    gap: 1rem;
+}
+
+.schedule-item .time {
+    color: var(--primary);
+    font-weight: 700;
+    min-width: 80px;
+}
+
+.schedule-item .desc {
+    color: var(--text-main);
 }
 
 .footer-content {

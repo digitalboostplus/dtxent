@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Migration | DTXENT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <style>
+        .migration-container {
+            max-width: 600px;
+            margin: 4rem auto;
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .log-area {
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 1rem;
+            height: 300px;
+            overflow-y: auto;
+            margin: 1rem 0;
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+        .log-entry { margin-bottom: 0.5rem; }
+        .log-success { color: #4ade80; }
+        .log-warn { color: #fbbf24; }
+        .log-error { color: #f87171; }
+        .log-info { color: #60a5fa; }
+    </style>
+</head>
+<body class="admin-body">
+    <div class="migration-container">
+        <h1>Migration Tool</h1>
+        <p class="text-muted">Migrate local events from <code>events-data.js</code> to Firestore.</p>
+        
+        <div id="auth-status" style="margin: 1rem 0;">Checking Auth...</div>
+
+        <button id="start-btn" class="btn btn-primary btn-block" disabled>Start Migration</button>
+        
+        <div class="log-area" id="log-output">
+            <div class="log-entry">Ready to start...</div>
+        </div>
+
+        <div style="margin-top: 1rem; text-align: center;">
+            <a href="index.html" class="btn btn-secondary">Back to Admin</a>
+        </div>
+    </div>
+
+    <script type="module" src="seed.js"></script>
+</body>
+</html>

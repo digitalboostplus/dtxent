@@ -30,6 +30,16 @@ const emptyState = document.getElementById('empty-state');
 const addEventBtn = document.getElementById('add-event-btn');
 const addFirstEventBtn = document.getElementById('add-first-event-btn');
 
+// Schedule Elements
+const scheduleContainer = document.getElementById('schedule-container');
+const addScheduleBtn = document.getElementById('add-schedule-btn');
+
+// Image Type Elements
+const imageTypeRadios = document.getElementsByName('imageType');
+const externalUrlInput = document.getElementById('externalImageUrl');
+const externalImagePreview = document.getElementById('external-image-preview');
+const imageUrlInputContainer = document.getElementById('image-url-input');
+
 // Modal Elements
 const eventModal = document.getElementById('event-modal');
 const modalTitle = document.getElementById('modal-title');
@@ -109,7 +119,33 @@ function setupEventListeners() {
     imageUploadArea.addEventListener('click', () => imageInput.click());
     imageInput.addEventListener('change', handleImageSelect);
     imageUploadArea.addEventListener('dragover', handleDragOver);
+    imageUploadArea.addEventListener('dragover', handleDragOver);
     imageUploadArea.addEventListener('drop', handleDrop);
+
+    // Schedule handling
+    addScheduleBtn.addEventListener('click', () => addScheduleItem());
+    scheduleContainer.addEventListener('click', (e) => {
+        if (e.target.classList.contains('btn-remove-schedule')) {
+            e.target.parentElement.remove();
+        }
+    });
+
+    // Image Type Toggle
+    imageTypeRadios.forEach(radio => {
+        radio.addEventListener('change', (e) => toggleImageType(e.target.value));
+    });
+
+    // External Image Preview
+    externalUrlInput.addEventListener('input', (e) => {
+        const url = e.target.value;
+        if (url) {
+            externalImagePreview.src = url;
+            externalImagePreview.style.display = 'block';
+            externalImagePreview.classList.add('visible');
+        } else {
+            externalImagePreview.style.display = 'none';
+        }
+    });
 
     // Delete modal
     deleteCancel.addEventListener('click', closeDeleteModal);
@@ -227,10 +263,46 @@ function createEventCard(event) {
 }
 
 // Modal Functions
+selectedImageFile = null;
+eventModal.classList.add('active');
+}
+
+function toggleImageType(type) {
+    if (type === 'upload') {
+        imageUploadArea.style.display = 'block';
+        imageUrlInputContainer.style.display = 'none';
+    } else {
+        imageUploadArea.style.display = 'none';
+        imageUrlInputContainer.style.display = 'block';
+    }
+}
+
+function addScheduleItem(time = '', description = '') {
+    const div = document.createElement('div');
+    div.className = 'schedule-item-row';
+    div.innerHTML = `
+        <input type="text" placeholder="Time" value="${time}" class="schedule-time" aria-label="Time">
+        <input type="text" placeholder="Description" value="${description}" class="schedule-desc" aria-label="Description">
+        <button type="button" class="btn-remove-schedule" title="Remove Item">×</button>
+    `;
+    scheduleContainer.appendChild(div);
+}
+
 function openModal(event = null) {
     editingEventId = event?.id || null;
     modalTitle.textContent = event ? 'Edit Event' : 'Add Event';
     btnText.textContent = event ? 'Update Event' : 'Save Event';
+
+    // Reset UI
+    scheduleContainer.innerHTML = '';
+
+    // Determine Image Mode
+    const isExternal = event?.imageUrl && !event.imagePath; // formatting check
+    const mode = isExternal ? 'url' : 'upload';
+
+    // Set Radio
+    Array.from(imageTypeRadios).find(r => r.value === mode).checked = true;
+    toggleImageType(mode);
 
     if (event) {
         // Populate form with event data
@@ -244,14 +316,23 @@ function openModal(event = null) {
         document.getElementById('imageAlt').value = event.imageAlt || '';
         document.getElementById('isPublished').checked = event.isPublished !== false;
 
+        // Schedule
+        if (event.schedule && Array.isArray(event.schedule)) {
+            event.schedule.forEach(item => addScheduleItem(item.time, item.description));
+        }
+
         // Handle date
         if (event.eventDate) {
             const date = event.eventDate.toDate ? event.eventDate.toDate() : new Date(event.eventDate);
             document.getElementById('eventDate').value = date.toISOString().split('T')[0];
         }
 
-        // Show existing image
-        if (event.imageUrl) {
+        // Show image
+        if (mode === 'url') {
+            externalUrlInput.value = event.imageUrl;
+            externalImagePreview.src = event.imageUrl;
+            externalImagePreview.style.display = 'block';
+        } else if (event.imageUrl) {
             imagePreview.src = event.imageUrl;
             imagePreview.classList.add('visible');
             uploadPlaceholder.style.display = 'none';
@@ -261,6 +342,9 @@ function openModal(event = null) {
         eventForm.reset();
         document.getElementById('isPublished').checked = true;
         resetImageUpload();
+        // Reset to upload mode default
+        Array.from(imageTypeRadios).find(r => r.value === 'upload').checked = true;
+        toggleImageType('upload');
     }
 
     selectedImageFile = null;
@@ -346,9 +430,18 @@ async function handleSubmit(e) {
     e.preventDefault();
 
     // Validate image for new events
-    if (!editingEventId && !selectedImageFile) {
-        showToast('Please select an image for the event.', 'error');
-        return;
+    const imageMode = document.querySelector('input[name="imageType"]:checked').value;
+    const externalUrl = externalUrlInput.value.trim();
+
+    if (!editingEventId) {
+        if (imageMode === 'upload' && !selectedImageFile) {
+            showToast('Please select an image for the event.', 'error');
+            return;
+        }
+        if (imageMode === 'url' && !externalUrl) {
+            showToast('Please enter an image URL.', 'error');
+            return;
+        }
     }
 
     setSubmitLoading(true);
@@ -358,15 +451,29 @@ async function handleSubmit(e) {
         let imageUrl = null;
         let imagePath = null;
 
-        // Upload image if selected
-        if (selectedImageFile) {
+        // Determine Image Logic
+        if (imageMode === 'upload' && selectedImageFile) {
+            // New File Upload
             const uploadResult = await uploadImage(selectedImageFile);
             imageUrl = uploadResult.url;
             imagePath = uploadResult.path;
+        } else if (imageMode === 'url') {
+            // External URL
+            imageUrl = externalUrl;
+            imagePath = null; // No internal path
+        } else if (editingEventId) {
+            // Keep existing image if no change
+            // This logic is handled in updateEvent mostly, but we need to pass current values?
+            // Actually createEvent/updateEvent need the explicit new values.
+            // If editing and no new file selected in upload mode, we don't overwrite imageUrl/imagePath unless switching to URL.
+            // We need to be careful not to wipe existing image if just editing text.
         }
 
         if (editingEventId) {
-            await updateEvent(editingEventId, formData, imageUrl, imagePath);
+            // If we are editing, and we switched to URL, we pass that.
+            // If we stayed on Uppload and selected new file, we pass that.
+            // If we stayed on Upload and selected nothing, imageUrl is null here.
+            await updateEvent(editingEventId, formData, imageUrl, imagePath, imageMode);
             showToast('Event updated successfully!', 'success');
         } else {
             await createEvent(formData, imageUrl, imagePath);
@@ -386,6 +493,16 @@ async function handleSubmit(e) {
 function getFormData() {
     const eventDate = new Date(document.getElementById('eventDate').value);
 
+    // Collect Schedule
+    const scheduleItems = [];
+    document.querySelectorAll('.schedule-item-row').forEach(row => {
+        const time = row.querySelector('.schedule-time').value.trim();
+        const desc = row.querySelector('.schedule-desc').value.trim();
+        if (time && desc) {
+            scheduleItems.push({ time, description: desc });
+        }
+    });
+
     return {
         artistName: document.getElementById('artistName').value.trim(),
         eventName: document.getElementById('eventName').value.trim(),
@@ -400,7 +517,8 @@ function getFormData() {
         ticketUrl: document.getElementById('ticketUrl').value.trim(),
         imageAlt: document.getElementById('imageAlt').value.trim() ||
             `${document.getElementById('artistName').value.trim()} - ${document.getElementById('eventName').value.trim()}`,
-        isPublished: document.getElementById('isPublished').checked
+        isPublished: document.getElementById('isPublished').checked,
+        schedule: scheduleItems
     };
 }
 
@@ -425,17 +543,22 @@ async function createEvent(formData, imageUrl, imagePath) {
     await addDoc(collection(db, 'events'), eventDoc);
 }
 
-async function updateEvent(eventId, formData, imageUrl, imagePath) {
+async function updateEvent(eventId, formData, imageUrl, imagePath, imageMode) {
     const eventRef = doc(db, 'events', eventId);
     const updateData = {
         ...formData,
         updatedAt: serverTimestamp()
     };
 
-    // If new image uploaded, delete old one and update URLs
-    if (imageUrl && imagePath) {
+    // If new image (either URL or Upload)
+    if (imageUrl) {
         const oldEvent = events.find(e => e.id === eventId);
-        if (oldEvent?.imagePath) {
+
+        // If we are replacing an existing internal image file with ANYTHING (new file or URL)
+        // we should probably delete the old file to save space, only if we are sure.
+        // Current logic: IF we have a NEW imageUrl, we update.
+
+        if (oldEvent?.imagePath && (imagePath || imageMode === 'url')) {
             try {
                 const oldImageRef = ref(storage, oldEvent.imagePath);
                 await deleteObject(oldImageRef);
@@ -443,8 +566,11 @@ async function updateEvent(eventId, formData, imageUrl, imagePath) {
                 console.warn('Could not delete old image:', e);
             }
         }
+
         updateData.imageUrl = imageUrl;
-        updateData.imagePath = imagePath;
+        // If mode is URL, imagePath should be null (or Removed).
+        // If mode is Upload, imagePath is set.
+        updateData.imagePath = imagePath || null;
     }
 
     await updateDoc(eventRef, updateData);

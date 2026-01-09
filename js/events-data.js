@@ -130,5 +130,21 @@ export const LOCAL_EVENTS = [
         imageName: "Chingos Love Laughter.jpg",
         ticketUrl: "https://tixplug.com/shop/chingos-love-laughter-comedy-show/",
         isPublished: true
+    },
+    {
+        artistName: "Hooked Up Productions Presents: Third Coast Bucking",
+        eventName: "Live Bullriding & Concert",
+        eventDate: "2026-02-07T15:30:00",
+        venueName: "Fort Bend County Fairgrounds",
+        venueCity: "Rosenberg",
+        venueState: "TX",
+        imageUrl: "https://tixplug.com/shop/chingos-love-laughter-comedy-show/",
+        ticketUrl: "https://tixplug.com/shop/chingos-love-laughter-comedy-show/#tickets",
+        schedule: [
+            { time: "3:30 PM", description: "Gates Open" },
+            { time: "6:00 PM", description: "Bullriding" },
+            { time: "8:00 PM", description: "Concert" }
+        ],
+        isPublished: true
     }
 ];

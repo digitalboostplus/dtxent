@@ -16,7 +16,7 @@ LOCAL_EVENTS.forEach(event => {
         console.error('Error: Missing artistName');
         errors++;
     }
-    
+
     // Check Date format
     const date = new Date(event.eventDate);
     if (isNaN(date.getTime())) {
@@ -30,8 +30,11 @@ LOCAL_EVENTS.forEach(event => {
         if (!fs.existsSync(imagePath)) {
             console.error(`Error: Image not found for ${event.artistName}: ${event.imageName}`);
             errors++;
-        } else {
-            // console.log(`OK: Image found for ${event.artistName}`);
+        }
+    } else if (event.imageUrl) {
+        // External URL, assume valid or check format if needed
+        if (!event.imageUrl.startsWith('http')) {
+            console.warn(`Warning: Invalid URL format for ${event.artistName}: ${event.imageUrl}`);
         }
     } else {
         console.warn(`Warning: No image specified for ${event.artistName}`);

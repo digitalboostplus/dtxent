@@ -22,9 +22,19 @@ export async function loadPublicEvents() {
 
         // Process matches and unmatched
         const processedEvents = LOCAL_EVENTS.map(event => {
-            const hasImage = event.imageName && event.imageName.length > 0;
-            if (!hasImage) {
+            const hasLocalImage = event.imageName && event.imageName.length > 0;
+            const hasExternalImage = event.imageUrl && event.imageUrl.length > 0;
+
+            if (!hasLocalImage && !hasExternalImage) {
                 console.warn(`[Event Warning] Unmatched image for show: ${event.artistName}`);
+            }
+
+            // Determine final image URL
+            let finalImageUrl = 'assets/dtxent-logo.png';
+            if (hasExternalImage) {
+                finalImageUrl = event.imageUrl;
+            } else if (hasLocalImage) {
+                finalImageUrl = `assets/${event.imageName}`;
             }
 
             // Format dates
@@ -35,7 +45,7 @@ export async function loadPublicEvents() {
             return {
                 ...event,
                 id: `local-${event.artistName.replace(/\s+/g, '-').toLowerCase()}`,
-                imageUrl: hasImage ? `assets/${event.imageName}` : 'assets/dtxent-logo.png',
+                imageUrl: finalImageUrl,
                 displayMonth: monthShort.toUpperCase(),
                 displayDay: dayNum
             };
@@ -92,6 +102,18 @@ function createEventCardHTML(event) {
                 <span class="event-venue">${escapeHtml(venueFullName)}</span>
                 <h3 class="event-artist">${escapeHtml(event.artistName)}</h3>
                 <p class="event-info">${escapeHtml(event.eventName)}</p>
+                
+                ${event.schedule ? `
+                <div class="event-schedule">
+                    ${event.schedule.map(item => `
+                        <div class="schedule-item">
+                            <span class="time">${escapeHtml(item.time)}</span>
+                            <span class="desc">${escapeHtml(item.description)}</span>
+                        </div>
+                    `).join('')}
+                </div>
+                ` : ''}
+
                 <a href="${escapeHtml(event.ticketUrl)}"
                    class="btn btn-primary btn-block"
                    target="_blank"

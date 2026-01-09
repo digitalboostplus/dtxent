@@ -2,13 +2,39 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Allow public read access to events
+    
+    // Validates an Event document
+    function isValidEvent() {
+      let data = request.resource.data;
+      return 
+        // Required fields
+        data.keys().hasAll(['artistName', 'eventName', 'eventDate', 'venueName', 'isPublished']) &&
+        data.artistName is string &&
+        data.eventName is string &&
+        data.eventDate is timestamp &&
+        data.venueName is string &&
+        data.isPublished is bool &&
+        
+        // Optional: Schedule (List of Maps)
+        (!data.keys().hasAny(['schedule']) || (
+          data.schedule is list && 
+          // Check first few items (Firestore rules can't iterate arbitrary lists easily, but we can check type)
+          // Ideally validation happens in app, but we verify it's a list here.
+          true
+        )) &&
+        
+        // Optional: External Image URL or Storage Path
+        (!data.keys().hasAny(['imageUrl']) || data.imageUrl is string || data.imageUrl == null) &&
+        (!data.keys().hasAny(['imagePath']) || data.imagePath is string || data.imagePath == null);
+    }
+
     match /events/{event} {
       allow read: if true;
-      allow write: if request.auth != null; // Only allow writes from authenticated users (admins)
+      allow create: if request.auth != null && isValidEvent();
+      allow update: if request.auth != null && isValidEvent();
+      allow delete: if request.auth != null;
     }
     
-    // Default deny for everything else
     match /{document=**} {
       allow read, write: if false;
     }
