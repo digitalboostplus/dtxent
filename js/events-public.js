@@ -1,8 +1,9 @@
 // Public Events Loader - Fetches and displays events on the landing page
-import { LOCAL_EVENTS } from './events-data.js';
+import { db } from './firebase-config.js';
+import { collection, getDocs, query, where, orderBy, Timestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
 /**
- * Load and display published events (Locally Mocked)
+ * Load and display published events (From Firestore)
  */
 export async function loadPublicEvents() {
     const eventsGrid = document.querySelector('.events-grid');
@@ -17,11 +18,35 @@ export async function loadPublicEvents() {
     `;
 
     try {
-        // Simulate network delay
-        await new Promise(resolve => setTimeout(resolve, 800));
+        // Fetch events from Firestore
+        const q = query(
+            collection(db, 'events'),
+            where('isPublished', '==', true),
+            orderBy('eventDate', 'asc')
+        );
 
-        // Process matches and unmatched
-        const processedEvents = LOCAL_EVENTS.map(event => {
+        const querySnapshot = await getDocs(q);
+        const processedEvents = [];
+
+        querySnapshot.forEach((doc) => {
+            const event = doc.data();
+            // Convert Firestore Timestamp to Date string/object for compatibility
+            let eventDate = event.eventDate;
+            if (eventDate instanceof Timestamp) {
+                eventDate = eventDate.toDate();
+            } else if (eventDate && eventDate.seconds) { // Handle potential plain object timestamp
+                eventDate = new Date(eventDate.seconds * 1000);
+            }
+
+            processedEvents.push({
+                ...event,
+                id: doc.id,
+                eventDate: eventDate // Normalize date
+            });
+        });
+
+        // Loop for image logic matches original structure
+        const displayEvents = processedEvents.map(event => {
             const hasLocalImage = event.imageName && event.imageName.length > 0;
             const hasExternalImage = event.imageUrl && event.imageUrl.length > 0;
 
@@ -34,7 +59,16 @@ export async function loadPublicEvents() {
             if (hasExternalImage) {
                 finalImageUrl = event.imageUrl;
             } else if (hasLocalImage) {
-                finalImageUrl = `assets/${event.imageName}`;
+                // For local images, if it starts with http, use it. 
+                // If it's just a filename, prepend assets/
+                if (event.imageName.startsWith('http')) {
+                    finalImageUrl = event.imageName;
+                } else {
+                    finalImageUrl = `assets/${event.imageName}`;
+                }
+            } else if (event.imageUrl && event.imageUrl.startsWith('../assets/')) {
+                // Handle migration case where we stored '../assets/...' in Firestore
+                finalImageUrl = event.imageUrl.replace('../', '');
             }
 
             // Format dates
@@ -44,14 +78,14 @@ export async function loadPublicEvents() {
 
             return {
                 ...event,
-                id: `local-${event.artistName.replace(/\s+/g, '-').toLowerCase()}`,
+                id: event.id, // Use ID from processed event object
                 imageUrl: finalImageUrl,
                 displayMonth: monthShort.toUpperCase(),
                 displayDay: dayNum
             };
         });
 
-        if (processedEvents.length === 0) {
+        if (displayEvents.length === 0) {
             eventsGrid.innerHTML = `
                 <div class="events-empty">
                     <p>No upcoming events at this time. Check back soon!</p>
@@ -61,10 +95,10 @@ export async function loadPublicEvents() {
         }
 
         // Render event cards
-        eventsGrid.innerHTML = processedEvents.map(event => createEventCardHTML(event)).join('');
+        eventsGrid.innerHTML = displayEvents.map(event => createEventCardHTML(event)).join('');
 
         // Generate and inject Schema.org data
-        injectSchemaOrg(processedEvents);
+        injectSchemaOrg(displayEvents);
 
         // Re-initialize animations for dynamically loaded cards
         initEventAnimations();

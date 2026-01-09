@@ -1,3 +1,7 @@
+/**
+ * @deprecated This file is no longer the primary source of truth for events.
+ * Events are now fetched from Firestore via js/events-public.js.
+ */
 export const LOCAL_EVENTS = [
     {
         artistName: "Jeff Dunham",
