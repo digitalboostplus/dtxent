@@ -127,7 +127,7 @@ export const LOCAL_EVENTS = [
         venueName: "Payne Arena",
         venueCity: "Hidalgo",
         venueState: "TX",
-        imageName: "1000266604-scaled.jpg",
+        imageName: "Chingos Love Laughter.jpg",
         ticketUrl: "https://tixplug.com/shop/chingos-love-laughter-comedy-show/",
         isPublished: true
     }
