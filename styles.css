@@ -1,16 +1,47 @@
 :root {
+    /* Primary Brand Colors */
     --primary: #FFCC00;
-    /* Yellowish Gold */
+    --primary-hover: #FFD633;
+    --primary-active: #E6B800;
     --primary-glow: rgba(255, 204, 0, 0.4);
+
+    /* Secondary Colors */
     --secondary: #FFFAB3;
-    /* Light Gold/Cream */
     --secondary-glow: rgba(255, 250, 179, 0.4);
+
+    /* Accent Colors */
+    --accent-blue: #00D9FF;
+    --accent-purple: #9747FF;
+
+    /* Semantic Colors */
+    --success: #22C55E;
+    --warning: #F59E0B;
+    --error: #EF4444;
+    --info: #3B82F6;
+
+    /* Surface Colors */
     --dark-bg: #0a0a0a;
     --card-bg: #161616;
+    --surface-elevated: #242424;
+    --surface-hover: #2e2e2e;
+
+    /* Text Colors */
     --text-main: #ffffff;
     --text-muted: #b8b8b8;
+
+    /* Gradient Presets */
+    --gradient-gold: linear-gradient(135deg, #FFCC00 0%, #FFD633 50%, #FFCC00 100%);
+    --gradient-glow: radial-gradient(circle at center, rgba(255, 204, 0, 0.2), transparent 70%);
+
+    /* Typography */
     --font-main: 'Outfit', sans-serif;
+
+    /* Transitions */
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: all 0.15s ease;
+    --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Spacing */
     --spacing-xs: 0.5rem;
     --spacing-sm: 0.75rem;
     --spacing-md: 1rem;
@@ -925,4 +956,351 @@ h3 {
         gap: 2rem;
         text-align: center;
     }
+}
+
+/* ========================================
+   SKELETON LOADING STATES
+   ======================================== */
+.skeleton-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.skeleton-card {
+    background: var(--card-bg);
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.skeleton-image {
+    height: 280px;
+    background: linear-gradient(90deg, #1a1a1a 0%, #242424 50%, #1a1a1a 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.skeleton-content {
+    padding: 2rem;
+}
+
+.skeleton-line {
+    height: 14px;
+    background: linear-gradient(90deg, #1a1a1a 0%, #242424 50%, #1a1a1a 100%);
+    background-size: 200% 100%;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.skeleton-line-sm { width: 60%; }
+.skeleton-line-lg { width: 80%; height: 24px; }
+.skeleton-line-md { width: 70%; }
+
+.skeleton-button {
+    height: 48px;
+    background: linear-gradient(90deg, #1a1a1a 0%, #242424 50%, #1a1a1a 100%);
+    background-size: 200% 100%;
+    border-radius: 50px;
+    margin-top: 1.5rem;
+    animation: shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* ========================================
+   BUTTON LOADING STATE
+   ======================================== */
+.btn.loading {
+    position: relative;
+    color: transparent;
+    pointer-events: none;
+}
+
+.btn.loading::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 2px solid transparent;
+    border-top-color: #000;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Button with icon */
+.btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.btn-icon svg {
+    width: 18px;
+    height: 18px;
+    transition: transform 0.3s ease;
+}
+
+.btn-icon:hover svg {
+    transform: translateX(4px);
+}
+
+/* External link indicator */
+.btn[target="_blank"]::after {
+    content: '↗';
+    margin-left: 0.5rem;
+    display: inline-block;
+    font-size: 0.9em;
+    transition: transform 0.3s ease;
+}
+
+.btn[target="_blank"]:hover::after {
+    transform: translate(2px, -2px);
+}
+
+/* ========================================
+   MOBILE MENU BACKDROP
+   ======================================== */
+.mobile-menu-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 999;
+}
+
+.mobile-menu-backdrop.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Staggered menu animation */
+.nav-links.active li {
+    animation: slideInRight 0.4s ease backwards;
+}
+
+.nav-links.active li:nth-child(1) { animation-delay: 0.1s; }
+.nav-links.active li:nth-child(2) { animation-delay: 0.15s; }
+.nav-links.active li:nth-child(3) { animation-delay: 0.2s; }
+.nav-links.active li:nth-child(4) { animation-delay: 0.25s; }
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* ========================================
+   ENHANCED EVENT CARD WITH GRADIENT BORDER
+   ======================================== */
+.event-card .card-glow {
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(
+        45deg,
+        transparent 0%,
+        rgba(255, 204, 0, 0.4) 25%,
+        transparent 50%,
+        rgba(255, 204, 0, 0.4) 75%,
+        transparent 100%
+    );
+    background-size: 200% 200%;
+    border-radius: 20px;
+    opacity: 0;
+    z-index: -1;
+    animation: borderRotate 3s linear infinite paused;
+    transition: opacity 0.3s ease;
+}
+
+.event-card:hover .card-glow {
+    opacity: 1;
+    animation-play-state: running;
+}
+
+@keyframes borderRotate {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+}
+
+/* ========================================
+   COUNTDOWN TIMER
+   ======================================== */
+.event-countdown {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    padding: 0.75rem;
+    background: rgba(255, 204, 0, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 204, 0, 0.2);
+}
+
+.countdown-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+}
+
+.countdown-value {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--primary);
+    line-height: 1;
+}
+
+.countdown-label {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 0.25rem;
+}
+
+.event-starting {
+    color: var(--success);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* ========================================
+   SOCIAL MEDIA ICONS
+   ======================================== */
+.footer-social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: var(--transition);
+}
+
+.footer-social a:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+    transform: translateY(-3px);
+}
+
+.footer-social a:hover svg {
+    fill: #000;
+}
+
+.footer-social svg {
+    width: 20px;
+    height: 20px;
+    fill: var(--text-muted);
+    transition: var(--transition);
+}
+
+/* ========================================
+   THREE.JS HERO CANVAS
+   ======================================== */
+.hero-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+}
+
+/* ========================================
+   REDUCED MOTION SUPPORT
+   ======================================== */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .event-card:hover {
+        transform: none;
+    }
+
+    .btn:hover {
+        transform: none;
+    }
+
+    .hero-canvas {
+        display: none;
+    }
+
+    .video-bg {
+        animation: none;
+    }
+
+    .card-glow {
+        display: none;
+    }
+}
+
+/* ========================================
+   GSAP ANIMATION PREP CLASSES
+   ======================================== */
+.gsap-hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.gsap-reveal {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Split text character styling */
+.char {
+    display: inline-block;
+}
+
+/* ========================================
+   FORM ENHANCEMENTS
+   ======================================== */
+.form-field {
+    position: relative;
+}
+
+.form-hint {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+}
+
+.form-error {
+    font-size: 0.85rem;
+    color: var(--error);
+    margin-top: 0.5rem;
+    display: none;
+}
+
+.form-error.visible {
+    display: block;
+}
+
+input:invalid:not(:placeholder-shown) + .form-error {
+    display: block;
 }

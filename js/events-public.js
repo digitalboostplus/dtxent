@@ -17,11 +17,20 @@ export function loadPublicEvents() {
         unsubscribeEvents();
     }
 
-    // Show loading state
+    // Show skeleton loading state
     eventsGrid.innerHTML = `
-        <div class="events-loading">
-            <div class="loading-spinner"></div>
-            <p>Loading events...</p>
+        <div class="skeleton-grid">
+            ${[1, 2, 3].map(() => `
+                <div class="skeleton-card" role="article" aria-label="Loading event">
+                    <div class="skeleton-image"></div>
+                    <div class="skeleton-content">
+                        <div class="skeleton-line skeleton-line-sm"></div>
+                        <div class="skeleton-line skeleton-line-lg"></div>
+                        <div class="skeleton-line skeleton-line-md"></div>
+                        <div class="skeleton-button"></div>
+                    </div>
+                </div>
+            `).join('')}
         </div>
     `;
 
@@ -109,6 +118,12 @@ export function loadPublicEvents() {
         // Re-initialize animations for dynamically loaded cards
         initEventAnimations();
 
+        // Initialize countdown timers
+        initCountdownTimers();
+
+        // Announce to screen readers
+        announceEventsLoaded(displayEvents.length);
+
     }, (error) => {
         console.error('Error loading events:', error);
         eventsGrid.innerHTML = `
@@ -136,9 +151,13 @@ function createEventCardHTML(event) {
     const imageUrl = event.imageUrl || 'assets/dtxent-logo.png';
     const imageAlt = event.imageAlt || `${event.artistName} - ${event.eventName}`;
     const venueFullName = event.venueFullName || `${event.venueName}, ${event.venueCity}, ${event.venueState}`;
+    const eventDateISO = event.eventDate instanceof Date
+        ? event.eventDate.toISOString()
+        : new Date(event.eventDate).toISOString();
 
     return `
         <article class="event-card" role="listitem">
+            <div class="card-glow"></div>
             <div class="event-image">
                 <div class="event-date">
                     <span class="month">${escapeHtml(event.displayMonth)}</span>
@@ -152,8 +171,23 @@ function createEventCardHTML(event) {
                 <span class="event-venue">${escapeHtml(venueFullName)}</span>
                 <h3 class="event-artist">${escapeHtml(event.artistName)}</h3>
                 <p class="event-info">${escapeHtml(event.eventName)}</p>
-                
-                ${event.schedule ? `
+
+                <div class="event-countdown" data-date="${eventDateISO}">
+                    <div class="countdown-item">
+                        <span class="countdown-value days">--</span>
+                        <span class="countdown-label">Days</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-value hours">--</span>
+                        <span class="countdown-label">Hours</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-value mins">--</span>
+                        <span class="countdown-label">Mins</span>
+                    </div>
+                </div>
+
+                ${event.schedule && event.schedule.length > 0 ? `
                 <div class="event-schedule">
                     ${event.schedule.map(item => `
                         <div class="schedule-item">
@@ -165,9 +199,11 @@ function createEventCardHTML(event) {
                 ` : ''}
 
                 <a href="${escapeHtml(event.ticketUrl)}"
-                   class="btn btn-primary btn-block"
+                   class="btn btn-primary btn-block btn-icon"
                    target="_blank"
-                   rel="noopener noreferrer">Get Tickets</a>
+                   rel="noopener noreferrer">
+                   Get Tickets
+                </a>
             </div>
         </article>
     `;
@@ -266,6 +302,59 @@ function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
+}
+
+/**
+ * Initialize and update countdown timers
+ */
+let countdownInterval = null;
+
+function initCountdownTimers() {
+    // Clear existing interval
+    if (countdownInterval) {
+        clearInterval(countdownInterval);
+    }
+
+    const updateAllCountdowns = () => {
+        document.querySelectorAll('.event-countdown').forEach(countdown => {
+            const eventDate = new Date(countdown.dataset.date).getTime();
+            const now = Date.now();
+            const distance = eventDate - now;
+
+            if (distance < 0) {
+                countdown.innerHTML = '<span class="event-starting">Event Started!</span>';
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const mins = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+
+            const daysEl = countdown.querySelector('.days');
+            const hoursEl = countdown.querySelector('.hours');
+            const minsEl = countdown.querySelector('.mins');
+
+            if (daysEl) daysEl.textContent = String(days).padStart(2, '0');
+            if (hoursEl) hoursEl.textContent = String(hours).padStart(2, '0');
+            if (minsEl) minsEl.textContent = String(mins).padStart(2, '0');
+        });
+    };
+
+    // Initial update
+    updateAllCountdowns();
+
+    // Update every minute
+    countdownInterval = setInterval(updateAllCountdowns, 60000);
+}
+
+/**
+ * Announce events loaded to screen readers
+ */
+function announceEventsLoaded(count) {
+    const status = document.getElementById('events-status');
+    if (status) {
+        status.textContent = `${count} upcoming events loaded`;
+    }
 }
 
 // Auto-initialize when DOM is ready
