@@ -2,11 +2,11 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    
+
     // Validates an Event document
     function isValidEvent() {
       let data = request.resource.data;
-      return 
+      return
         // Required fields
         data.keys().hasAll(['artistName', 'eventName', 'eventDate', 'venueName', 'isPublished']) &&
         data.artistName is string &&
@@ -14,27 +14,50 @@ service cloud.firestore {
         data.eventDate is timestamp &&
         data.venueName is string &&
         data.isPublished is bool &&
-        
+
         // Optional: Schedule (List of Maps)
         (!data.keys().hasAny(['schedule']) || (
-          data.schedule is list && 
-          // Check first few items (Firestore rules can't iterate arbitrary lists easily, but we can check type)
-          // Ideally validation happens in app, but we verify it's a list here.
+          data.schedule is list &&
           true
         )) &&
-        
+
         // Optional: External Image URL or Storage Path
         (!data.keys().hasAny(['imageUrl']) || data.imageUrl is string || data.imageUrl == null) &&
         (!data.keys().hasAny(['imagePath']) || data.imagePath is string || data.imagePath == null);
     }
 
+    // Validates a Newsletter subscription document
+    function isValidNewsletterSubscription() {
+      let data = request.resource.data;
+      return
+        data.keys().hasAll(['email', 'subscribedAt', 'status']) &&
+        data.email is string &&
+        data.email.size() > 5 &&
+        data.email.size() < 255 &&
+        data.status is string &&
+        data.status in ['active', 'unsubscribed'];
+    }
+
+    // Events collection
     match /events/{event} {
       allow read: if true;
       allow create: if request.auth != null && isValidEvent();
       allow update: if request.auth != null && isValidEvent();
       allow delete: if request.auth != null;
     }
-    
+
+    // Newsletter subscribers collection
+    match /newsletter/{subscriber} {
+      // Anyone can read to check if already subscribed (needed for duplicate check)
+      allow read: if true;
+      // Anyone can subscribe (create)
+      allow create: if isValidNewsletterSubscription();
+      // Only authenticated users can update/delete (admin only)
+      allow update: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+
+    // Deny all other collections
     match /{document=**} {
       allow read, write: if false;
     }

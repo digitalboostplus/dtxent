@@ -94,3 +94,35 @@ Each document in this collection represents a unique concert or event.
 1.  **Public Read:** Anyone can read documents where `metadata.isPublished == true`.
 2.  **Admin Write:** Only authenticated users with `admin` role can create/update/delete.
 3.  **Validation:** Rules should enforce types (e.g., `ticketPrice.min` must be a number).
+
+---
+
+## Collection: `newsletter`
+
+Stores newsletter subscribers from the landing page signup form.
+
+### Fields
+
+| Field Name | Data Type | Requirement | Description | Constraints / Notes |
+| :--- | :--- | :--- | :--- | :--- |
+| `email` | String | Required | Subscriber's email address. | Lowercase, 5-255 chars. |
+| `subscribedAt` | Timestamp | Required | When the user subscribed. | Server timestamp. |
+| `source` | String | Optional | Where the signup came from. | e.g., "landing_page", "checkout". |
+| `status` | String | Required | Subscription status. | Enum: "active", "unsubscribed". |
+
+### JSON Example
+
+```json
+{
+  "email": "fan@example.com",
+  "subscribedAt": "2025-01-08T15:30:00Z",
+  "source": "landing_page",
+  "status": "active"
+}
+```
+
+### Security Rules
+
+1. **Public Read:** Anyone can read to check for duplicate subscriptions.
+2. **Public Create:** Anyone can subscribe (validated).
+3. **Admin Update/Delete:** Only authenticated users can modify/remove subscribers.
