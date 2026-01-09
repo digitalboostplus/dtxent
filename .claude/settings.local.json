@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir \"C:\\\\projects\\\\dbplus\\\\dtxent-landing\\\\assets\")",
+      "Bash(firebase deploy:*)",
+      "Bash(dir \"C:\\\\projects\\\\dbplus\\\\dtxent-landing\\\\assets\" /b)"
+    ]
+  }
+}
