@@ -1,13 +1,21 @@
-// Public Events Loader - Fetches and displays events on the landing page
+// Public Events Loader - Fetches and displays events on the landing page (Real-time)
 import { db } from './firebase-config.js';
-import { collection, getDocs, query, where, orderBy, Timestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { collection, query, where, orderBy, Timestamp, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+// Store unsubscribe function for cleanup
+let unsubscribeEvents = null;
 
 /**
- * Load and display published events (From Firestore)
+ * Load and display published events with real-time updates (From Firestore)
  */
-export async function loadPublicEvents() {
+export function loadPublicEvents() {
     const eventsGrid = document.querySelector('.events-grid');
     if (!eventsGrid) return;
+
+    // Clean up any existing listener
+    if (unsubscribeEvents) {
+        unsubscribeEvents();
+    }
 
     // Show loading state
     eventsGrid.innerHTML = `
@@ -17,15 +25,14 @@ export async function loadPublicEvents() {
         </div>
     `;
 
-    try {
-        // Fetch events from Firestore
-        const q = query(
-            collection(db, 'events'),
-            where('isPublished', '==', true),
-            orderBy('eventDate', 'asc')
-        );
+    // Set up real-time listener
+    const q = query(
+        collection(db, 'events'),
+        where('isPublished', '==', true),
+        orderBy('eventDate', 'asc')
+    );
 
-        const querySnapshot = await getDocs(q);
+    unsubscribeEvents = onSnapshot(q, (querySnapshot) => {
         const processedEvents = [];
 
         querySnapshot.forEach((doc) => {
@@ -34,18 +41,18 @@ export async function loadPublicEvents() {
             let eventDate = event.eventDate;
             if (eventDate instanceof Timestamp) {
                 eventDate = eventDate.toDate();
-            } else if (eventDate && eventDate.seconds) { // Handle potential plain object timestamp
+            } else if (eventDate && eventDate.seconds) {
                 eventDate = new Date(eventDate.seconds * 1000);
             }
 
             processedEvents.push({
                 ...event,
                 id: doc.id,
-                eventDate: eventDate // Normalize date
+                eventDate: eventDate
             });
         });
 
-        // Loop for image logic matches original structure
+        // Process events for display
         const displayEvents = processedEvents.map(event => {
             const hasLocalImage = event.imageName && event.imageName.length > 0;
             const hasExternalImage = event.imageUrl && event.imageUrl.length > 0;
@@ -56,19 +63,18 @@ export async function loadPublicEvents() {
 
             // Determine final image URL
             let finalImageUrl = 'assets/dtxent-logo.png';
-            if (hasExternalImage) {
+
+            // First check for migrated assets path (../assets/)
+            if (event.imageUrl && event.imageUrl.startsWith('../assets/')) {
+                finalImageUrl = event.imageUrl.replace('../', '');
+            } else if (hasExternalImage) {
                 finalImageUrl = event.imageUrl;
             } else if (hasLocalImage) {
-                // For local images, if it starts with http, use it. 
-                // If it's just a filename, prepend assets/
                 if (event.imageName.startsWith('http')) {
                     finalImageUrl = event.imageName;
                 } else {
                     finalImageUrl = `assets/${event.imageName}`;
                 }
-            } else if (event.imageUrl && event.imageUrl.startsWith('../assets/')) {
-                // Handle migration case where we stored '../assets/...' in Firestore
-                finalImageUrl = event.imageUrl.replace('../', '');
             }
 
             // Format dates
@@ -78,7 +84,7 @@ export async function loadPublicEvents() {
 
             return {
                 ...event,
-                id: event.id, // Use ID from processed event object
+                id: event.id,
                 imageUrl: finalImageUrl,
                 displayMonth: monthShort.toUpperCase(),
                 displayDay: dayNum
@@ -103,13 +109,23 @@ export async function loadPublicEvents() {
         // Re-initialize animations for dynamically loaded cards
         initEventAnimations();
 
-    } catch (error) {
+    }, (error) => {
         console.error('Error loading events:', error);
         eventsGrid.innerHTML = `
             <div class="events-error">
                 <p>Unable to load events. Please refresh the page.</p>
             </div>
         `;
+    });
+}
+
+/**
+ * Stop listening for event updates (cleanup)
+ */
+export function stopEventUpdates() {
+    if (unsubscribeEvents) {
+        unsubscribeEvents();
+        unsubscribeEvents = null;
     }
 }
 

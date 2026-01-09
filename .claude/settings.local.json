@@ -3,7 +3,10 @@
     "allow": [
       "Bash(dir \"C:\\\\projects\\\\dbplus\\\\dtxent-landing\\\\assets\")",
       "Bash(firebase deploy:*)",
-      "Bash(dir \"C:\\\\projects\\\\dbplus\\\\dtxent-landing\\\\assets\" /b)"
+      "Bash(dir \"C:\\\\projects\\\\dbplus\\\\dtxent-landing\\\\assets\" /b)",
+      "Bash(firebase firestore:indexes:*)",
+      "Bash(node -e:*)",
+      "WebFetch(domain:dtxent-web.web.app)"
     ]
   }
 }
