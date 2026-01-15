@@ -4,6 +4,7 @@ import { collection, query, where, orderBy, Timestamp, onSnapshot } from 'https:
 
 // Store unsubscribe function for cleanup
 let unsubscribeEvents = null;
+import { LOCAL_EVENTS } from './events-data.js';
 
 /**
  * Load and display published events with real-time updates (From Firestore)
@@ -62,43 +63,7 @@ export function loadPublicEvents() {
         });
 
         // Process events for display
-        const displayEvents = processedEvents.map(event => {
-            const hasLocalImage = event.imageName && event.imageName.length > 0;
-            const hasExternalImage = event.imageUrl && event.imageUrl.length > 0;
-
-            if (!hasLocalImage && !hasExternalImage) {
-                console.warn(`[Event Warning] Unmatched image for show: ${event.artistName}`);
-            }
-
-            // Determine final image URL
-            let finalImageUrl = 'assets/dtxent-logo.png';
-
-            // First check for migrated assets path (../assets/)
-            if (event.imageUrl && event.imageUrl.startsWith('../assets/')) {
-                finalImageUrl = event.imageUrl.replace('../', '');
-            } else if (hasExternalImage) {
-                finalImageUrl = event.imageUrl;
-            } else if (hasLocalImage) {
-                if (event.imageName.startsWith('http')) {
-                    finalImageUrl = event.imageName;
-                } else {
-                    finalImageUrl = `assets/${event.imageName}`;
-                }
-            }
-
-            // Format dates
-            const dateObj = new Date(event.eventDate);
-            const monthShort = dateObj.toLocaleString('en-US', { month: 'short' });
-            const dayNum = dateObj.getDate();
-
-            return {
-                ...event,
-                id: event.id,
-                imageUrl: finalImageUrl,
-                displayMonth: monthShort.toUpperCase(),
-                displayDay: dayNum
-            };
-        });
+        const displayEvents = processEventsForDisplay(processedEvents);
 
         if (displayEvents.length === 0) {
             eventsGrid.innerHTML = `
@@ -125,13 +90,95 @@ export function loadPublicEvents() {
         announceEventsLoaded(displayEvents.length);
 
     }, (error) => {
-        console.error('Error loading events:', error);
-        eventsGrid.innerHTML = `
-            <div class="events-error">
-                <p>Unable to load events. Please refresh the page.</p>
-            </div>
-        `;
+        console.warn('Error loading events from Firestore, falling back to local data:', error);
+
+        // Fallback to local data
+        const displayEvents = processEventsForDisplay(LOCAL_EVENTS);
+
+        if (displayEvents.length === 0) {
+            eventsGrid.innerHTML = `
+                <div class="events-empty">
+                    <p>No upcoming events at this time. Check back soon!</p>
+                </div>
+            `;
+            return;
+        }
+
+        renderEventsList(displayEvents, eventsGrid);
     });
+}
+
+/**
+ * Process raw event data for display
+ */
+function processEventsForDisplay(events) {
+    return events.map(event => {
+        const hasLocalImage = event.imageName && event.imageName.length > 0;
+        const hasExternalImage = event.imageUrl && event.imageUrl.length > 0;
+
+        // Determine final image URL
+        let finalImageUrl = 'assets/dtxent-logo.png';
+
+        // First check for migrated assets path (../assets/)
+        if (event.imageUrl && event.imageUrl.startsWith('../assets/')) {
+            finalImageUrl = event.imageUrl.replace('../', '');
+        } else if (hasExternalImage) {
+            finalImageUrl = event.imageUrl;
+        } else if (hasLocalImage) {
+            if (event.imageName.startsWith('http')) {
+                finalImageUrl = event.imageName;
+            } else {
+                finalImageUrl = `assets/${event.imageName}`;
+            }
+        }
+
+        // Format dates
+        let dateObj;
+        if (event.eventDate && event.eventDate.seconds) {
+            dateObj = new Date(event.eventDate.seconds * 1000);
+        } else {
+            dateObj = new Date(event.eventDate);
+        }
+
+        if (isNaN(dateObj.getTime())) {
+            dateObj = new Date(); // Fallback if invalid
+        }
+
+        const monthShort = dateObj.toLocaleString('en-US', { month: 'short' });
+        const dayNum = dateObj.getDate();
+
+        return {
+            ...event,
+            id: event.id || Math.random().toString(36).substr(2, 9),
+            imageUrl: finalImageUrl,
+            displayMonth: monthShort.toUpperCase(),
+            displayDay: dayNum,
+            eventDate: dateObj // Ensure it's a Date object
+        };
+    });
+}
+
+/**
+ * Render the list of events to the grid
+ */
+function renderEventsList(displayEvents, container) {
+    // Render event cards
+    container.innerHTML = displayEvents.map(event => createEventCardHTML(event)).join('');
+
+    // Generate and inject Schema.org data
+    injectSchemaOrg(displayEvents);
+
+    // Re-initialize animations for dynamically loaded cards
+    // We need to wait for the DOM to update, and ensure animateEventCards exists
+    // It is likely imported from animations.js, but here we were calling initEventAnimations defined locally
+    // Let's use the local one if it exists or define it.
+    initEventAnimations();
+
+    // Initialize countdown timers
+    initCountdownTimers();
+
+    // Announce to screen readers
+    announceEventsLoaded(displayEvents.length);
 }
 
 /**

@@ -152,3 +152,111 @@ export const LOCAL_EVENTS = [
         isPublished: true
     }
 ];
+
+export const LOCAL_CLUBS = [
+    {
+        id: "club-1",
+        name: "17th St. Entertainment District",
+        type: "Nightlife Hub",
+        city: "McAllen",
+        image: "assets/nightlife-17th.png",
+        description: "The heartbeat of McAllen nightlife. A strip of bars, clubs, and lounges.",
+        features: ["Multiple Venues", "Live Music", "Late Night"],
+        link: "https://exploremcallen.com",
+        lat: 26.203,
+        lng: -98.230
+    },
+    {
+        id: "club-2",
+        name: "Clayton's Beach Bar",
+        type: "Beach Bar",
+        city: "South Padre Island",
+        image: "assets/claytons.png",
+        description: "The biggest beach bar in Texas. Live concerts, drinks, and ocean views.",
+        features: ["Beachfront", "Concerts", "Fireworks"],
+        link: "https://claytonsbeachbar.com",
+        lat: 26.128,
+        lng: -97.166
+    },
+    {
+        id: "club-3",
+        name: "Suerte Bar & Grill",
+        type: "Upscale Bar",
+        city: "McAllen",
+        image: "assets/suerte.png",
+        description: "Modern cantina with premium cocktails and a high-energy atmosphere.",
+        features: ["Cocktails", "VIP Tables", "DJ"],
+        link: "#",
+        lat: 26.204,
+        lng: -98.231
+    }
+];
+
+export const LOCAL_RESTAURANTS = [
+    {
+        id: "food-1",
+        name: "SALT - New American Table",
+        type: "Fine Dining",
+        city: "McAllen",
+        price: "$$$",
+        image: "assets/salt-mcallen.png",
+        description: "Chef-driven cuisine focusing on fresh, local ingredients.",
+        features: ["Farm-to-Table", "Craft Cocktails", "Date Night"],
+        link: "https://saltnewamericantable.com",
+        lat: 26.230,
+        lng: -98.240
+    },
+    {
+        id: "food-2",
+        name: "Sea Ranch Restaurant",
+        type: "Seafood",
+        city: "South Padre Island",
+        price: "$$$",
+        image: "assets/sea-ranch.png",
+        description: "Premier waterfront dining featuring wild-caught gulf seafood.",
+        features: ["Waterfront View", "Fresh Seafood", "Marina"],
+        link: "http://searanchrestaurant.com",
+        lat: 26.100,
+        lng: -97.170
+    },
+    {
+        id: "food-3",
+        name: "Taco Palenque",
+        type: "Casual Dining",
+        city: "McAllen",
+        price: "$",
+        image: "assets/taco-palenque.png",
+        description: "Authentic Mexican cuisine. Perfect for late-night cravings after the show.",
+        features: ["Late Night", "Drive-thru", "Authentic Flavor"],
+        link: "https://tacopalenque.com",
+        lat: 26.200,
+        lng: -98.230
+    }
+];
+
+export const LOCAL_HOTELS = [
+    {
+        id: "hotel-1",
+        name: "Embassy Suites Convention Center",
+        city: "McAllen",
+        stars: 4,
+        image: "assets/embassy-mcallen.png",
+        description: "Located within walking distance of the McAllen Convention Center district.",
+        features: ["Free Breakfast", "Pool", "Suites"],
+        link: "https://www.hilton.com",
+        lat: 26.195,
+        lng: -98.257
+    },
+    {
+        id: "hotel-2",
+        name: "Isla Grand Beach Resort",
+        city: "South Padre Island",
+        stars: 4,
+        image: "assets/isla-grand.png",
+        description: "A beachfront resort offering a tropical escape with pools and dining.",
+        features: ["Beachfront", "Resort Style", "Nightclub on-site"],
+        link: "https://islagrand.com",
+        lat: 26.090,
+        lng: -97.160
+    }
+];

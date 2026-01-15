@@ -6,7 +6,13 @@
       "Bash(dir \"C:\\\\projects\\\\dbplus\\\\dtxent-landing\\\\assets\" /b)",
       "Bash(firebase firestore:indexes:*)",
       "Bash(node -e:*)",
-      "WebFetch(domain:dtxent-web.web.app)"
+      "WebFetch(domain:dtxent-web.web.app)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nfeat: Comprehensive UI/UX enhancements with animations and performance\n\nVisual Enhancements:\n- Enhanced color system with semantic tokens and gradients\n- Skeleton loading screens for better perceived performance\n- Mobile menu with backdrop blur and staggered animations\n- Social media SVG icons \\(Facebook, Instagram, X\\)\n- Gradient border animations on event cards\n- Countdown timers showing days/hours/mins to events\n\nAnimation Libraries:\n- Three.js particle hero background with mouse interaction\n- GSAP ScrollTrigger for smooth scroll animations\n- Magnetic button hover effects\n- Parallax scrolling on hero section\n\nFunctionality:\n- Newsletter signup with Firestore backend\n- Service worker for offline caching\n- Real-time event updates from Firestore\n- Updated ticket URLs for all events\n\nAccessibility:\n- Reduced motion support \\(@prefers-reduced-motion\\)\n- Screen reader announcements for dynamic content\n- Enhanced keyboard navigation\n- ARIA labels and live regions\n\nPerformance:\n- Service worker caching strategy\n- Module preloading for critical assets\n- Fallback animations when GSAP unavailable\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git push:*)",
+      "Bash(git commit:*)",
+      "WebSearch",
+      "WebFetch(domain:developer.ticketmaster.com)"
     ]
   }
 }

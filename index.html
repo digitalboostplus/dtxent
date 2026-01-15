@@ -51,7 +51,10 @@
                 <img src="assets/dtxent-logo.png" alt="DTXENT Logo" class="logo-img">
             </a>
             <ul class="nav-links">
-                <li><a href="#upcoming">Upcoming Shows</a></li>
+                <li><a href="#upcoming">Shows</a></li>
+                <li><a href="#nightlife">Nightlife</a></li>
+                <li><a href="#dining">Dining</a></li>
+                <li><a href="#stay">Stay</a></li>
                 <li><a href="#venues">Venues</a></li>
                 <li><a href="#contact">Contact</a></li>
                 <li><a href="#upcoming" class="btn btn-primary">Buy Tickets</a></li>
@@ -102,6 +105,46 @@
 
                 <div class="events-grid" role="list" aria-label="Upcoming concerts and events">
                     <!-- Events are loaded dynamically from Firebase with skeleton loading -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Nightlife Section -->
+        <section id="nightlife" class="section nightlife" aria-labelledby="nightlife-title">
+            <div class="container">
+                <div class="section-header">
+                    <h2 id="nightlife-title" class="section-title">The <span class="text-highlight">After Party</span>
+                    </h2>
+                    <p class="section-desc">Keep the energy alive at South Texas' premier nightlife destinations.</p>
+                </div>
+                <div class="lifestyle-grid" id="nightlife-grid">
+                    <!-- Loaded dynamically -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Dining Section -->
+        <section id="dining" class="section dining" aria-labelledby="dining-title">
+            <div class="container">
+                <div class="section-header">
+                    <h2 id="dining-title" class="section-title">Eat <span class="text-highlight">Local</span></h2>
+                    <p class="section-desc">From pre-show dinners to late-night bites.</p>
+                </div>
+                <div class="lifestyle-grid" id="dining-grid">
+                    <!-- Loaded dynamically -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Stay Section -->
+        <section id="stay" class="section stay" aria-labelledby="stay-title">
+            <div class="container">
+                <div class="section-header">
+                    <h2 id="stay-title" class="section-title">Stay in <span class="text-highlight">Style</span></h2>
+                    <p class="section-desc">Preferred accommodations for the ultimate experience.</p>
+                </div>
+                <div class="lifestyle-grid" id="stay-grid">
+                    <!-- Loaded dynamically -->
                 </div>
             </div>
         </section>
@@ -204,6 +247,7 @@
     <!-- Core Scripts -->
     <script src="script.js"></script>
     <script type="module" src="js/events-public.js"></script>
+    <script type="module" src="js/lifestyle-public.js"></script>
 
     <!-- GSAP Animation Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
