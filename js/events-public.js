@@ -5,6 +5,8 @@ import { collection, query, where, orderBy, Timestamp, onSnapshot } from 'https:
 // Store unsubscribe function for cleanup
 let unsubscribeEvents = null;
 import { LOCAL_EVENTS } from './events-data.js';
+import { eventModal } from './event-detail-modal.js';
+import { getEventDetails } from './ticketmaster-api.js';
 
 /**
  * Load and display published events with real-time updates (From Firestore)
@@ -18,104 +20,100 @@ export function loadPublicEvents() {
         unsubscribeEvents();
     }
 
-    // Show skeleton loading state
-    eventsGrid.innerHTML = `
-        <div class="skeleton-grid">
-            ${[1, 2, 3].map(() => `
-                <div class="skeleton-card" role="article" aria-label="Loading event">
-                    <div class="skeleton-image"></div>
-                    <div class="skeleton-content">
-                        <div class="skeleton-line skeleton-line-sm"></div>
-                        <div class="skeleton-line skeleton-line-lg"></div>
-                        <div class="skeleton-line skeleton-line-md"></div>
-                        <div class="skeleton-button"></div>
-                    </div>
-                </div>
-            `).join('')}
-        </div>
-    `;
+    // Step 1: Initial load from LOCAL_EVENTS for zero-latency
+    console.log('Performing initial load from local data...');
+    const now = new Date();
+    const pastCutoff = new Date(now.getTime() - (6 * 60 * 60 * 1000));
 
-    // Set up real-time listener
-    const q = query(
-        collection(db, 'events'),
-        where('isPublished', '==', true),
-        orderBy('eventDate', 'asc')
-    );
-
-    unsubscribeEvents = onSnapshot(q, (querySnapshot) => {
-        const processedEvents = [];
-
-        querySnapshot.forEach((doc) => {
-            const event = doc.data();
-            // Convert Firestore Timestamp to Date string/object for compatibility
-            let eventDate = event.eventDate;
-            if (eventDate instanceof Timestamp) {
-                eventDate = eventDate.toDate();
-            } else if (eventDate && eventDate.seconds) {
-                eventDate = new Date(eventDate.seconds * 1000);
-            }
-
-            processedEvents.push({
-                ...event,
-                id: doc.id,
-                eventDate: eventDate
-            });
-        // Filter out past events (e.g., events that occurred more than 6 hours ago)
-        const now = new Date();
-        const pastCutoff = new Date(now.getTime() - (6 * 60 * 60 * 1000));
-        const upcomingEvents = processedEvents.filter(event => event.eventDate >= pastCutoff);
-
-        // Process events for display
-        const displayEvents = processEventsForDisplay(upcomingEvents);
-
-        if (displayEvents.length === 0) {
-            eventsGrid.innerHTML = `
-                <div class="events-empty">
-                    <p>No upcoming events at this time. Check back soon!</p>
-                </div>
-            `;
-            return;
-        }
-
-        // Render event cards
-        eventsGrid.innerHTML = displayEvents.map(event => createEventCardHTML(event)).join('');
-
-        // Generate and inject Schema.org data
-        injectSchemaOrg(displayEvents);
-
-        // Re-initialize animations for dynamically loaded cards
-        initEventAnimations();
-
-        // Initialize countdown timers
-        initCountdownTimers();
-
-        // Announce to screen readers
-        announceEventsLoaded(displayEvents.length);
-
-    }, (error) => {
-        console.warn('Error loading events from Firestore, falling back to local data:', error);
-
-        // Fallback to local data
-        const now = new Date();
-        const pastCutoff = new Date(now.getTime() - (6 * 60 * 60 * 1000));
-        const upcomingLocalEvents = LOCAL_EVENTS.filter(event => {
-            const eventDate = new Date(event.eventDate);
-            return !isNaN(eventDate.getTime()) && eventDate >= pastCutoff;
-        });
-
-        const displayEvents = processEventsForDisplay(upcomingLocalEvents);
-
-        if (displayEvents.length === 0) {
-            eventsGrid.innerHTML = `
-                <div class="events-empty">
-                    <p>No upcoming events at this time. Check back soon!</p>
-                </div>
-            `;
-            return;
-        }
-
-        renderEventsList(displayEvents, eventsGrid);
+    const initialLocalEvents = LOCAL_EVENTS.filter(event => {
+        const eventDate = new Date(event.eventDate);
+        return !isNaN(eventDate.getTime()) && eventDate >= pastCutoff;
     });
+
+    if (initialLocalEvents.length > 0) {
+        renderEventsList(processEventsForDisplay(initialLocalEvents), eventsGrid);
+    } else {
+        // Show skeleton while waiting for Firestore
+        eventsGrid.innerHTML = `
+            <div class="skeleton-grid">
+                ${[1, 2, 3].map(() => `
+                    <div class="skeleton-card" role="article" aria-label="Loading event">
+                        <div class="skeleton-image"></div>
+                        <div class="skeleton-content">
+                            <div class="skeleton-line skeleton-line-sm"></div>
+                            <div class="skeleton-line skeleton-line-lg"></div>
+                            <div class="skeleton-line skeleton-line-md"></div>
+                            <div class="skeleton-button"></div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
+
+    // Step 2: Set up real-time listener from Firestore
+    try {
+        const q = query(
+            collection(db, 'events'),
+            where('isPublished', '==', true),
+            orderBy('eventDate', 'asc')
+        );
+
+        unsubscribeEvents = onSnapshot(q, (querySnapshot) => {
+            const firestoreEvents = [];
+            querySnapshot.forEach((doc) => {
+                const event = doc.data();
+                let eventDate = event.eventDate;
+                if (eventDate instanceof Timestamp) {
+                    eventDate = eventDate.toDate();
+                } else if (eventDate && eventDate.seconds) {
+                    eventDate = new Date(eventDate.seconds * 1000);
+                }
+
+                firestoreEvents.push({
+                    ...event,
+                    id: doc.id,
+                    eventDate: eventDate
+                });
+            });
+
+            const upcomingFirestore = firestoreEvents.filter(e => e.eventDate >= pastCutoff);
+
+            if (upcomingFirestore.length > 0) {
+                console.log(`Loaded ${upcomingFirestore.length} events from Firestore.`);
+                renderEventsList(processEventsForDisplay(upcomingFirestore), eventsGrid);
+            } else {
+                console.log('Firestore is empty or has no upcoming events. Staying with/reverting to local data.');
+                // If Firestore is empty but we have local data, ensure local data is shown
+                const upcomingLocal = LOCAL_EVENTS.filter(event => {
+                    const eventDate = new Date(event.eventDate);
+                    return !isNaN(eventDate.getTime()) && eventDate >= pastCutoff;
+                });
+
+                if (upcomingLocal.length > 0) {
+                    renderEventsList(processEventsForDisplay(upcomingLocal), eventsGrid);
+                } else {
+                    eventsGrid.innerHTML = `
+                        <div class="events-empty">
+                            <p>No upcoming events at this time. Check back soon!</p>
+                        </div>
+                    `;
+                }
+            }
+        }, (error) => {
+            console.warn('Firestore listener error, continuing with local data:', error);
+            // Error case: already handled by initial load, but let's re-verify local data
+            if (eventsGrid.querySelector('.skeleton-grid')) {
+                const upcomingLocal = LOCAL_EVENTS.filter(event => {
+                    const eventDate = new Date(event.eventDate);
+                    return !isNaN(eventDate.getTime()) && eventDate >= pastCutoff;
+                });
+                renderEventsList(processEventsForDisplay(upcomingLocal), eventsGrid);
+            }
+        });
+    } catch (err) {
+        console.error('Error setting up event listener:', err);
+    }
 }
 
 /**
@@ -175,13 +173,16 @@ function renderEventsList(displayEvents, container) {
     // Render event cards
     container.innerHTML = displayEvents.map(event => createEventCardHTML(event)).join('');
 
+    // Attach click handlers for modal
+    attachEventClickHandlers(displayEvents);
+
+    // Enrich Ticketmaster events with real-time data
+    enrichTicketmasterEvents(displayEvents);
+
     // Generate and inject Schema.org data
     injectSchemaOrg(displayEvents);
 
     // Re-initialize animations for dynamically loaded cards
-    // We need to wait for the DOM to update, and ensure animateEventCards exists
-    // It is likely imported from animations.js, but here we were calling initEventAnimations defined locally
-    // Let's use the local one if it exists or define it.
     initEventAnimations();
 
     // Initialize countdown timers
@@ -212,17 +213,21 @@ function createEventCardHTML(event) {
         ? event.eventDate.toISOString()
         : new Date(event.eventDate).toISOString();
 
+    const eventId = event.id || Math.random().toString(36).substr(2, 9);
+
     return `
-        <article class="event-card" role="listitem">
+        <article class="event-card" role="listitem" data-event-id="${eventId}" ${event.tmEventId ? `data-tm-id="${event.tmEventId}"` : ''}>
             <div class="card-glow"></div>
             <div class="event-image">
                 <div class="event-date">
                     <span class="month">${escapeHtml(event.displayMonth)}</span>
                     <span class="day">${escapeHtml(event.displayDay)}</span>
                 </div>
+                <div class="event-status-tag" id="status-${eventId}"></div>
                 <img src="${escapeHtml(imageUrl)}"
                      alt="${escapeHtml(imageAlt)}"
                      loading="lazy">
+                <div class="event-price-range" id="price-${eventId}" style="display: none;"></div>
             </div>
             <div class="event-details">
                 <span class="event-venue">${escapeHtml(venueFullName)}</span>
@@ -255,15 +260,71 @@ function createEventCardHTML(event) {
                 </div>
                 ` : ''}
 
-                <a href="${escapeHtml(event.ticketUrl)}"
-                   class="btn btn-primary btn-block btn-icon"
-                   target="_blank"
-                   rel="noopener noreferrer">
-                   Get Tickets
-                </a>
+                <div class="event-actions" style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                    <button class="btn btn-outline btn-block show-details-btn">View Details</button>
+                    <a href="${escapeHtml(event.ticketUrl)}"
+                       class="btn btn-primary btn-block btn-icon"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       onclick="event.stopPropagation()">
+                       Tickets
+                    </a>
+                </div>
             </div>
         </article>
     `;
+}
+
+/**
+ * Attach click handlers to event cards
+ */
+function attachEventClickHandlers(events) {
+    document.querySelectorAll('.event-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+            // Don't open modal if clicking the ticket link directly
+            if (e.target.closest('a')) return;
+
+            const eventId = card.dataset.eventId;
+            const eventData = events.find(ev => ev.id === eventId);
+            if (eventData) {
+                eventModal.open(eventData);
+            }
+        });
+    });
+}
+
+/**
+ * Enrich Ticketmaster events with real-time price and status
+ */
+async function enrichTicketmasterEvents(events) {
+    const tmEvents = events.filter(e => e.tmEventId);
+
+    // Process in parallel with rate limiting (Discovery API allows 5/sec)
+    for (const event of tmEvents) {
+        getEventDetails(event.tmEventId).then(data => {
+            if (!data) return;
+
+            const priceEl = document.getElementById(`price-${event.id}`);
+            const statusEl = document.getElementById(`status-${event.id}`);
+
+            // Update Price
+            if (data.priceRanges && data.priceRanges.length > 0 && priceEl) {
+                const min = Math.round(data.priceRanges[0].min);
+                priceEl.textContent = `From $${min}`;
+                priceEl.style.display = 'block';
+            }
+
+            // Update Status Badge
+            if (data.dates.status.code && statusEl) {
+                const status = data.dates.status.code;
+                if (status === 'onsale') {
+                    statusEl.innerHTML = '<span class="badge badge-onsale">On Sale</span>';
+                } else if (status === 'offsale' || status === 'cancelled') {
+                    statusEl.innerHTML = `<span class="badge badge-soldout">${status === 'cancelled' ? 'Cancelled' : 'Sold Out'}</span>`;
+                }
+            }
+        });
+    }
 }
 
 /**

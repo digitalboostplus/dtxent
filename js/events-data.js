@@ -43,6 +43,7 @@ export const LOCAL_EVENTS = [
         venueState: "TX",
         imageName: "payne-los-angeles-azules.jpg",
         ticketUrl: "https://www.ticketmaster.com/los-angeles-azules-cumbia-sin-fronteras-hidalgo-texas-03-07-2026/event/3A00634E94D967D7",
+        tmEventId: "3A00634E94D967D7",
         isPublished: true
     },
     {
@@ -54,6 +55,7 @@ export const LOCAL_EVENTS = [
         venueState: "TX",
         imageName: "payne-kodak-black.jpg",
         ticketUrl: "https://www.ticketmaster.com/kodak-black-hidalgo-texas-03-12-2026/event/3A006443DF90C757",
+        tmEventId: "3A006443DF90C757",
         isPublished: true
     },
     {
@@ -65,6 +67,7 @@ export const LOCAL_EVENTS = [
         venueState: "TX",
         imageName: "",
         ticketUrl: "https://www.ticketmaster.com/hidalgo-borderfest-manuel-turizo-hidalgo-texas-03-13-2026/event/3A006442FF94D936",
+        tmEventId: "3A006442FF94D936",
         isPublished: true
     },
     {
@@ -87,6 +90,7 @@ export const LOCAL_EVENTS = [
         venueState: "TX",
         imageName: "payne-panter-belico.jpg",
         ticketUrl: "https://www.ticketmaster.com/panter-belico-hidalgo-texas-03-21-2026/event/3A006338AC3E4B8B",
+        tmEventId: "3A006338AC3E4B8B",
         isPublished: true
     },
     {
@@ -98,6 +102,7 @@ export const LOCAL_EVENTS = [
         venueState: "TX",
         imageName: "",
         ticketUrl: "https://www.ticketmaster.com/reik-tour-2026-hidalgo-texas-03-28-2026/event/3A006377F8B7D2C4",
+        tmEventId: "3A006377F8B7D2C4",
         isPublished: true
     },
     {
@@ -120,6 +125,7 @@ export const LOCAL_EVENTS = [
         venueState: "TX",
         imageName: "payne-emerson-lake-palmer.jpg",
         ticketUrl: "https://www.ticketmaster.com/an-evening-with-emerson-lake-palmer-hidalgo-texas-05-01-2026/event/3A006364BE3AA8B1",
+        tmEventId: "3A006364BE3AA8B1",
         isPublished: true
     },
     {
@@ -131,6 +137,7 @@ export const LOCAL_EVENTS = [
         venueState: "TX",
         imageName: "payne-alejandro-sanz.jpg",
         ticketUrl: "https://www.ticketmaster.com/alejandro-sanz-y-ahora-que-gira-hidalgo-texas-05-09-2026/event/3A006355DAD69751",
+        tmEventId: "3A006355DAD69751",
         isPublished: true
     },
     {
@@ -153,6 +160,7 @@ export const LOCAL_EVENTS = [
         venueState: "TX",
         imageName: "payne-carin-le-n.jpg",
         ticketUrl: "https://www.ticketmaster.com/carin-leon-de-sonora-para-el-hidalgo-texas-05-20-2026/event/3A0064309908954C",
+        tmEventId: "3A0064309908954C",
         isPublished: true
     },
     {
@@ -164,6 +172,7 @@ export const LOCAL_EVENTS = [
         venueState: "TX",
         imageName: "payne-puppy-pals-live.jpg",
         ticketUrl: "https://www.ticketmaster.com/puppy-pals-live-hidalgo-texas-05-28-2026/event/3A00644BF7033190",
+        tmEventId: "3A00644BF7033190",
         isPublished: true
     },
     {
@@ -175,6 +184,7 @@ export const LOCAL_EVENTS = [
         venueState: "TX",
         imageName: "payne-grupo-bryndis-industria-del-amor-guardianes.jpg",
         ticketUrl: "https://www.ticketmaster.com/grupo-bryndis-industria-del-amor-guardianes-hidalgo-texas-05-29-2026/event/3A00638999886744",
+        tmEventId: "3A00638999886744",
         isPublished: true
     },
     {
