@@ -19,9 +19,8 @@ from datetime import datetime
 import requests
 
 # ---------- Configuration ----------
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
-TMP_DIR = PROJECT_ROOT / ".tmp"
-DTXENT_DIR = PROJECT_ROOT / "dtxent-site"
+DTXENT_DIR = Path(__file__).resolve().parent.parent  # dtxent-site/
+TMP_DIR = DTXENT_DIR / ".tmp"
 ASSETS_DIR = DTXENT_DIR / "assets"
 EVENTS_DATA_FILE = DTXENT_DIR / "js" / "events-data.js"
 

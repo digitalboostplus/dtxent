@@ -8,15 +8,15 @@ Generate a daily social media post promoting upcoming shows. Each post includes 
 - `GEMINI_API_KEY` from `.env`
 
 ## Tools
-1. `execution/generate_social_post.py` — Main script
+1. `dtxent-site/execution/generate_social_post.py` — Main script
 
 ## Outputs
-- `.tmp/social_posts/YYYY-MM-DD_post.json` — Post metadata (caption, hashtags, events featured)
-- `.tmp/social_posts/YYYY-MM-DD_image.png` — AI-generated promo image
+- `dtxent-site/.tmp/social_posts/YYYY-MM-DD_post.json` — Post metadata (caption, hashtags, events featured)
+- `dtxent-site/.tmp/social_posts/YYYY-MM-DD_image.png` — AI-generated promo image
 
 ## Execution
 ```
-python execution/generate_social_post.py
+python dtxent-site/execution/generate_social_post.py
 ```
 
 ### Optional flags:

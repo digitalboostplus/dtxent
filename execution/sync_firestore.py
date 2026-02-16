@@ -16,8 +16,9 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 # Load environment variables
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
-load_dotenv(PROJECT_ROOT / ".env")
+REPO_ROOT = Path(__file__).resolve().parent.parent  # dtxent-site/
+WORKSPACE_ROOT = REPO_ROOT.parent               # dtxent-builder/
+load_dotenv(WORKSPACE_ROOT / ".env")
 
 # Firebase Admin SDK (lazy initialization)
 _db = None
@@ -49,7 +50,7 @@ def init_firebase():
 
         if not service_account_path:
             # Try default location
-            default_path = PROJECT_ROOT / "firebase-service-account.json"
+            default_path = WORKSPACE_ROOT / "firebase-service-account.json"
             if default_path.exists():
                 service_account_path = str(default_path)
             else:
@@ -62,7 +63,7 @@ def init_firebase():
 
         # Resolve relative paths
         if not os.path.isabs(service_account_path):
-            service_account_path = str(PROJECT_ROOT / service_account_path)
+            service_account_path = str(WORKSPACE_ROOT / service_account_path)
 
         if not os.path.exists(service_account_path):
             raise FileNotFoundError(f"Service account file not found: {service_account_path}")

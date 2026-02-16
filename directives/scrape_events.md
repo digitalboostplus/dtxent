@@ -7,13 +7,13 @@ Fetch all upcoming events from **tixplug.com** and **paynearena.com**, then upda
 - None (source URLs are hardcoded in the scripts)
 
 ## Tools
-1. `execution/scrape_tixplug.py` — Fetches events via WordPress REST API
-2. `execution/scrape_paynearena.py` — Scrapes events from Squarespace HTML
-3. `execution/update_dtxent.py` — Merges events, regenerates `events-data.js`, downloads images, commits & pushes
+1. `dtxent-site/execution/scrape_tixplug.py` — Fetches events via WordPress REST API
+2. `dtxent-site/execution/scrape_paynearena.py` — Scrapes events from Squarespace HTML
+3. `dtxent-site/execution/update_dtxent.py` — Merges events, regenerates `events-data.js`, downloads images, commits & pushes
 
 ## Outputs
-- `.tmp/tixplug_events.json` — Raw scraped tixplug events
-- `.tmp/paynearena_events.json` — Raw scraped paynearena events
+- `dtxent-site/.tmp/tixplug_events.json` — Raw scraped tixplug events
+- `dtxent-site/.tmp/paynearena_events.json` — Raw scraped paynearena events
 - Updated `dtxent-site/js/events-data.js` with fresh `LOCAL_EVENTS` array
 - Updated `dtxent-site/assets/` with downloaded event poster images
 - Git commit + push to `https://github.com/digitalboostplus/dtxent.git`
@@ -21,9 +21,9 @@ Fetch all upcoming events from **tixplug.com** and **paynearena.com**, then upda
 
 ## Execution Order
 ```
-python execution/scrape_tixplug.py
-python execution/scrape_paynearena.py
-python execution/update_dtxent.py
+python dtxent-site/execution/scrape_tixplug.py
+python dtxent-site/execution/scrape_paynearena.py
+python dtxent-site/execution/update_dtxent.py
 ```
 
 ## Data Schema (per event)

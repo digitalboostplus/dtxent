@@ -17,33 +17,33 @@ Creates a clickbait social media caption + AI-generated promo image for upcoming
 
 1. Generate the social media post (text + image)
 ```
-python execution/generate_social_post.py --days 7 --platform general
+python dtxent-site/execution/generate_social_post.py --days 7 --platform general
 ```
 
 2. Review output
 ```
-dir .tmp\social_posts\
+dir dtxent-site\.tmp\social_posts\
 ```
 
 3. (Optional) View the generated post JSON
 ```
-type .tmp\social_posts\*_post.json
+type dtxent-site\.tmp\social_posts\*_post.json
 ```
 
 ## Variations
 
 ### Dry run (text only, no image generation)
 ```
-python execution/generate_social_post.py --dry-run
+python dtxent-site/execution/generate_social_post.py --dry-run
 ```
 
 ### Platform-specific
 ```
-python execution/generate_social_post.py --platform instagram
-python execution/generate_social_post.py --platform twitter
+python dtxent-site/execution/generate_social_post.py --platform instagram
+python dtxent-site/execution/generate_social_post.py --platform twitter
 ```
 
 ### Extended lookahead
 ```
-python execution/generate_social_post.py --days 30
+python dtxent-site/execution/generate_social_post.py --days 30
 ```

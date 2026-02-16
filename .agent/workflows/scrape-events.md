@@ -17,17 +17,17 @@ This workflow scrapes all upcoming shows from tixplug.com and paynearena.com, th
 
 1. Scrape TixPlug events via WordPress REST API
 ```
-python execution/scrape_tixplug.py
+python dtxent-site/execution/scrape_tixplug.py
 ```
 
 2. Scrape Payne Arena events via HTML
 ```
-python execution/scrape_paynearena.py
+python dtxent-site/execution/scrape_paynearena.py
 ```
 
 3. Merge events, update events-data.js, download images, and push to GitHub
 ```
-python execution/update_dtxent.py
+python dtxent-site/execution/update_dtxent.py
 ```
 
 4. Verify the push was successful

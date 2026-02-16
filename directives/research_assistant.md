@@ -10,15 +10,15 @@ Discover and evaluate venues, restaurants, hotels, food trucks, and other vendor
 - `GEMINI_API_KEY` from `.env`
 
 ## Tools
-1. `execution/research_venues.py` — Main script
+1. `dtxent-site/execution/research_venues.py` — Main script
 
 ## Outputs
-- `.tmp/research/YYYY-MM-DD_{category}_{location}.json` — Structured results
+- `dtxent-site/.tmp/research/YYYY-MM-DD_{category}_{location}.json` — Structured results
 - Console summary of top recommendations
 
 ## Execution
 ```
-python execution/research_venues.py --category "restaurants" --location "Hidalgo, TX" --radius 25
+python dtxent-site/execution/research_venues.py --category "restaurants" --location "Hidalgo, TX" --radius 25
 ```
 
 ### Optional flags:

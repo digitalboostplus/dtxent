@@ -29,10 +29,12 @@ from dotenv import load_dotenv
 # Configuration
 # ---------------------------------------------------------------------------
 
-ROOT_DIR = Path(__file__).resolve().parent.parent
-EVENTS_DATA_PATH = ROOT_DIR / "dtxent-site" / "js" / "events-data.js"
-OUTPUT_DIR = ROOT_DIR / ".tmp" / "research"
-ENV_PATH = ROOT_DIR / ".env"
+REPO_ROOT = Path(__file__).resolve().parent.parent  # dtxent-site/
+WORKSPACE_ROOT = REPO_ROOT.parent               # dtxent-builder/
+
+EVENTS_DATA_PATH = REPO_ROOT / "js" / "events-data.js"
+OUTPUT_DIR = REPO_ROOT / ".tmp" / "research"
+ENV_PATH = WORKSPACE_ROOT / ".env"
 
 MODEL = "gemini-3-pro-preview"
 

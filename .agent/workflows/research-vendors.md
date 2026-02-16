@@ -17,49 +17,49 @@ Uses the AI Research Assistant (Gemini 3 Pro Preview with Google Search groundin
 
 1. Run the research assistant for the desired category and location
 ```
-python execution/research_venues.py --category "restaurants" --location "Hidalgo, TX" --radius 25 --top 10
+python dtxent-site/execution/research_venues.py --category "restaurants" --location "Hidalgo, TX" --radius 25 --top 10
 ```
 
 2. Review the output report
 ```
-dir .tmp\research\
+dir dtxent-site\.tmp\research\
 ```
 
 3. View the results
 ```
-type .tmp\research\*restaurants*.json
+type dtxent-site\.tmp\research\*restaurants*.json
 ```
 
 ## Common Searches
 
 ### Restaurants near Payne Arena
 ```
-python execution/research_venues.py --category "restaurants" --location "Payne Arena, Hidalgo, TX" --radius 15
+python dtxent-site/execution/research_venues.py --category "restaurants" --location "Payne Arena, Hidalgo, TX" --radius 15
 ```
 
 ### Hotels near South Padre Island
 ```
-python execution/research_venues.py --category "hotels" --location "South Padre Island, TX" --radius 10
+python dtxent-site/execution/research_venues.py --category "hotels" --location "South Padre Island, TX" --radius 10
 ```
 
 ### Food trucks in the RGV
 ```
-python execution/research_venues.py --category "food_trucks" --location "McAllen, TX" --radius 30
+python dtxent-site/execution/research_venues.py --category "food_trucks" --location "McAllen, TX" --radius 30
 ```
 
 ### Nightlife / clubs
 ```
-python execution/research_venues.py --category "clubs" --location "McAllen, TX" --radius 10
+python dtxent-site/execution/research_venues.py --category "clubs" --location "McAllen, TX" --radius 10
 ```
 
 ### Event vendors (catering, rentals, etc.)
 ```
-python execution/research_venues.py --category "vendors" --location "Hidalgo, TX" --radius 25
+python dtxent-site/execution/research_venues.py --category "vendors" --location "Hidalgo, TX" --radius 25
 ```
 
 ## Adding Results to Website
 Use the `--update-site` flag to generate a pending update file:
 ```
-python execution/research_venues.py --category "restaurants" --location "Hidalgo, TX" --update-site
+python dtxent-site/execution/research_venues.py --category "restaurants" --location "Hidalgo, TX" --update-site
 ```
-This saves a `pending_update_restaurants.json` in `.tmp/research/` for manual review before integrating into `events-data.js`.
+This saves a `pending_update_restaurants.json` in `dtxent-site/.tmp/research/` for manual review before integrating into `events-data.js`.
