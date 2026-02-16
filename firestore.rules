@@ -15,6 +15,9 @@ service cloud.firestore {
         data.venueName is string &&
         data.isPublished is bool &&
 
+        // Optional: isClosed flag for past events
+        (!data.keys().hasAny(['isClosed']) || data.isClosed is bool) &&
+
         // Optional: Schedule (List of Maps)
         (!data.keys().hasAny(['schedule']) || (
           data.schedule is list &&

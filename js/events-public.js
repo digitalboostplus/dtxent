@@ -77,7 +77,9 @@ export function loadPublicEvents() {
                 });
             });
 
-            const upcomingFirestore = firestoreEvents.filter(e => e.eventDate >= pastCutoff);
+            const upcomingFirestore = firestoreEvents.filter(e =>
+                e.eventDate >= pastCutoff && e.isClosed !== true
+            );
 
             if (upcomingFirestore.length > 0) {
                 console.log(`Loaded ${upcomingFirestore.length} events from Firestore.`);
