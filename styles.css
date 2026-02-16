@@ -1010,7 +1010,7 @@ h3 {
     display: flex;
     align-items: flex-end;
     padding: 2rem;
-    group: cursor-pointer;
+    cursor: pointer;
 }
 
 .venue-bg {
@@ -1597,6 +1597,20 @@ h3 {
     display: inline-block;
 }
 
+/* Safety: ensure critical sections are visible even if JS animations fail */
+@keyframes ensureVisible {
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.venue-card,
+.section-header,
+.contact-content {
+    animation: ensureVisible 0s 3s forwards;
+}
+
 /* ========================================
    FORM ENHANCEMENTS
    ======================================== */
@@ -1916,15 +1930,15 @@ input:invalid:not(:placeholder-shown)+.form-error {
         grid-template-columns: 1fr;
         gap: 2rem;
     }
-    
+
     .modal-event-name {
         font-size: 2rem;
     }
-    
+
     .modal-hero {
         height: 250px;
     }
-    
+
     .modal-content {
         padding: 1.5rem;
     }

@@ -34,6 +34,16 @@ function initGSAPAnimations() {
 }
 
 /**
+ * Force all animated elements to be visible (fallback for failures)
+ */
+function forceShowAll() {
+    document.querySelectorAll('.venue-card, .section-header, .contact-content').forEach(el => {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+    });
+}
+
+/**
  * Hero entrance animation
  */
 function initHeroAnimation() {
@@ -45,17 +55,17 @@ function initHeroAnimation() {
         duration: 1.2,
         delay: 0.3
     })
-    .from('.hero-subtitle', {
-        y: 50,
-        opacity: 0,
-        duration: 0.8
-    }, '-=0.6')
-    .from('.hero-btns .btn', {
-        y: 30,
-        opacity: 0,
-        stagger: 0.15,
-        duration: 0.6
-    }, '-=0.4');
+        .from('.hero-subtitle', {
+            y: 50,
+            opacity: 0,
+            duration: 0.8
+        }, '-=0.6')
+        .from('.hero-btns .btn', {
+            y: 30,
+            opacity: 0,
+            stagger: 0.15,
+            duration: 0.6
+        }, '-=0.4');
 }
 
 /**
@@ -232,8 +242,22 @@ export function animateEventCards() {
 
 // Initialize when DOM is ready and GSAP is loaded
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initGSAPAnimations);
+    document.addEventListener('DOMContentLoaded', () => {
+        try {
+            initGSAPAnimations();
+        } catch (err) {
+            console.error('GSAP init failed, forcing elements visible:', err);
+            forceShowAll();
+        }
+    });
 } else {
     // Small delay to ensure GSAP scripts are loaded
-    setTimeout(initGSAPAnimations, 100);
+    setTimeout(() => {
+        try {
+            initGSAPAnimations();
+        } catch (err) {
+            console.error('GSAP init failed, forcing elements visible:', err);
+            forceShowAll();
+        }
+    }, 100);
 }

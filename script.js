@@ -79,6 +79,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, 200);
 
+    // Safety: force-show any hidden animated elements after 5s
+    // This catches edge cases where neither GSAP nor the fallback observer triggered
+    setTimeout(() => {
+        document.querySelectorAll('.venue-card, .section-header, .contact-content').forEach(el => {
+            const computedOpacity = getComputedStyle(el).opacity;
+            if (computedOpacity === '0') {
+                console.warn('[Safety] Forcing visibility on hidden element:', el);
+                el.style.opacity = '1';
+                el.style.transform = 'none';
+                el.style.transition = 'opacity 0.5s ease';
+            }
+        });
+    }, 5000);
+
     function initFallbackAnimations() {
         const observerOptions = {
             threshold: 0.1,

@@ -16,7 +16,16 @@ function renderGrid(elementId, data, cardCreator) {
     const grid = document.getElementById(elementId);
     if (!grid) return;
 
-    grid.innerHTML = data.map(item => cardCreator(item)).join('');
+    try {
+        if (!data || data.length === 0) {
+            grid.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 2rem;">No content available at this time.</p>';
+            return;
+        }
+        grid.innerHTML = data.map(item => cardCreator(item)).join('');
+    } catch (err) {
+        console.error(`Error rendering ${elementId}:`, err);
+        grid.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 2rem;">⚠️ Unable to load content. Please try again later.</p>';
+    }
 }
 
 /**

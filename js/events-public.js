@@ -477,7 +477,29 @@ function announceEventsLoaded(count) {
 
 // Auto-initialize when DOM is ready
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', loadPublicEvents);
+    document.addEventListener('DOMContentLoaded', () => {
+        try {
+            loadPublicEvents();
+        } catch (err) {
+            console.error('Failed to load events:', err);
+            const grid = document.querySelector('.events-grid');
+            if (grid) {
+                grid.innerHTML = `<div class="events-error">
+                    <p>⚠️ Unable to load events. Please refresh or try again later.</p>
+                </div>`;
+            }
+        }
+    });
 } else {
-    loadPublicEvents();
+    try {
+        loadPublicEvents();
+    } catch (err) {
+        console.error('Failed to load events:', err);
+        const grid = document.querySelector('.events-grid');
+        if (grid) {
+            grid.innerHTML = `<div class="events-error">
+                <p>⚠️ Unable to load events. Please refresh or try again later.</p>
+            </div>`;
+        }
+    }
 }
