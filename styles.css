@@ -948,6 +948,51 @@ h3 {
     color: var(--text-main);
 }
 
+/* Multi-date badge */
+.event-date-multi {
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(255, 204, 0, 0.15));
+    border-color: var(--primary);
+}
+
+.event-date-multi .month {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 0;
+}
+
+.event-date-multi .day {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--primary);
+}
+
+/* Ticket date selector */
+.ticket-selector {
+    position: relative;
+    flex: 1;
+}
+
+.ticket-selector .date-select {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.ticket-selector .btn {
+    width: 100%;
+    pointer-events: none;
+}
+
+.ticket-selector:hover .btn {
+    background: var(--primary-hover);
+}
+
 .event-details {
     padding: 2rem;
     background: linear-gradient(to bottom, var(--card-bg), rgba(22, 22, 22, 0.95));

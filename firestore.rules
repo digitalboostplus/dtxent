@@ -18,6 +18,9 @@ service cloud.firestore {
         // Optional: isClosed flag for past events
         (!data.keys().hasAny(['isClosed']) || data.isClosed is bool) &&
 
+        // Optional: dates array for multi-date shows
+        (!data.keys().hasAny(['dates']) || data.dates is list) &&
+
         // Optional: Schedule (List of Maps)
         (!data.keys().hasAny(['schedule']) || (
           data.schedule is list &&

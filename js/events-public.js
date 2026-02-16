@@ -216,15 +216,61 @@ function createEventCardHTML(event) {
         : new Date(event.eventDate).toISOString();
 
     const eventId = event.id || Math.random().toString(36).substr(2, 9);
+    const hasMultipleDates = event.dates && event.dates.length > 1;
+
+    // Build date badge - show "Multiple Dates" or single date
+    let dateBadgeHTML;
+    if (hasMultipleDates) {
+        dateBadgeHTML = `
+            <div class="event-date event-date-multi">
+                <span class="month">${event.dates.length}</span>
+                <span class="day">DATES</span>
+            </div>
+        `;
+    } else {
+        dateBadgeHTML = `
+            <div class="event-date">
+                <span class="month">${escapeHtml(event.displayMonth)}</span>
+                <span class="day">${escapeHtml(event.displayDay)}</span>
+            </div>
+        `;
+    }
+
+    // Build ticket button - dropdown for multi-date or direct link for single
+    let ticketButtonHTML;
+    if (hasMultipleDates) {
+        const dateOptions = event.dates.map(d => {
+            const dateObj = new Date(d.eventDate);
+            const formatted = dateObj.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+            return `<option value="${escapeHtml(d.ticketUrl)}">${formatted}</option>`;
+        }).join('');
+
+        ticketButtonHTML = `
+            <div class="ticket-selector" onclick="event.stopPropagation()">
+                <select class="date-select" onchange="if(this.value) window.open(this.value, '_blank')">
+                    <option value="">Select Date</option>
+                    ${dateOptions}
+                </select>
+                <span class="btn btn-primary btn-block">Tickets</span>
+            </div>
+        `;
+    } else {
+        ticketButtonHTML = `
+            <a href="${escapeHtml(event.ticketUrl)}"
+               class="btn btn-primary btn-block btn-icon"
+               target="_blank"
+               rel="noopener noreferrer"
+               onclick="event.stopPropagation()">
+               Tickets
+            </a>
+        `;
+    }
 
     return `
         <article class="event-card" role="listitem" data-event-id="${eventId}" ${event.tmEventId ? `data-tm-id="${event.tmEventId}"` : ''}>
             <div class="card-glow"></div>
             <div class="event-image">
-                <div class="event-date">
-                    <span class="month">${escapeHtml(event.displayMonth)}</span>
-                    <span class="day">${escapeHtml(event.displayDay)}</span>
-                </div>
+                ${dateBadgeHTML}
                 <div class="event-status-tag" id="status-${eventId}"></div>
                 <img src="${escapeHtml(imageUrl)}"
                      alt="${escapeHtml(imageAlt)}"
@@ -264,13 +310,7 @@ function createEventCardHTML(event) {
 
                 <div class="event-actions" style="display: flex; gap: 0.5rem; margin-top: 1rem;">
                     <button class="btn btn-outline btn-block show-details-btn">View Details</button>
-                    <a href="${escapeHtml(event.ticketUrl)}"
-                       class="btn btn-primary btn-block btn-icon"
-                       target="_blank"
-                       rel="noopener noreferrer"
-                       onclick="event.stopPropagation()">
-                       Tickets
-                    </a>
+                    ${ticketButtonHTML}
                 </div>
             </div>
         </article>
