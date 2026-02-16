@@ -12,8 +12,17 @@ class EventDetailModal {
     }
 
     init() {
+        // Prevent multiple initializations
+        if (this.initialized) return;
+
         // Create modal structure if it doesn't exist
         if (!document.getElementById('event-modal')) {
+            // Safety check for document body
+            if (!document.body) {
+                console.warn('[Modal] Document body not ready, deferring initialization');
+                return;
+            }
+
             const modalHTML = `
                 <div id="event-modal" class="modal-overlay" role="dialog" aria-modal="true">
                     <div class="modal-container">
@@ -38,28 +47,57 @@ class EventDetailModal {
         });
 
         window.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && this.modal.classList.contains('active')) {
+            if (e.key === 'Escape' && this.modal && this.modal.classList.contains('active')) {
                 this.close();
             }
         });
+
+        this.initialized = true;
     }
 
     async open(eventData) {
-        // Prevent background scrolling
-        document.body.style.overflow = 'hidden';
+        if (!eventData) {
+            console.error('[Modal] No event data provided');
+            return;
+        }
 
-        // Initial render with local data
-        this.renderInitial(eventData);
-        this.modal.classList.add('active');
+        try {
+            // Ensure initialized
+            if (!this.initialized) {
+                this.init();
+            }
 
-        // If it's a Ticketmaster event, fetch real-time data
-        if (eventData.tmEventId) {
-            this.showLoading();
-            const tmData = await getEventDetails(eventData.tmEventId);
-            if (tmData) {
-                this.renderTMData(eventData, tmData);
-            } else {
-                this.hideLoading();
+            if (!this.modal) {
+                throw new Error('Modal element not found after initialization');
+            }
+
+            // Prevent background scrolling
+            document.body.style.overflow = 'hidden';
+
+            // Initial render with local data
+            this.renderInitial(eventData);
+            this.modal.classList.add('active');
+
+            // If it's a Ticketmaster event, fetch real-time data
+            if (eventData.tmEventId) {
+                this.showLoading();
+                try {
+                    const tmData = await getEventDetails(eventData.tmEventId);
+                    if (tmData && this.modal.classList.contains('active')) {
+                        this.renderTMData(eventData, tmData);
+                    }
+                } catch (tmError) {
+                    console.warn('[Modal] Failed to fetch real-time data:', tmError);
+                } finally {
+                    this.hideLoading();
+                }
+            }
+        } catch (err) {
+            console.error('[Modal] Error opening modal:', err);
+            // Restore scrolling if opening fails
+            document.body.style.overflow = '';
+            if (this.modal) {
+                this.modal.classList.remove('active');
             }
         }
     }

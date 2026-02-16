@@ -1698,17 +1698,20 @@ input:invalid:not(:placeholder-shown)+.form-error {
     height: 100%;
     background: rgba(0, 0, 0, 0.9);
     backdrop-filter: blur(15px);
-    display: none;
+    display: flex;
     justify-content: center;
     align-items: center;
     z-index: 2000;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 .modal-overlay.active {
-    display: flex;
     opacity: 1;
+    visibility: visible;
+    pointer-events: all;
 }
 
 .modal-container {
