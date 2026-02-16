@@ -68,6 +68,17 @@ export const LOCAL_EVENTS = [
         isPublished: true
     },
     {
+        artistName: "High Tide Pool Party",
+        eventName: "feat. RNB Foemob & Charged Up",
+        eventDate: "2026-03-20T20:00:00",
+        venueName: "Peninsula Island Resort & Spa",
+        venueCity: "South Padre Island",
+        venueState: "TX",
+        imageName: "high-tide-pool-party.jpg",
+        ticketUrl: "https://zaeee.saffire.com/p/tickets",
+        isPublished: true
+    },
+    {
         artistName: "Citrus Break Comedy Show w/ MIKE Winfield (Citrus LIVE)",
         eventName: "",
         eventDate: "2026-03-21T20:00:00",
