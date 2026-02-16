@@ -120,9 +120,13 @@ export function loadPublicEvents() {
 
 /**
  * Process raw event data for display
+ * Groups multiple dates for the same artist at the same venue
  */
 function processEventsForDisplay(events) {
-    return events.map(event => {
+    if (!events || events.length === 0) return [];
+
+    // First, normalize all events (dates, images, etc.)
+    const normalizedEvents = events.map(event => {
         const hasLocalImage = event.imageName && event.imageName.length > 0;
         const hasExternalImage = event.imageUrl && event.imageUrl.length > 0;
 
@@ -154,16 +158,67 @@ function processEventsForDisplay(events) {
             dateObj = new Date(); // Fallback if invalid
         }
 
-        const monthShort = dateObj.toLocaleString('en-US', { month: 'short' });
-        const dayNum = dateObj.getDate();
-
         return {
             ...event,
             id: event.id || Math.random().toString(36).substr(2, 9),
             imageUrl: finalImageUrl,
+            eventDate: dateObj
+        };
+    });
+
+    // Sort by date ascending before grouping
+    normalizedEvents.sort((a, b) => a.eventDate - b.eventDate);
+
+    // Grouping logic: Key is artistName + venueName
+    const groupedMap = new Map();
+
+    normalizedEvents.forEach(event => {
+        const key = `${event.artistName.toLowerCase().trim()}|${event.venueName.toLowerCase().trim()}`;
+
+        if (groupedMap.has(key)) {
+            const existing = groupedMap.get(key);
+
+            // Add date to existing event's dates array
+            if (!existing.dates) {
+                existing.dates = [{
+                    eventDate: existing.eventDate,
+                    ticketUrl: existing.ticketUrl
+                }];
+            }
+
+            // Avoid duplicate dates in the array
+            const isDuplicateDate = existing.dates.some(d =>
+                new Date(d.eventDate).getTime() === event.eventDate.getTime()
+            );
+
+            if (!isDuplicateDate) {
+                existing.dates.push({
+                    eventDate: event.eventDate,
+                    ticketUrl: event.ticketUrl
+                });
+            }
+        } else {
+            // New entry
+            groupedMap.set(key, { ...event });
+        }
+    });
+
+    // Final pass to add display formats
+    return Array.from(groupedMap.values()).map(event => {
+        const monthShort = event.eventDate.toLocaleString('en-US', { month: 'short' });
+        const dayNum = event.eventDate.getDate();
+
+        // Sort dates within the group if they exist
+        if (event.dates && event.dates.length > 1) {
+            event.dates.sort((a, b) => new Date(a.eventDate) - new Date(b.eventDate));
+            // Update main date to the first one (already sorted but being explicit)
+            event.eventDate = new Date(event.dates[0].eventDate);
+        }
+
+        return {
+            ...event,
             displayMonth: monthShort.toUpperCase(),
-            displayDay: dayNum,
-            eventDate: dateObj // Ensure it's a Date object
+            displayDay: dayNum
         };
     });
 }

@@ -94,13 +94,43 @@ class EventDetailModal {
             day: 'numeric'
         });
 
+        const hasMultipleDates = event.dates && event.dates.length > 1;
+        let datesHTML = '';
+
+        if (hasMultipleDates) {
+            datesHTML = `
+                <section class="modal-dates-multi">
+                    <h3 class="modal-section-title">Available Dates</h3>
+                    <div class="modal-dates-list">
+                        ${event.dates.map(d => {
+                const dDate = new Date(d.eventDate);
+                const day = dDate.toLocaleDateString('en-US', { weekday: 'short' });
+                const mo = dDate.toLocaleDateString('en-US', { month: 'short' });
+                const dt = dDate.getDate();
+                const tm = dDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+
+                return `
+                                <div class="modal-date-row">
+                                    <div class="date-info">
+                                        <span class="date-day">${day}, ${mo} ${dt}</span>
+                                        <span class="date-time">${tm}</span>
+                                    </div>
+                                    <a href="${d.ticketUrl}" target="_blank" class="btn btn-primary btn-sm">Tickets</a>
+                                </div>
+                            `;
+            }).join('')}
+                    </div>
+                </section>
+            `;
+        }
+
         this.contentArea.innerHTML = `
             <div class="modal-hero">
                 <img src="${event.imageUrl}" alt="${event.artistName}">
             </div>
             <div class="modal-content">
                 <div class="modal-header">
-                    <span class="modal-event-date">${dateString}</span>
+                    <span class="modal-event-date">${hasMultipleDates ? 'Multiple Dates Available' : dateString}</span>
                     <h2 class="modal-event-name">${event.artistName}</h2>
                     <p class="modal-info-text">${event.eventName || ''}</p>
                 </div>
@@ -114,6 +144,7 @@ class EventDetailModal {
                                 Join us for an unforgettable experience!
                             </p>
                         </section>
+                        ${datesHTML}
                     </div>
                     <div class="modal-sidebar">
                         <div class="venue-info">
@@ -126,9 +157,11 @@ class EventDetailModal {
                             </div>
                         </div>
                         
+                        ${!hasMultipleDates ? `
                         <div class="modal-actions">
                             <a href="${event.ticketUrl}" target="_blank" class="btn btn-primary btn-block">Buy Tickets</a>
                         </div>
+                        ` : ''}
                     </div>
                 </div>
             </div>
