@@ -60,10 +60,13 @@ export function loadPublicEvents() {
                 id: doc.id,
                 eventDate: eventDate
             });
-        });
+        // Filter out past events (e.g., events that occurred more than 6 hours ago)
+        const now = new Date();
+        const pastCutoff = new Date(now.getTime() - (6 * 60 * 60 * 1000));
+        const upcomingEvents = processedEvents.filter(event => event.eventDate >= pastCutoff);
 
         // Process events for display
-        const displayEvents = processEventsForDisplay(processedEvents);
+        const displayEvents = processEventsForDisplay(upcomingEvents);
 
         if (displayEvents.length === 0) {
             eventsGrid.innerHTML = `
@@ -93,7 +96,14 @@ export function loadPublicEvents() {
         console.warn('Error loading events from Firestore, falling back to local data:', error);
 
         // Fallback to local data
-        const displayEvents = processEventsForDisplay(LOCAL_EVENTS);
+        const now = new Date();
+        const pastCutoff = new Date(now.getTime() - (6 * 60 * 60 * 1000));
+        const upcomingLocalEvents = LOCAL_EVENTS.filter(event => {
+            const eventDate = new Date(event.eventDate);
+            return !isNaN(eventDate.getTime()) && eventDate >= pastCutoff;
+        });
+
+        const displayEvents = processEventsForDisplay(upcomingLocalEvents);
 
         if (displayEvents.length === 0) {
             eventsGrid.innerHTML = `
