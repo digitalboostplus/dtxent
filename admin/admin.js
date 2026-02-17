@@ -844,20 +844,9 @@ function validateAndPreviewImage(file) {
 async function handleSubmit(e) {
     e.preventDefault();
 
-    // Validate image for new events
+    // Validation: Image is now optional
     const imageMode = document.querySelector('input[name="imageType"]:checked').value;
     const externalUrl = externalUrlInput.value.trim();
-
-    if (!editingEventId) {
-        if (imageMode === 'upload' && !selectedImageFile) {
-            showToast('Please select an image for the event.', 'error');
-            return;
-        }
-        if (imageMode === 'url' && !externalUrl) {
-            showToast('Please enter an image URL.', 'error');
-            return;
-        }
-    }
 
     setSubmitLoading(true);
 
