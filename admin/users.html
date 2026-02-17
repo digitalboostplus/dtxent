@@ -48,8 +48,13 @@
 
             <!-- Add Admin Form -->
             <div class="add-admin-form">
-                <input type="email" id="new-admin-email" placeholder="Enter email address to add as admin..." required>
-                <button class="btn btn-primary" id="add-admin-btn">Add Admin</button>
+                <input type="email" id="new-admin-email" placeholder="Enter email address..." required>
+                <select id="new-admin-role" class="admin-select">
+                    <option value="editor">Editor</option>
+                    <option value="admin" selected>Admin</option>
+                    <option value="owner">Owner</option>
+                </select>
+                <button class="btn btn-primary" id="add-admin-btn">Add User</button>
             </div>
 
             <!-- Admin Users List -->

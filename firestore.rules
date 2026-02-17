@@ -1,38 +1,38 @@
 rules_version = '2';
-
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Check if the authenticated user is in the admins collection
-    function isAdmin(email) {
-      return exists(/databases/$(database)/documents/admins/$(email));
+    // --- Helper Functions ---
+
+    // Get admin data for the given email
+    function getAdmin(email) {
+      return get(/databases/$(database)/documents/admins/$(email)).data;
     }
+
+    // Check if user has one of the required roles
+    function hasRole(email, roles) {
+      let admin = getAdmin(email);
+      return admin != null && admin.role in roles;
+    }
+
+    // Role-specific helpers
+    function isOwner(email) { return hasRole(email, ['owner']); }
+    function isAdmin(email) { return hasRole(email, ['owner', 'admin']); }
+    function isEditor(email) { return hasRole(email, ['owner', 'admin', 'editor']); }
 
     // Validates an Event document
     function isValidEvent() {
       let data = request.resource.data;
       return
-        // Required fields
         data.keys().hasAll(['artistName', 'eventName', 'eventDate', 'venueName', 'isPublished']) &&
         data.artistName is string &&
         data.eventName is string &&
         data.eventDate is timestamp &&
         data.venueName is string &&
         data.isPublished is bool &&
-
-        // Optional: isClosed flag for past events
         (!data.keys().hasAny(['isClosed']) || data.isClosed is bool) &&
-
-        // Optional: dates array for multi-date shows
         (!data.keys().hasAny(['dates']) || data.dates is list) &&
-
-        // Optional: Schedule (List of Maps)
-        (!data.keys().hasAny(['schedule']) || (
-          data.schedule is list &&
-          true
-        )) &&
-
-        // Optional: External Image URL or Storage Path
+        (!data.keys().hasAny(['schedule']) || data.schedule is list) &&
         (!data.keys().hasAny(['imageUrl']) || data.imageUrl is string || data.imageUrl == null) &&
         (!data.keys().hasAny(['imagePath']) || data.imagePath is string || data.imagePath == null);
     }
@@ -49,31 +49,31 @@ service cloud.firestore {
         data.status in ['active', 'unsubscribed'];
     }
 
-    // Events collection - admin-only writes
+    // --- Collection Rules ---
+
+    // Events collection
     match /events/{event} {
       allow read: if true;
-      allow create: if request.auth != null && isAdmin(request.auth.token.email) && isValidEvent();
-      allow update: if request.auth != null && isAdmin(request.auth.token.email) && isValidEvent();
+      // Owners, Admins, and Editors can create/update
+      allow create, update: if request.auth != null && isEditor(request.auth.token.email) && isValidEvent();
+      // Only Owners and Admins can delete events
       allow delete: if request.auth != null && isAdmin(request.auth.token.email);
     }
 
-    // Admins collection - only admins can manage other admins
+    // Admins collection
     match /admins/{adminDoc} {
+      // Any authenticated user can read (needed for role check)
       allow read: if request.auth != null;
-      allow create: if request.auth != null && isAdmin(request.auth.token.email);
-      allow delete: if request.auth != null && isAdmin(request.auth.token.email);
-      allow update: if false;
+      // ONLY Owners can create/delete/update other admins
+      allow create, delete, update: if request.auth != null && isOwner(request.auth.token.email);
     }
 
     // Newsletter subscribers collection
     match /newsletter/{subscriber} {
-      // Anyone can read to check if already subscribed (needed for duplicate check)
       allow read: if true;
-      // Anyone can subscribe (create)
       allow create: if isValidNewsletterSubscription();
-      // Only authenticated users can update/delete (admin only)
-      allow update: if request.auth != null;
-      allow delete: if request.auth != null;
+      // Only Owners and Admins can manage subscribers
+      allow update, delete: if request.auth != null && isAdmin(request.auth.token.email);
     }
 
     // Deny all other collections

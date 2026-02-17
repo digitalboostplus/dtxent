@@ -91,6 +91,21 @@ export async function requireAdminAccess(loginUrl = '/admin/login.html') {
         throw new Error('Not authorized as admin');
     }
 
+    const adminData = adminDoc.data();
+    return { ...user, role: adminData.role || 'admin' };
+}
+
+/**
+ * Protect a page - require Owner role
+ * @param {string} loginUrl
+ * @returns {Promise<User>}
+ */
+export async function requireOwnerAccess(loginUrl = '/admin/login.html') {
+    const user = await requireAdminAccess(loginUrl);
+    if (user.role !== 'owner') {
+        window.location.href = '/admin/index.html?error=insufficient_permissions';
+        throw new Error('Insufficient permissions');
+    }
     return user;
 }
 

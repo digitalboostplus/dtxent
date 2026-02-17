@@ -104,6 +104,7 @@ let deletingEventId = null;
 let deletingImagePath = null;
 let selectedImageFile = null;
 let selectedEventIds = new Set();
+let currentUserRole = 'editor';
 
 // Filter State
 let filterState = {
@@ -131,6 +132,7 @@ function debounce(fn, delay) {
 async function init() {
     try {
         const user = await requireAdminAccess('/admin/login.html');
+        currentUserRole = user.role;
         adminEmail.textContent = user.email;
         hideLoading();
         showApp();
@@ -455,6 +457,10 @@ function renderEvents() {
 
     eventsList.querySelectorAll('.delete-btn').forEach(btn => {
         btn.addEventListener('click', () => {
+            if (currentUserRole === 'editor') {
+                showToast('You do not have permission to delete events.', 'error');
+                return;
+            }
             deletingEventId = btn.dataset.id;
             deletingImagePath = btn.dataset.imagepath;
             openDeleteModal();
@@ -514,10 +520,12 @@ function createEventCard(event) {
                     ${event.isPublished ? '👁' : '👁‍🗨'}
                 </button>
                 <button class="btn-icon edit edit-btn" data-id="${event.id}" title="Edit">✏️</button>
+                ${currentUserRole !== 'editor' ? `
                 <button class="btn-icon delete delete-btn"
                         data-id="${event.id}"
                         data-imagepath="${event.imagePath || ''}"
                         title="Delete">🗑️</button>
+                ` : ''}
             </div>
         </div>
     `;
@@ -590,38 +598,6 @@ async function handleBulkUnpublish() {
     } catch (error) {
         console.error('Bulk unpublish error:', error);
         showToast('Error unpublishing events.', 'error');
-    }
-}
-
-async function handleBulkDelete() {
-    bulkDeleteModal.classList.remove('active');
-    const ids = [...selectedEventIds];
-
-    try {
-        const results = await Promise.allSettled(
-            ids.map(async id => {
-                const event = events.find(e => e.id === id);
-                if (event?.imagePath) {
-                    try {
-                        await deleteObject(ref(storage, event.imagePath));
-                    } catch (e) {
-                        console.warn('Could not delete image:', e);
-                    }
-                }
-                await deleteDoc(doc(db, 'events', id));
-            })
-        );
-        const failed = results.filter(r => r.status === 'rejected').length;
-        if (failed > 0) {
-            showToast(`Deleted ${ids.length - failed} events. ${failed} failed.`, 'error');
-        } else {
-            showToast(`Deleted ${ids.length} event(s)!`, 'success');
-        }
-        clearSelection();
-        await loadEvents();
-    } catch (error) {
-        console.error('Bulk delete error:', error);
-        showToast('Error deleting events.', 'error');
     }
 }
 
@@ -749,6 +725,44 @@ function resetImageUpload() {
 // Delete Modal
 function openDeleteModal() {
     deleteModal.classList.add('active');
+}
+
+async function handleBulkDelete() {
+    if (currentUserRole === 'editor') {
+        showToast('You do not have permission to delete events.', 'error');
+        bulkDeleteModal.classList.remove('active');
+        return;
+    }
+    bulkDeleteModal.classList.remove('active');
+    const ids = [...selectedEventIds];
+    try {
+        const results = await Promise.allSettled(
+            ids.map(async id => {
+                const event = events.find(e => e.id === id);
+                if (event?.imagePath) {
+                    try {
+                        await deleteObject(ref(storage, event.imagePath));
+                    } catch (e) {
+                        console.warn('Could not delete image:', e);
+                    }
+                }
+                await deleteDoc(doc(db, 'events', id));
+            })
+        );
+        const failed = results.filter(r => r.status === 'rejected').length;
+        if (failed > 0) {
+            showToast(`Deleted ${ids.length - failed} events. ${failed} failed.`, 'error');
+        } else {
+            showToast(`Deleted ${ids.length} event(s)!`, 'success');
+        }
+        clearSelection();
+        await loadEvents();
+    } catch (error) {
+        console.error('Bulk delete error:', error);
+        showToast('Error deleting events.', 'error');
+    }
+    deletingEventId = null;
+    deletingImagePath = null;
 }
 
 function closeDeleteModal() {

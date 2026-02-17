@@ -1,6 +1,6 @@
 // Admin Users Management
 import { db, auth } from '../js/firebase-config.js';
-import { requireAdminAccess, signOut } from '../js/auth.js';
+import { requireOwnerAccess, signOut } from '../js/auth.js';
 import {
     collection,
     doc,
@@ -18,6 +18,7 @@ const logoutBtn = document.getElementById('logout-btn');
 const adminsList = document.getElementById('admins-list');
 const emptyState = document.getElementById('empty-state');
 const newAdminEmailInput = document.getElementById('new-admin-email');
+const newAdminRoleSelect = document.getElementById('new-admin-role');
 const addAdminBtn = document.getElementById('add-admin-btn');
 const deleteModal = document.getElementById('delete-modal');
 const deleteCancel = document.getElementById('delete-cancel');
@@ -33,7 +34,7 @@ let deletingAdminEmail = null;
 // Initialize
 async function init() {
     try {
-        const user = await requireAdminAccess('/admin/login.html');
+        const user = await requireOwnerAccess('/admin/login.html');
         currentUserEmail = user.email;
         adminEmail.textContent = user.email;
         hideLoading();
@@ -113,6 +114,7 @@ function renderAdmins() {
             <div class="admin-user-card">
                 <div class="admin-user-info">
                     <div class="admin-user-email">${escapeHtml(admin.email)}${isSelf ? ' (you)' : ''}</div>
+                    <div class="admin-user-role-badge role-${admin.role || 'admin'}">${(admin.role || 'admin').toUpperCase()}</div>
                     <div class="admin-user-meta">Added by ${escapeHtml(addedBy)} on ${addedAt}</div>
                 </div>
                 <div class="admin-user-actions">
@@ -154,12 +156,14 @@ async function handleAddAdmin() {
 
     addAdminBtn.disabled = true;
     try {
+        const role = newAdminRoleSelect.value;
         await setDoc(doc(db, 'admins', email), {
             email,
+            role,
             addedBy: currentUserEmail,
             addedAt: serverTimestamp()
         });
-        showToast(`${email} added as admin!`, 'success');
+        showToast(`${email} added as ${role}!`, 'success');
         newAdminEmailInput.value = '';
         await loadAdmins();
     } catch (error) {
