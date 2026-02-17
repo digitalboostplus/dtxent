@@ -70,7 +70,8 @@
             <!-- Filter Toolbar -->
             <div class="filter-toolbar">
                 <div class="filter-row">
-                    <input type="text" id="filter-search" class="filter-input" placeholder="Search artists, events, venues...">
+                    <input type="text" id="filter-search" class="filter-input"
+                        placeholder="Search artists, events, venues...">
                     <select id="filter-status" class="filter-select">
                         <option value="all">All Status</option>
                         <option value="published">Published</option>
@@ -190,7 +191,7 @@
 
                     <div class="form-group">
                         <label for="ticketUrl">Ticket URL <span class="required">*</span></label>
-                        <input type="url" id="ticketUrl" name="ticketUrl" required
+                        <input type="text" id="ticketUrl" name="ticketUrl" required
                             placeholder="https://www.ticketmaster.com/...">
                     </div>
 
@@ -242,7 +243,7 @@
                         </div>
 
                         <div id="image-url-input" style="display: none;">
-                            <input type="url" id="externalImageUrl" name="externalImageUrl"
+                            <input type="text" id="externalImageUrl" name="externalImageUrl"
                                 placeholder="https://example.com/image.jpg">
                             <img id="external-image-preview" class="image-preview" alt="Preview"
                                 style="display: none; margin-top: 10px;">
@@ -262,6 +263,16 @@
                                 <span class="toggle-slider"></span>
                             </label>
                             <span class="toggle-label">Published (visible on website)</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="toggle-wrapper">
+                            <label class="toggle">
+                                <input type="checkbox" id="isClosed" name="isClosed">
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <span class="toggle-label">Closed (tickets no longer available)</span>
                         </div>
                     </div>
                 </div>
@@ -308,7 +319,8 @@
             <div class="modal-body">
                 <div class="confirm-dialog">
                     <h3>Delete Selected Events?</h3>
-                    <p id="bulk-delete-msg">This action cannot be undone. The selected events and their images will be permanently deleted.</p>
+                    <p id="bulk-delete-msg">This action cannot be undone. The selected events and their images will be
+                        permanently deleted.</p>
                     <div class="confirm-actions">
                         <button type="button" class="btn btn-secondary" id="bulk-delete-cancel">Cancel</button>
                         <button type="button" class="btn btn-danger" id="bulk-delete-confirm">Delete All</button>

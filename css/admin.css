@@ -423,6 +423,17 @@
     color: var(--primary);
 }
 
+.status-badge.closed {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+}
+
+.btn-icon.active-closed {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.3);
+    color: #f87171;
+}
+
 /* Action Buttons */
 .btn-icon {
     display: inline-flex;

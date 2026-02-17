@@ -43,6 +43,10 @@ async function init() {
         setupEventListeners();
     } catch (error) {
         console.error('Auth error:', error);
+        hideLoading();
+        if (!error.message.includes('Not authenticated')) {
+            alert('Authentication Error: ' + error.message);
+        }
     }
 }
 

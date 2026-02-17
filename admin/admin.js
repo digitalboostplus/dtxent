@@ -140,6 +140,12 @@ async function init() {
         setupEventListeners();
     } catch (error) {
         console.error('Auth error:', error);
+        hideLoading();
+        // If not authenticated, requireAdminAccess already redirects
+        // If other error, show it
+        if (!error.message.includes('Not authenticated')) {
+            alert('Authentication Error: ' + error.message);
+        }
     }
 }
 
@@ -475,6 +481,14 @@ function renderEvents() {
         });
     });
 
+    eventsList.querySelectorAll('.toggle-closed').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const eventId = btn.dataset.id;
+            const currentStatus = btn.dataset.closed === 'true';
+            await toggleClosed(eventId, currentStatus);
+        });
+    });
+
     // Checkbox listeners
     eventsList.querySelectorAll('.event-checkbox').forEach(cb => {
         cb.addEventListener('change', () => {
@@ -510,9 +524,16 @@ function createEventCard(event) {
                     <span class="status-badge ${event.isPublished ? 'published' : 'draft'}">
                         ${event.isPublished ? 'Published' : 'Draft'}
                     </span>
+                    ${event.isClosed ? '<span class="status-badge closed">Closed</span>' : ''}
                 </div>
             </div>
             <div class="event-admin-actions">
+                <button class="btn-icon toggle-closed ${event.isClosed ? 'active-closed' : ''}"
+                        data-id="${event.id}"
+                        data-closed="${!!event.isClosed}"
+                        title="${event.isClosed ? 'Reopen Show' : 'Mark as Closed'}">
+                    ${event.isClosed ? '🔒' : '🔓'}
+                </button>
                 <button class="btn-icon toggle-publish"
                         data-id="${event.id}"
                         data-published="${event.isPublished}"
@@ -601,6 +622,43 @@ async function handleBulkUnpublish() {
     }
 }
 
+async function handleBulkDelete() {
+    if (currentUserRole === 'editor') {
+        showToast('You do not have permission to delete events.', 'error');
+        bulkDeleteModal.classList.remove('active');
+        return;
+    }
+    bulkDeleteModal.classList.remove('active');
+    const ids = [...selectedEventIds];
+
+    try {
+        const results = await Promise.allSettled(
+            ids.map(async id => {
+                const event = events.find(e => e.id === id);
+                if (event?.imagePath) {
+                    try {
+                        await deleteObject(ref(storage, event.imagePath));
+                    } catch (e) {
+                        console.warn('Could not delete image:', e);
+                    }
+                }
+                await deleteDoc(doc(db, 'events', id));
+            })
+        );
+        const failed = results.filter(r => r.status === 'rejected').length;
+        if (failed > 0) {
+            showToast(`Deleted ${ids.length - failed} events. ${failed} failed.`, 'error');
+        } else {
+            showToast(`Deleted ${ids.length} event(s)!`, 'success');
+        }
+        clearSelection();
+        await loadEvents();
+    } catch (error) {
+        console.error('Bulk delete error:', error);
+        showToast('Error deleting events.', 'error');
+    }
+}
+
 // Modal Functions
 function toggleImageType(type) {
     if (type === 'upload') {
@@ -628,7 +686,7 @@ function addDateItem(dateVal = '', ticketUrl = '') {
     div.className = 'date-item-row';
     div.innerHTML = `
         <input type="date" value="${escapeAttr(dateVal)}" class="date-value" aria-label="Date">
-        <input type="url" placeholder="Ticket URL" value="${escapeAttr(ticketUrl)}" class="date-ticket-url" aria-label="Ticket URL">
+        <input type="text" placeholder="Ticket URL" value="${escapeAttr(ticketUrl)}" class="date-ticket-url" aria-label="Ticket URL">
         <button type="button" class="btn-remove-date" title="Remove Date">&times;</button>
     `;
     datesContainer.appendChild(div);
@@ -662,6 +720,7 @@ function openModal(event = null) {
         document.getElementById('ticketUrl').value = event.ticketUrl || '';
         document.getElementById('imageAlt').value = event.imageAlt || '';
         document.getElementById('isPublished').checked = event.isPublished !== false;
+        document.getElementById('isClosed').checked = !!event.isClosed;
 
         // Schedule
         if (event.schedule && Array.isArray(event.schedule)) {
@@ -725,44 +784,6 @@ function resetImageUpload() {
 // Delete Modal
 function openDeleteModal() {
     deleteModal.classList.add('active');
-}
-
-async function handleBulkDelete() {
-    if (currentUserRole === 'editor') {
-        showToast('You do not have permission to delete events.', 'error');
-        bulkDeleteModal.classList.remove('active');
-        return;
-    }
-    bulkDeleteModal.classList.remove('active');
-    const ids = [...selectedEventIds];
-    try {
-        const results = await Promise.allSettled(
-            ids.map(async id => {
-                const event = events.find(e => e.id === id);
-                if (event?.imagePath) {
-                    try {
-                        await deleteObject(ref(storage, event.imagePath));
-                    } catch (e) {
-                        console.warn('Could not delete image:', e);
-                    }
-                }
-                await deleteDoc(doc(db, 'events', id));
-            })
-        );
-        const failed = results.filter(r => r.status === 'rejected').length;
-        if (failed > 0) {
-            showToast(`Deleted ${ids.length - failed} events. ${failed} failed.`, 'error');
-        } else {
-            showToast(`Deleted ${ids.length} event(s)!`, 'success');
-        }
-        clearSelection();
-        await loadEvents();
-    } catch (error) {
-        console.error('Bulk delete error:', error);
-        showToast('Error deleting events.', 'error');
-    }
-    deletingEventId = null;
-    deletingImagePath = null;
 }
 
 function closeDeleteModal() {
@@ -912,6 +933,7 @@ function getFormData() {
         imageAlt: document.getElementById('imageAlt').value.trim() ||
             `${document.getElementById('artistName').value.trim()} - ${document.getElementById('eventName').value.trim()}`,
         isPublished: document.getElementById('isPublished').checked,
+        isClosed: document.getElementById('isClosed').checked,
         schedule: scheduleItems
     };
 
@@ -987,6 +1009,22 @@ async function togglePublish(eventId, currentStatus) {
         await loadEvents();
     } catch (error) {
         console.error('Error toggling publish:', error);
+        showToast('Error updating event status.', 'error');
+    }
+}
+
+// Toggle Closed
+async function toggleClosed(eventId, currentStatus) {
+    try {
+        const eventRef = doc(db, 'events', eventId);
+        await updateDoc(eventRef, {
+            isClosed: !currentStatus,
+            updatedAt: serverTimestamp()
+        });
+        showToast(`Event ${!currentStatus ? 'marked as closed' : 'reopened'}!`, 'success');
+        await loadEvents();
+    } catch (error) {
+        console.error('Error toggling closed:', error);
         showToast('Error updating event status.', 'error');
     }
 }

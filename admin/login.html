@@ -58,8 +58,8 @@
     <script type="module">
         import { signIn, redirectIfAuthenticated } from '../js/auth.js';
 
-        // Redirect if already logged in
-        redirectIfAuthenticated('/admin/index.html');
+        // Redirect if already logged in (commented out to prevent auto-login loop)
+        // redirectIfAuthenticated('/admin/index.html');
 
         // Show unauthorized error if redirected
         const urlParams = new URLSearchParams(window.location.search);
