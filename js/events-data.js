@@ -17,7 +17,7 @@ export const LOCAL_EVENTS = [
             { time: "7:00 PM", description: "Doors Open" },
             { time: "9:00 PM", description: "Show Starts" }
         ],
-        isPublished: true
+        isPublished: false
     },
     {
         artistName: "Gulf Coast Comedy",
@@ -32,7 +32,7 @@ export const LOCAL_EVENTS = [
             { time: "5:30 PM", description: "Doors Open" },
             { time: "6:30 PM", description: "Show Starts" }
         ],
-        isPublished: true
+        isPublished: false
     },
     {
         artistName: "Los Angeles Azules",
