@@ -26,6 +26,7 @@ export function loadPublicEvents() {
     const pastCutoff = new Date(now.getTime() - (6 * 60 * 60 * 1000));
 
     const initialLocalEvents = LOCAL_EVENTS.filter(event => {
+        if (event.isPublished === false) return false;
         const eventDate = new Date(event.eventDate);
         return !isNaN(eventDate.getTime()) && eventDate >= pastCutoff;
     });
@@ -88,6 +89,7 @@ export function loadPublicEvents() {
                 console.log('Firestore is empty or has no upcoming events. Staying with/reverting to local data.');
                 // If Firestore is empty but we have local data, ensure local data is shown
                 const upcomingLocal = LOCAL_EVENTS.filter(event => {
+                    if (event.isPublished === false) return false;
                     const eventDate = new Date(event.eventDate);
                     return !isNaN(eventDate.getTime()) && eventDate >= pastCutoff;
                 });
@@ -107,6 +109,7 @@ export function loadPublicEvents() {
             // Error case: already handled by initial load, but let's re-verify local data
             if (eventsGrid.querySelector('.skeleton-grid')) {
                 const upcomingLocal = LOCAL_EVENTS.filter(event => {
+                    if (event.isPublished === false) return false;
                     const eventDate = new Date(event.eventDate);
                     return !isNaN(eventDate.getTime()) && eventDate >= pastCutoff;
                 });
