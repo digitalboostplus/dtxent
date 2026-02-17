@@ -1,6 +1,6 @@
 // Admin Dashboard - Event Management
 import { db, storage, auth } from '../js/firebase-config.js';
-import { requireAuth, signOut, onAuthStateChanged } from '../js/auth.js';
+import { requireAdminAccess, signOut, onAuthStateChanged } from '../js/auth.js';
 import {
     collection,
     addDoc,
@@ -27,12 +27,17 @@ const adminEmail = document.getElementById('admin-email');
 const logoutBtn = document.getElementById('logout-btn');
 const eventsList = document.getElementById('events-list');
 const emptyState = document.getElementById('empty-state');
+const noResultsState = document.getElementById('no-results-state');
 const addEventBtn = document.getElementById('add-event-btn');
 const addFirstEventBtn = document.getElementById('add-first-event-btn');
 
 // Schedule Elements
 const scheduleContainer = document.getElementById('schedule-container');
 const addScheduleBtn = document.getElementById('add-schedule-btn');
+
+// Dates Elements
+const datesContainer = document.getElementById('dates-container');
+const addDateBtn = document.getElementById('add-date-btn');
 
 // Image Type Elements
 const imageTypeRadios = document.getElementsByName('imageType');
@@ -61,6 +66,34 @@ const imageInput = document.getElementById('eventImage');
 const imagePreview = document.getElementById('image-preview');
 const uploadPlaceholder = document.getElementById('upload-placeholder');
 
+// Filter Elements
+const filterSearch = document.getElementById('filter-search');
+const filterStatus = document.getElementById('filter-status');
+const filterVenue = document.getElementById('filter-venue');
+const filterSort = document.getElementById('filter-sort');
+const filterDateFrom = document.getElementById('filter-date-from');
+const filterDateTo = document.getElementById('filter-date-to');
+const clearFiltersBtn = document.getElementById('clear-filters-btn');
+const selectAllCheckbox = document.getElementById('select-all-checkbox');
+
+// Bulk Elements
+const bulkToolbar = document.getElementById('bulk-toolbar');
+const bulkCount = document.getElementById('bulk-count');
+const bulkPublishBtn = document.getElementById('bulk-publish-btn');
+const bulkUnpublishBtn = document.getElementById('bulk-unpublish-btn');
+const bulkDeleteBtn = document.getElementById('bulk-delete-btn');
+const bulkCancelBtn = document.getElementById('bulk-cancel-btn');
+const bulkDeleteModal = document.getElementById('bulk-delete-modal');
+const bulkDeleteCancel = document.getElementById('bulk-delete-cancel');
+const bulkDeleteConfirm = document.getElementById('bulk-delete-confirm');
+const bulkDeleteMsg = document.getElementById('bulk-delete-msg');
+
+// Stats Elements
+const statTotal = document.getElementById('stat-total');
+const statUpcoming = document.getElementById('stat-upcoming');
+const statPast = document.getElementById('stat-past');
+const statDrafts = document.getElementById('stat-drafts');
+
 // Toast Container
 const toastContainer = document.getElementById('toast-container');
 
@@ -70,14 +103,34 @@ let editingEventId = null;
 let deletingEventId = null;
 let deletingImagePath = null;
 let selectedImageFile = null;
+let selectedEventIds = new Set();
+
+// Filter State
+let filterState = {
+    search: '',
+    status: 'all',
+    venue: 'all',
+    sort: 'date-asc',
+    dateFrom: '',
+    dateTo: ''
+};
 
 // Month abbreviations
 const MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
+// Debounce helper
+function debounce(fn, delay) {
+    let timer;
+    return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn(...args), delay);
+    };
+}
+
 // Initialize
 async function init() {
     try {
-        const user = await requireAuth('/admin/login.html');
+        const user = await requireAdminAccess('/admin/login.html');
         adminEmail.textContent = user.email;
         hideLoading();
         showApp();
@@ -119,13 +172,20 @@ function setupEventListeners() {
     imageUploadArea.addEventListener('click', () => imageInput.click());
     imageInput.addEventListener('change', handleImageSelect);
     imageUploadArea.addEventListener('dragover', handleDragOver);
-    imageUploadArea.addEventListener('dragover', handleDragOver);
     imageUploadArea.addEventListener('drop', handleDrop);
 
     // Schedule handling
     addScheduleBtn.addEventListener('click', () => addScheduleItem());
     scheduleContainer.addEventListener('click', (e) => {
         if (e.target.classList.contains('btn-remove-schedule')) {
+            e.target.parentElement.remove();
+        }
+    });
+
+    // Dates handling
+    addDateBtn.addEventListener('click', () => addDateItem());
+    datesContainer.addEventListener('click', (e) => {
+        if (e.target.classList.contains('btn-remove-date')) {
             e.target.parentElement.remove();
         }
     });
@@ -154,13 +214,184 @@ function setupEventListeners() {
         if (e.target === deleteModal) closeDeleteModal();
     });
 
+    // Filter listeners
+    filterSearch.addEventListener('input', debounce(() => {
+        filterState.search = filterSearch.value.trim().toLowerCase();
+        renderEvents();
+    }, 150));
+
+    filterStatus.addEventListener('change', () => {
+        filterState.status = filterStatus.value;
+        renderEvents();
+    });
+
+    filterVenue.addEventListener('change', () => {
+        filterState.venue = filterVenue.value;
+        renderEvents();
+    });
+
+    filterSort.addEventListener('change', () => {
+        filterState.sort = filterSort.value;
+        renderEvents();
+    });
+
+    filterDateFrom.addEventListener('change', () => {
+        filterState.dateFrom = filterDateFrom.value;
+        renderEvents();
+    });
+
+    filterDateTo.addEventListener('change', () => {
+        filterState.dateTo = filterDateTo.value;
+        renderEvents();
+    });
+
+    clearFiltersBtn.addEventListener('click', clearFilters);
+
+    // Select All
+    selectAllCheckbox.addEventListener('change', () => {
+        const filtered = getFilteredEvents();
+        if (selectAllCheckbox.checked) {
+            filtered.forEach(e => selectedEventIds.add(e.id));
+        } else {
+            filtered.forEach(e => selectedEventIds.delete(e.id));
+        }
+        updateCheckboxes();
+        updateBulkToolbar();
+    });
+
+    // Bulk actions
+    bulkPublishBtn.addEventListener('click', handleBulkPublish);
+    bulkUnpublishBtn.addEventListener('click', handleBulkUnpublish);
+    bulkDeleteBtn.addEventListener('click', () => {
+        bulkDeleteMsg.textContent = `This will permanently delete ${selectedEventIds.size} event(s) and their images. This cannot be undone.`;
+        bulkDeleteModal.classList.add('active');
+    });
+    bulkCancelBtn.addEventListener('click', clearSelection);
+    bulkDeleteCancel.addEventListener('click', () => bulkDeleteModal.classList.remove('active'));
+    bulkDeleteConfirm.addEventListener('click', handleBulkDelete);
+    bulkDeleteModal.addEventListener('click', (e) => {
+        if (e.target === bulkDeleteModal) bulkDeleteModal.classList.remove('active');
+    });
+
     // Keyboard shortcuts
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             closeModal();
             closeDeleteModal();
+            bulkDeleteModal.classList.remove('active');
         }
     });
+}
+
+// Filters
+function clearFilters() {
+    filterSearch.value = '';
+    filterStatus.value = 'all';
+    filterVenue.value = 'all';
+    filterSort.value = 'date-asc';
+    filterDateFrom.value = '';
+    filterDateTo.value = '';
+    filterState = { search: '', status: 'all', venue: 'all', sort: 'date-asc', dateFrom: '', dateTo: '' };
+    renderEvents();
+}
+
+function getFilteredEvents() {
+    let filtered = [...events];
+    const now = new Date();
+
+    // Text search
+    if (filterState.search) {
+        const q = filterState.search;
+        filtered = filtered.filter(e =>
+            (e.artistName || '').toLowerCase().includes(q) ||
+            (e.eventName || '').toLowerCase().includes(q) ||
+            (e.venueName || '').toLowerCase().includes(q) ||
+            (e.venueCity || '').toLowerCase().includes(q)
+        );
+    }
+
+    // Status filter
+    if (filterState.status === 'published') {
+        filtered = filtered.filter(e => e.isPublished);
+    } else if (filterState.status === 'draft') {
+        filtered = filtered.filter(e => !e.isPublished);
+    }
+
+    // Venue filter
+    if (filterState.venue !== 'all') {
+        filtered = filtered.filter(e => e.venueName === filterState.venue);
+    }
+
+    // Date range filter
+    if (filterState.dateFrom) {
+        const from = new Date(filterState.dateFrom);
+        filtered = filtered.filter(e => {
+            const d = e.eventDate?.toDate ? e.eventDate.toDate() : new Date(e.eventDate);
+            return d >= from;
+        });
+    }
+    if (filterState.dateTo) {
+        const to = new Date(filterState.dateTo);
+        to.setHours(23, 59, 59, 999);
+        filtered = filtered.filter(e => {
+            const d = e.eventDate?.toDate ? e.eventDate.toDate() : new Date(e.eventDate);
+            return d <= to;
+        });
+    }
+
+    // Sort
+    filtered.sort((a, b) => {
+        const dateA = a.eventDate?.toDate ? a.eventDate.toDate() : new Date(a.eventDate);
+        const dateB = b.eventDate?.toDate ? b.eventDate.toDate() : new Date(b.eventDate);
+
+        switch (filterState.sort) {
+            case 'date-asc': return dateA - dateB;
+            case 'date-desc': return dateB - dateA;
+            case 'artist-az': return (a.artistName || '').localeCompare(b.artistName || '');
+            case 'artist-za': return (b.artistName || '').localeCompare(a.artistName || '');
+            case 'recent':
+                const createdA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(0);
+                const createdB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(0);
+                return createdB - createdA;
+            default: return 0;
+        }
+    });
+
+    return filtered;
+}
+
+function populateVenueFilter() {
+    const venues = [...new Set(events.map(e => e.venueName).filter(Boolean))].sort();
+    filterVenue.innerHTML = '<option value="all">All Venues</option>';
+    venues.forEach(v => {
+        const opt = document.createElement('option');
+        opt.value = v;
+        opt.textContent = v;
+        filterVenue.appendChild(opt);
+    });
+    // Restore selection if still valid
+    if (filterState.venue !== 'all' && venues.includes(filterState.venue)) {
+        filterVenue.value = filterState.venue;
+    }
+}
+
+// Stats
+function updateStats() {
+    const now = new Date();
+    const total = events.length;
+    let upcoming = 0, past = 0, drafts = 0;
+
+    events.forEach(e => {
+        const d = e.eventDate?.toDate ? e.eventDate.toDate() : new Date(e.eventDate);
+        if (d >= now) upcoming++;
+        else past++;
+        if (!e.isPublished) drafts++;
+    });
+
+    statTotal.textContent = total;
+    statUpcoming.textContent = upcoming;
+    statPast.textContent = past;
+    statDrafts.textContent = drafts;
 }
 
 // Logout
@@ -178,10 +409,11 @@ async function loadEvents() {
     try {
         const q = query(collection(db, 'events'), orderBy('eventDate', 'asc'));
         const snapshot = await getDocs(q);
-        events = snapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
+        events = snapshot.docs.map(d => ({
+            id: d.id,
+            ...d.data()
         }));
+        populateVenueFilter();
         renderEvents();
     } catch (error) {
         console.error('Error loading events:', error);
@@ -191,14 +423,26 @@ async function loadEvents() {
 
 // Render Events List
 function renderEvents() {
+    updateStats();
+
     if (events.length === 0) {
         eventsList.innerHTML = '';
+        noResultsState.style.display = 'none';
         emptyState.style.display = 'block';
         return;
     }
 
     emptyState.style.display = 'none';
-    eventsList.innerHTML = events.map(event => createEventCard(event)).join('');
+    const filtered = getFilteredEvents();
+
+    if (filtered.length === 0) {
+        eventsList.innerHTML = '';
+        noResultsState.style.display = 'block';
+        return;
+    }
+
+    noResultsState.style.display = 'none';
+    eventsList.innerHTML = filtered.map(event => createEventCard(event)).join('');
 
     // Add event listeners to action buttons
     eventsList.querySelectorAll('.edit-btn').forEach(btn => {
@@ -224,14 +468,31 @@ function renderEvents() {
             await togglePublish(eventId, currentStatus);
         });
     });
+
+    // Checkbox listeners
+    eventsList.querySelectorAll('.event-checkbox').forEach(cb => {
+        cb.addEventListener('change', () => {
+            if (cb.checked) {
+                selectedEventIds.add(cb.dataset.id);
+            } else {
+                selectedEventIds.delete(cb.dataset.id);
+            }
+            updateBulkToolbar();
+            updateSelectAllState();
+        });
+    });
 }
 
 function createEventCard(event) {
     const date = event.eventDate?.toDate ? event.eventDate.toDate() : new Date(event.eventDate);
     const displayDate = `${event.displayMonth || MONTHS[date.getMonth()]} ${event.displayDay || date.getDate()}`;
+    const isChecked = selectedEventIds.has(event.id) ? 'checked' : '';
 
     return `
         <div class="event-admin-card">
+            <div class="event-checkbox-col">
+                <input type="checkbox" class="event-checkbox" data-id="${event.id}" ${isChecked}>
+            </div>
             <img src="${event.imageUrl || '../assets/dtxent-logo.png'}"
                  alt="${event.imageAlt || event.artistName}"
                  class="event-admin-image">
@@ -262,11 +523,109 @@ function createEventCard(event) {
     `;
 }
 
-// Modal Functions
-selectedImageFile = null;
-eventModal.classList.add('active');
+// Bulk Operations
+function updateBulkToolbar() {
+    const count = selectedEventIds.size;
+    if (count > 0) {
+        bulkToolbar.style.display = 'flex';
+        bulkCount.textContent = `${count} selected`;
+    } else {
+        bulkToolbar.style.display = 'none';
+    }
 }
 
+function updateSelectAllState() {
+    const filtered = getFilteredEvents();
+    const allSelected = filtered.length > 0 && filtered.every(e => selectedEventIds.has(e.id));
+    selectAllCheckbox.checked = allSelected;
+}
+
+function updateCheckboxes() {
+    eventsList.querySelectorAll('.event-checkbox').forEach(cb => {
+        cb.checked = selectedEventIds.has(cb.dataset.id);
+    });
+}
+
+function clearSelection() {
+    selectedEventIds.clear();
+    selectAllCheckbox.checked = false;
+    updateCheckboxes();
+    updateBulkToolbar();
+}
+
+async function handleBulkPublish() {
+    const ids = [...selectedEventIds];
+    try {
+        const results = await Promise.allSettled(
+            ids.map(id => updateDoc(doc(db, 'events', id), { isPublished: true, updatedAt: serverTimestamp() }))
+        );
+        const failed = results.filter(r => r.status === 'rejected').length;
+        if (failed > 0) {
+            showToast(`Published ${ids.length - failed} events. ${failed} failed.`, 'error');
+        } else {
+            showToast(`Published ${ids.length} event(s)!`, 'success');
+        }
+        clearSelection();
+        await loadEvents();
+    } catch (error) {
+        console.error('Bulk publish error:', error);
+        showToast('Error publishing events.', 'error');
+    }
+}
+
+async function handleBulkUnpublish() {
+    const ids = [...selectedEventIds];
+    try {
+        const results = await Promise.allSettled(
+            ids.map(id => updateDoc(doc(db, 'events', id), { isPublished: false, updatedAt: serverTimestamp() }))
+        );
+        const failed = results.filter(r => r.status === 'rejected').length;
+        if (failed > 0) {
+            showToast(`Unpublished ${ids.length - failed} events. ${failed} failed.`, 'error');
+        } else {
+            showToast(`Unpublished ${ids.length} event(s)!`, 'success');
+        }
+        clearSelection();
+        await loadEvents();
+    } catch (error) {
+        console.error('Bulk unpublish error:', error);
+        showToast('Error unpublishing events.', 'error');
+    }
+}
+
+async function handleBulkDelete() {
+    bulkDeleteModal.classList.remove('active');
+    const ids = [...selectedEventIds];
+
+    try {
+        const results = await Promise.allSettled(
+            ids.map(async id => {
+                const event = events.find(e => e.id === id);
+                if (event?.imagePath) {
+                    try {
+                        await deleteObject(ref(storage, event.imagePath));
+                    } catch (e) {
+                        console.warn('Could not delete image:', e);
+                    }
+                }
+                await deleteDoc(doc(db, 'events', id));
+            })
+        );
+        const failed = results.filter(r => r.status === 'rejected').length;
+        if (failed > 0) {
+            showToast(`Deleted ${ids.length - failed} events. ${failed} failed.`, 'error');
+        } else {
+            showToast(`Deleted ${ids.length} event(s)!`, 'success');
+        }
+        clearSelection();
+        await loadEvents();
+    } catch (error) {
+        console.error('Bulk delete error:', error);
+        showToast('Error deleting events.', 'error');
+    }
+}
+
+// Modal Functions
 function toggleImageType(type) {
     if (type === 'upload') {
         imageUploadArea.style.display = 'block';
@@ -281,11 +640,22 @@ function addScheduleItem(time = '', description = '') {
     const div = document.createElement('div');
     div.className = 'schedule-item-row';
     div.innerHTML = `
-        <input type="text" placeholder="Time" value="${time}" class="schedule-time" aria-label="Time">
-        <input type="text" placeholder="Description" value="${description}" class="schedule-desc" aria-label="Description">
-        <button type="button" class="btn-remove-schedule" title="Remove Item">×</button>
+        <input type="text" placeholder="Time" value="${escapeAttr(time)}" class="schedule-time" aria-label="Time">
+        <input type="text" placeholder="Description" value="${escapeAttr(description)}" class="schedule-desc" aria-label="Description">
+        <button type="button" class="btn-remove-schedule" title="Remove Item">&times;</button>
     `;
     scheduleContainer.appendChild(div);
+}
+
+function addDateItem(dateVal = '', ticketUrl = '') {
+    const div = document.createElement('div');
+    div.className = 'date-item-row';
+    div.innerHTML = `
+        <input type="date" value="${escapeAttr(dateVal)}" class="date-value" aria-label="Date">
+        <input type="url" placeholder="Ticket URL" value="${escapeAttr(ticketUrl)}" class="date-ticket-url" aria-label="Ticket URL">
+        <button type="button" class="btn-remove-date" title="Remove Date">&times;</button>
+    `;
+    datesContainer.appendChild(div);
 }
 
 function openModal(event = null) {
@@ -295,9 +665,10 @@ function openModal(event = null) {
 
     // Reset UI
     scheduleContainer.innerHTML = '';
+    datesContainer.innerHTML = '';
 
     // Determine Image Mode
-    const isExternal = event?.imageUrl && !event.imagePath; // formatting check
+    const isExternal = event?.imageUrl && !event.imagePath;
     const mode = isExternal ? 'url' : 'upload';
 
     // Set Radio
@@ -319,6 +690,15 @@ function openModal(event = null) {
         // Schedule
         if (event.schedule && Array.isArray(event.schedule)) {
             event.schedule.forEach(item => addScheduleItem(item.time, item.description));
+        }
+
+        // Additional dates (skip first entry which matches primary date)
+        if (event.dates && Array.isArray(event.dates) && event.dates.length > 1) {
+            event.dates.slice(1).forEach(d => {
+                const dateStr = d.date || '';
+                const url = d.ticketUrl || '';
+                addDateItem(dateStr, url);
+            });
         }
 
         // Handle date
@@ -453,26 +833,15 @@ async function handleSubmit(e) {
 
         // Determine Image Logic
         if (imageMode === 'upload' && selectedImageFile) {
-            // New File Upload
             const uploadResult = await uploadImage(selectedImageFile);
             imageUrl = uploadResult.url;
             imagePath = uploadResult.path;
         } else if (imageMode === 'url') {
-            // External URL
             imageUrl = externalUrl;
-            imagePath = null; // No internal path
-        } else if (editingEventId) {
-            // Keep existing image if no change
-            // This logic is handled in updateEvent mostly, but we need to pass current values?
-            // Actually createEvent/updateEvent need the explicit new values.
-            // If editing and no new file selected in upload mode, we don't overwrite imageUrl/imagePath unless switching to URL.
-            // We need to be careful not to wipe existing image if just editing text.
+            imagePath = null;
         }
 
         if (editingEventId) {
-            // If we are editing, and we switched to URL, we pass that.
-            // If we stayed on Uppload and selected new file, we pass that.
-            // If we stayed on Upload and selected nothing, imageUrl is null here.
             await updateEvent(editingEventId, formData, imageUrl, imagePath, imageMode);
             showToast('Event updated successfully!', 'success');
         } else {
@@ -492,6 +861,7 @@ async function handleSubmit(e) {
 
 function getFormData() {
     const eventDate = new Date(document.getElementById('eventDate').value);
+    const ticketUrl = document.getElementById('ticketUrl').value.trim();
 
     // Collect Schedule
     const scheduleItems = [];
@@ -503,7 +873,17 @@ function getFormData() {
         }
     });
 
-    return {
+    // Collect Additional Dates
+    const additionalDates = [];
+    document.querySelectorAll('.date-item-row').forEach(row => {
+        const dateVal = row.querySelector('.date-value').value;
+        const url = row.querySelector('.date-ticket-url').value.trim();
+        if (dateVal) {
+            additionalDates.push({ date: dateVal, ticketUrl: url || ticketUrl });
+        }
+    });
+
+    const data = {
         artistName: document.getElementById('artistName').value.trim(),
         eventName: document.getElementById('eventName').value.trim(),
         eventDate: Timestamp.fromDate(eventDate),
@@ -514,12 +894,23 @@ function getFormData() {
         venueCity: document.getElementById('venueCity').value.trim(),
         venueState: document.getElementById('venueState').value,
         venueFullName: `${document.getElementById('venueName').value.trim()}, ${document.getElementById('venueCity').value.trim()}, ${document.getElementById('venueState').value}`,
-        ticketUrl: document.getElementById('ticketUrl').value.trim(),
+        ticketUrl,
         imageAlt: document.getElementById('imageAlt').value.trim() ||
             `${document.getElementById('artistName').value.trim()} - ${document.getElementById('eventName').value.trim()}`,
         isPublished: document.getElementById('isPublished').checked,
         schedule: scheduleItems
     };
+
+    // Only include dates array when there are additional dates
+    if (additionalDates.length > 0) {
+        const primaryDateStr = document.getElementById('eventDate').value;
+        data.dates = [
+            { date: primaryDateStr, ticketUrl },
+            ...additionalDates
+        ];
+    }
+
+    return data;
 }
 
 async function uploadImage(file) {
@@ -554,10 +945,6 @@ async function updateEvent(eventId, formData, imageUrl, imagePath, imageMode) {
     if (imageUrl) {
         const oldEvent = events.find(e => e.id === eventId);
 
-        // If we are replacing an existing internal image file with ANYTHING (new file or URL)
-        // we should probably delete the old file to save space, only if we are sure.
-        // Current logic: IF we have a NEW imageUrl, we update.
-
         if (oldEvent?.imagePath && (imagePath || imageMode === 'url')) {
             try {
                 const oldImageRef = ref(storage, oldEvent.imagePath);
@@ -568,8 +955,6 @@ async function updateEvent(eventId, formData, imageUrl, imagePath, imageMode) {
         }
 
         updateData.imageUrl = imageUrl;
-        // If mode is URL, imagePath should be null (or Removed).
-        // If mode is Upload, imagePath is set.
         updateData.imagePath = imagePath || null;
     }
 
@@ -643,6 +1028,10 @@ function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
+}
+
+function escapeAttr(text) {
+    return (text || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
 // Start the app

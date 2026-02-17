@@ -24,6 +24,10 @@
                 <p>Sign in to manage events</p>
             </div>
 
+            <div id="unauthorized-error" class="login-error-banner" style="display: none;">
+                You do not have admin access. Contact an administrator for access.
+            </div>
+
             <form id="login-form" class="login-form">
                 <div class="form-group">
                     <label for="email">Email</label>
@@ -56,6 +60,12 @@
 
         // Redirect if already logged in
         redirectIfAuthenticated('/admin/index.html');
+
+        // Show unauthorized error if redirected
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('error') === 'unauthorized') {
+            document.getElementById('unauthorized-error').style.display = 'block';
+        }
 
         const form = document.getElementById('login-form');
         const emailInput = document.getElementById('email');

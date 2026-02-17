@@ -25,9 +25,15 @@
     <div class="admin-layout" id="admin-app" style="display: none;">
         <!-- Header -->
         <header class="admin-header">
-            <a href="../index.html" class="logo">
-                <img src="../assets/dtxent-logo.png" alt="DTXENT Logo" class="logo-img">
-            </a>
+            <div class="admin-header-left">
+                <a href="../index.html" class="logo">
+                    <img src="../assets/dtxent-logo.png" alt="DTXENT Logo" class="logo-img">
+                </a>
+                <nav class="admin-nav">
+                    <a href="index.html" class="admin-nav-link active">Events</a>
+                    <a href="users.html" class="admin-nav-link">Users</a>
+                </nav>
+            </div>
             <div class="admin-header-right">
                 <span class="admin-user" id="admin-email"></span>
                 <button class="btn btn-secondary btn-sm" id="logout-btn">Logout</button>
@@ -39,6 +45,63 @@
             <div class="page-header">
                 <h1>Events</h1>
                 <button class="btn btn-primary" id="add-event-btn">+ Add Event</button>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Total Events</div>
+                    <div class="stat-value" id="stat-total">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Upcoming</div>
+                    <div class="stat-value" id="stat-upcoming">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Past</div>
+                    <div class="stat-value" id="stat-past">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Drafts</div>
+                    <div class="stat-value" id="stat-drafts">0</div>
+                </div>
+            </div>
+
+            <!-- Filter Toolbar -->
+            <div class="filter-toolbar">
+                <div class="filter-row">
+                    <input type="text" id="filter-search" class="filter-input" placeholder="Search artists, events, venues...">
+                    <select id="filter-status" class="filter-select">
+                        <option value="all">All Status</option>
+                        <option value="published">Published</option>
+                        <option value="draft">Draft</option>
+                    </select>
+                    <select id="filter-venue" class="filter-select">
+                        <option value="all">All Venues</option>
+                    </select>
+                    <select id="filter-sort" class="filter-select">
+                        <option value="date-asc">Date (Earliest)</option>
+                        <option value="date-desc">Date (Latest)</option>
+                        <option value="artist-az">Artist A-Z</option>
+                        <option value="artist-za">Artist Z-A</option>
+                        <option value="recent">Recently Added</option>
+                    </select>
+                </div>
+                <div class="filter-row">
+                    <label class="filter-date-label">From</label>
+                    <input type="date" id="filter-date-from" class="filter-input filter-date">
+                    <label class="filter-date-label">To</label>
+                    <input type="date" id="filter-date-to" class="filter-input filter-date">
+                    <label class="filter-checkbox-label">
+                        <input type="checkbox" id="select-all-checkbox"> Select All
+                    </label>
+                    <button class="btn btn-secondary btn-sm" id="clear-filters-btn">Clear Filters</button>
+                </div>
+            </div>
+
+            <!-- No Results State -->
+            <div id="no-results-state" class="no-results-state" style="display: none;">
+                <p>No matching events found. Try adjusting your filters.</p>
             </div>
 
             <!-- Events List -->
@@ -132,6 +195,16 @@
                     </div>
 
                     <div class="form-group">
+                        <label>Additional Event Dates</label>
+                        <p class="form-hint">The primary date above is always included.</p>
+                        <div id="dates-container" class="dates-container">
+                            <!-- Dynamic date items will appear here -->
+                        </div>
+                        <button type="button" class="btn btn-secondary btn-sm" id="add-date-btn"
+                            style="margin-top: 0.5rem;">+ Add Date</button>
+                    </div>
+
+                    <div class="form-group">
                         <label>Event Schedule</label>
                         <div id="schedule-container" class="schedule-container">
                             <!-- Dynamic schedule items will appear here -->
@@ -214,6 +287,31 @@
                     <div class="confirm-actions">
                         <button type="button" class="btn btn-secondary" id="delete-cancel">Cancel</button>
                         <button type="button" class="btn btn-danger" id="delete-confirm">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Action Toolbar -->
+    <div id="bulk-toolbar" class="bulk-toolbar" style="display: none;">
+        <span class="bulk-count" id="bulk-count">0 selected</span>
+        <button class="btn btn-primary btn-sm" id="bulk-publish-btn">Publish</button>
+        <button class="btn btn-secondary btn-sm" id="bulk-unpublish-btn">Unpublish</button>
+        <button class="btn btn-danger btn-sm" id="bulk-delete-btn">Delete</button>
+        <button class="btn btn-secondary btn-sm" id="bulk-cancel-btn">Cancel</button>
+    </div>
+
+    <!-- Bulk Delete Confirm Modal -->
+    <div id="bulk-delete-modal" class="modal-overlay">
+        <div class="modal" style="max-width: 400px;">
+            <div class="modal-body">
+                <div class="confirm-dialog">
+                    <h3>Delete Selected Events?</h3>
+                    <p id="bulk-delete-msg">This action cannot be undone. The selected events and their images will be permanently deleted.</p>
+                    <div class="confirm-actions">
+                        <button type="button" class="btn btn-secondary" id="bulk-delete-cancel">Cancel</button>
+                        <button type="button" class="btn btn-danger" id="bulk-delete-confirm">Delete All</button>
                     </div>
                 </div>
             </div>

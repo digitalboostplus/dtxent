@@ -3,6 +3,11 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // Check if the authenticated user is in the admins collection
+    function isAdmin(email) {
+      return exists(/databases/$(database)/documents/admins/$(email));
+    }
+
     // Validates an Event document
     function isValidEvent() {
       let data = request.resource.data;
@@ -44,12 +49,20 @@ service cloud.firestore {
         data.status in ['active', 'unsubscribed'];
     }
 
-    // Events collection
+    // Events collection - admin-only writes
     match /events/{event} {
       allow read: if true;
-      allow create: if request.auth != null && isValidEvent();
-      allow update: if request.auth != null && isValidEvent();
-      allow delete: if request.auth != null;
+      allow create: if request.auth != null && isAdmin(request.auth.token.email) && isValidEvent();
+      allow update: if request.auth != null && isAdmin(request.auth.token.email) && isValidEvent();
+      allow delete: if request.auth != null && isAdmin(request.auth.token.email);
+    }
+
+    // Admins collection - only admins can manage other admins
+    match /admins/{adminDoc} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && isAdmin(request.auth.token.email);
+      allow delete: if request.auth != null && isAdmin(request.auth.token.email);
+      allow update: if false;
     }
 
     // Newsletter subscribers collection

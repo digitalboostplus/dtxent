@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Users | Dynamic TX Entertainment</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../css/admin.css">
+</head>
+
+<body class="admin-body">
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <p>Loading...</p>
+        </div>
+    </div>
+
+    <div class="admin-layout" id="admin-app" style="display: none;">
+        <!-- Header -->
+        <header class="admin-header">
+            <div class="admin-header-left">
+                <a href="../index.html" class="logo">
+                    <img src="../assets/dtxent-logo.png" alt="DTXENT Logo" class="logo-img">
+                </a>
+                <nav class="admin-nav">
+                    <a href="index.html" class="admin-nav-link">Events</a>
+                    <a href="users.html" class="admin-nav-link active">Users</a>
+                </nav>
+            </div>
+            <div class="admin-header-right">
+                <span class="admin-user" id="admin-email"></span>
+                <button class="btn btn-secondary btn-sm" id="logout-btn">Logout</button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <div class="page-header">
+                <h1>Admin Users</h1>
+            </div>
+
+            <!-- Add Admin Form -->
+            <div class="add-admin-form">
+                <input type="email" id="new-admin-email" placeholder="Enter email address to add as admin..." required>
+                <button class="btn btn-primary" id="add-admin-btn">Add Admin</button>
+            </div>
+
+            <!-- Admin Users List -->
+            <div id="admins-list" class="admin-users-list">
+                <!-- Admin cards rendered here -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="empty-state" class="empty-state" style="display: none;">
+                <h3>No Admin Users</h3>
+                <p>Add your first admin user above.</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- Delete Confirm Modal -->
+    <div id="delete-modal" class="modal-overlay">
+        <div class="modal" style="max-width: 400px;">
+            <div class="modal-body">
+                <div class="confirm-dialog">
+                    <h3>Remove Admin?</h3>
+                    <p id="delete-msg">This user will no longer have admin access.</p>
+                    <div class="confirm-actions">
+                        <button type="button" class="btn btn-secondary" id="delete-cancel">Cancel</button>
+                        <button type="button" class="btn btn-danger" id="delete-confirm">Remove</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script type="module" src="users.js"></script>
+</body>
+
+</html>

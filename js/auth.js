@@ -1,5 +1,5 @@
 // Authentication Module
-import { auth } from './firebase-config.js';
+import { auth, db } from './firebase-config.js';
 import {
     signInWithEmailAndPassword,
     signOut as firebaseSignOut,
@@ -7,6 +7,10 @@ import {
     browserLocalPersistence,
     setPersistence
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+import {
+    doc,
+    getDoc
+} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
 /**
  * Sign in user with email and password
@@ -69,6 +73,25 @@ export function requireAuth(loginUrl = '/admin/login.html') {
             }
         });
     });
+}
+
+/**
+ * Protect a page - require both Firebase Auth AND admin role in Firestore
+ * @param {string} loginUrl - URL to redirect to if not authenticated/authorized
+ * @returns {Promise<User>} - Resolves with user if authenticated and authorized
+ */
+export async function requireAdminAccess(loginUrl = '/admin/login.html') {
+    const user = await requireAuth(loginUrl);
+
+    // Check if user's email exists in the admins collection
+    const adminDoc = await getDoc(doc(db, 'admins', user.email));
+    if (!adminDoc.exists()) {
+        await firebaseSignOut(auth);
+        window.location.href = loginUrl + '?error=unauthorized';
+        throw new Error('Not authorized as admin');
+    }
+
+    return user;
 }
 
 /**
