@@ -37,7 +37,7 @@ function initGSAPAnimations() {
  * Force all animated elements to be visible (fallback for failures)
  */
 function forceShowAll() {
-    document.querySelectorAll('.venue-card, .section-header, .contact-content').forEach(el => {
+    document.querySelectorAll('.section-header, .contact-content').forEach(el => {
         el.style.opacity = '1';
         el.style.transform = 'none';
     });
@@ -105,22 +105,6 @@ function initSectionAnimations() {
         });
     });
 
-    // Venue cards
-    gsap.utils.toArray('.venue-card').forEach((card, i) => {
-        gsap.from(card, {
-            scrollTrigger: {
-                trigger: card,
-                start: 'top 85%',
-                toggleActions: 'play none none reverse'
-            },
-            y: 60,
-            opacity: 0,
-            scale: 0.95,
-            duration: 0.8,
-            delay: i * 0.15,
-            ease: 'power2.out'
-        });
-    });
 
     // Contact section
     gsap.from('.contact-content', {

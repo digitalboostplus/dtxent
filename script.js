@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Safety: force-show any hidden animated elements after 5s
     // This catches edge cases where neither GSAP nor the fallback observer triggered
     setTimeout(() => {
-        document.querySelectorAll('.venue-card, .section-header, .contact-content').forEach(el => {
+        document.querySelectorAll('.section-header, .contact-content').forEach(el => {
             const computedOpacity = getComputedStyle(el).opacity;
             if (computedOpacity === '0') {
                 console.warn('[Safety] Forcing visibility on hidden element:', el);
@@ -112,8 +112,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }, observerOptions);
 
-        // Animate section headers and venue cards
-        const animateElements = document.querySelectorAll('.venue-card, .section-header');
+        // Animate section headers
+        const animateElements = document.querySelectorAll('.section-header');
         animateElements.forEach(el => {
             el.style.opacity = '0';
             el.style.transform = 'translateY(40px) scale(0.95)';
