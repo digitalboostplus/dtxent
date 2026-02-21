@@ -594,7 +594,8 @@ h3 {
     gap: 1.5rem;
     justify-content: center;
     flex-wrap: wrap;
-    animation: heroBtnsReveal 1s ease-out 0.8s backwards;
+    position: relative;
+    z-index: 10;
 }
 
 @keyframes heroBtnsReveal {

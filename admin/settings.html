@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CKRTCSV8QH"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-CKRTCSV8QH');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site Settings | Dynamic TX Entertainment</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../css/admin.css">
+</head>
+
+<body class="admin-body">
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <p>Loading...</p>
+        </div>
+    </div>
+
+    <div class="admin-layout" id="admin-app" style="display: none;">
+        <!-- Header -->
+        <header class="admin-header">
+            <div class="admin-header-left">
+                <a href="../index.html" class="logo">
+                    <img src="../assets/dtxent-logo.png" alt="DTXENT Logo" class="logo-img">
+                </a>
+                <nav class="admin-nav">
+                    <a href="index.html" class="admin-nav-link">Events</a>
+                    <a href="users.html" class="admin-nav-link">Users</a>
+                    <a href="settings.html" class="admin-nav-link active">Settings</a>
+                </nav>
+            </div>
+            <div class="admin-header-right">
+                <span class="admin-user" id="admin-email"></span>
+                <button class="btn btn-secondary btn-sm" id="logout-btn">Logout</button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <div class="page-header">
+                <h1>Site Settings</h1>
+            </div>
+
+            <!-- Tabs -->
+            <div class="settings-tabs">
+                <button class="settings-tab active" data-tab="hero">Hero</button>
+                <button class="settings-tab" data-tab="sections">Sections</button>
+                <button class="settings-tab" data-tab="social">Social</button>
+                <button class="settings-tab" data-tab="footer">Footer</button>
+                <button class="settings-tab" data-tab="newsletter">Newsletter</button>
+                <button class="settings-tab" data-tab="seo">SEO</button>
+                <button class="settings-tab" data-tab="theme">Theme</button>
+                <button class="settings-tab" data-tab="nightlife">Nightlife</button>
+                <button class="settings-tab" data-tab="dining">Dining</button>
+                <button class="settings-tab" data-tab="hotels">Hotels</button>
+            </div>
+
+            <!-- Hero Tab -->
+            <div class="tab-panel active" id="tab-hero">
+                <div class="settings-card">
+                    <h3>Hero Section</h3>
+                    <p class="settings-desc">Configure the main hero banner on the homepage.</p>
+                    <div class="form-group">
+                        <label for="hero-title">Title</label>
+                        <input type="text" id="hero-title" placeholder="Own The Night. Live Life Out Loud.">
+                    </div>
+                    <div class="form-group">
+                        <label for="hero-highlighted">Highlighted Text (gradient)</label>
+                        <input type="text" id="hero-highlighted" placeholder="The Night.">
+                    </div>
+                    <div class="form-group">
+                        <label for="hero-subtitle">Subtitle</label>
+                        <textarea id="hero-subtitle" placeholder="Texas-born luxury entertainment..."></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="hero-cta-text">CTA Button Text</label>
+                            <input type="text" id="hero-cta-text" placeholder="Find Your Show">
+                        </div>
+                        <div class="form-group">
+                            <label for="hero-cta-link">CTA Button Link</label>
+                            <input type="text" id="hero-cta-link" placeholder="#upcoming">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="hero-bg-url">Background Image URL (optional)</label>
+                        <input type="text" id="hero-bg-url" placeholder="https://...">
+                    </div>
+                    <div class="settings-actions">
+                        <button class="btn btn-primary" id="save-hero">Save Hero</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sections Tab -->
+            <div class="tab-panel" id="tab-sections">
+                <div class="settings-card" data-section="upcoming">
+                    <h3>Upcoming Shows Section</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Title Text</label>
+                            <input type="text" class="section-title-input" placeholder="Upcoming">
+                        </div>
+                        <div class="form-group">
+                            <label>Highlighted Word</label>
+                            <input type="text" class="section-highlight-input" placeholder="Shows">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <input type="text" class="section-desc-input" placeholder="Don't miss out on the biggest events of the year.">
+                    </div>
+                </div>
+
+                <div class="settings-card" data-section="nightlife">
+                    <h3>Nightlife Section</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Title Text</label>
+                            <input type="text" class="section-title-input" placeholder="The">
+                        </div>
+                        <div class="form-group">
+                            <label>Highlighted Word</label>
+                            <input type="text" class="section-highlight-input" placeholder="After Party">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <input type="text" class="section-desc-input" placeholder="Keep the energy alive...">
+                    </div>
+                </div>
+
+                <div class="settings-card" data-section="dining">
+                    <h3>Dining Section</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Title Text</label>
+                            <input type="text" class="section-title-input" placeholder="Eat">
+                        </div>
+                        <div class="form-group">
+                            <label>Highlighted Word</label>
+                            <input type="text" class="section-highlight-input" placeholder="Local">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <input type="text" class="section-desc-input" placeholder="From pre-show dinners to late-night bites.">
+                    </div>
+                </div>
+
+                <div class="settings-card" data-section="stay">
+                    <h3>Stay Section</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Title Text</label>
+                            <input type="text" class="section-title-input" placeholder="Stay in">
+                        </div>
+                        <div class="form-group">
+                            <label>Highlighted Word</label>
+                            <input type="text" class="section-highlight-input" placeholder="Style">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <input type="text" class="section-desc-input" placeholder="Preferred accommodations...">
+                    </div>
+                </div>
+
+                <div class="settings-card" data-section="newsletter">
+                    <h3>Newsletter Section</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Title Text</label>
+                            <input type="text" class="section-title-input" placeholder="Join the">
+                        </div>
+                        <div class="form-group">
+                            <label>Highlighted Word</label>
+                            <input type="text" class="section-highlight-input" placeholder="Party">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <input type="text" class="section-desc-input" placeholder="Sign up for our newsletter...">
+                    </div>
+                </div>
+
+                <div class="settings-actions">
+                    <button class="btn btn-primary" id="save-sections">Save Sections</button>
+                </div>
+            </div>
+
+            <!-- Social Tab -->
+            <div class="tab-panel" id="tab-social">
+                <div class="settings-card">
+                    <h3>Social Media Links</h3>
+                    <p class="settings-desc">Update your social media profile URLs.</p>
+                    <div class="form-group">
+                        <label for="social-facebook">Facebook URL</label>
+                        <input type="text" id="social-facebook" placeholder="https://facebook.com/dtxent">
+                    </div>
+                    <div class="form-group">
+                        <label for="social-instagram">Instagram URL</label>
+                        <input type="text" id="social-instagram" placeholder="https://instagram.com/dtxent">
+                    </div>
+                    <div class="form-group">
+                        <label for="social-twitter">X (Twitter) URL</label>
+                        <input type="text" id="social-twitter" placeholder="https://twitter.com/dtxent">
+                    </div>
+                    <div class="settings-actions">
+                        <button class="btn btn-primary" id="save-social">Save Social</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Tab -->
+            <div class="tab-panel" id="tab-footer">
+                <div class="settings-card">
+                    <h3>Footer</h3>
+                    <p class="settings-desc">Update footer content.</p>
+                    <div class="form-group">
+                        <label for="footer-copyright">Copyright Text</label>
+                        <input type="text" id="footer-copyright" placeholder="&copy; 2025 Dynamic TX Entertainment. All rights reserved.">
+                    </div>
+                    <div class="settings-actions">
+                        <button class="btn btn-primary" id="save-footer">Save Footer</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Newsletter Tab -->
+            <div class="tab-panel" id="tab-newsletter">
+                <div class="settings-card">
+                    <h3>Newsletter Form</h3>
+                    <p class="settings-desc">Customize the newsletter subscription form.</p>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="newsletter-placeholder">Input Placeholder</label>
+                            <input type="text" id="newsletter-placeholder" placeholder="Enter your email">
+                        </div>
+                        <div class="form-group">
+                            <label for="newsletter-button">Button Text</label>
+                            <input type="text" id="newsletter-button" placeholder="Subscribe">
+                        </div>
+                    </div>
+                    <div class="settings-actions">
+                        <button class="btn btn-primary" id="save-newsletter">Save Newsletter</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEO Tab -->
+            <div class="tab-panel" id="tab-seo">
+                <div class="settings-card">
+                    <h3>SEO & Meta Tags</h3>
+                    <p class="settings-desc">Search engine optimization settings.</p>
+                    <div class="form-group">
+                        <label for="seo-title">Page Title</label>
+                        <input type="text" id="seo-title" placeholder="Dynamic TX Entertainment | Live Concerts & Events">
+                    </div>
+                    <div class="form-group">
+                        <label for="seo-description">Meta Description</label>
+                        <textarea id="seo-description" placeholder="Dynamic TX Entertainment promotes..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="seo-keywords">Keywords</label>
+                        <input type="text" id="seo-keywords" placeholder="texas concerts, live events, payne arena...">
+                    </div>
+                    <div class="form-group">
+                        <label for="seo-og-image">OG Image URL</label>
+                        <input type="text" id="seo-og-image" placeholder="https://dtxent.com/assets/dtxent-logo.png">
+                    </div>
+                    <div class="settings-actions">
+                        <button class="btn btn-primary" id="save-seo">Save SEO</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Theme Tab -->
+            <div class="tab-panel" id="tab-theme">
+                <div class="settings-card">
+                    <h3>Theme Colors</h3>
+                    <p class="settings-desc">Customize the site color scheme. Changes apply to the public site.</p>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Primary Color</label>
+                            <div class="color-picker-group">
+                                <input type="color" id="theme-primary" value="#FFCC00">
+                                <input type="text" id="theme-primary-hex" placeholder="#FFCC00">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Primary Hover Color</label>
+                            <div class="color-picker-group">
+                                <input type="color" id="theme-primary-hover" value="#FFD633">
+                                <input type="text" id="theme-primary-hover-hex" placeholder="#FFD633">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Dark Background</label>
+                            <div class="color-picker-group">
+                                <input type="color" id="theme-dark-bg" value="#0a0a0a">
+                                <input type="text" id="theme-dark-bg-hex" placeholder="#0a0a0a">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Card Background</label>
+                            <div class="color-picker-group">
+                                <input type="color" id="theme-card-bg" value="#161616">
+                                <input type="text" id="theme-card-bg-hex" placeholder="#161616">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="settings-actions">
+                        <button class="btn btn-primary" id="save-theme">Save Theme</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nightlife Tab -->
+            <div class="tab-panel" id="tab-nightlife">
+                <div class="settings-card">
+                    <h3>Nightlife Listings</h3>
+                    <p class="settings-desc">Manage clubs and nightlife venues shown on the site.</p>
+                    <button class="btn btn-primary" id="add-club-btn">+ Add Club</button>
+                    <div class="lifestyle-admin-grid" id="clubs-grid">
+                        <!-- Rendered dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dining Tab -->
+            <div class="tab-panel" id="tab-dining">
+                <div class="settings-card">
+                    <h3>Dining Listings</h3>
+                    <p class="settings-desc">Manage restaurants shown on the site.</p>
+                    <button class="btn btn-primary" id="add-restaurant-btn">+ Add Restaurant</button>
+                    <div class="lifestyle-admin-grid" id="restaurants-grid">
+                        <!-- Rendered dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hotels Tab -->
+            <div class="tab-panel" id="tab-hotels">
+                <div class="settings-card">
+                    <h3>Hotel Listings</h3>
+                    <p class="settings-desc">Manage hotel recommendations shown on the site.</p>
+                    <button class="btn btn-primary" id="add-hotel-btn">+ Add Hotel</button>
+                    <div class="lifestyle-admin-grid" id="hotels-grid">
+                        <!-- Rendered dynamically -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Lifestyle Item Modal -->
+    <div id="lifestyle-modal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="lifestyle-modal-title">Add Item</h2>
+                <button class="modal-close" id="lifestyle-modal-close">&times;</button>
+            </div>
+            <form id="lifestyle-form">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="ls-name">Name <span class="required">*</span></label>
+                        <input type="text" id="ls-name" required placeholder="e.g., Clayton's Beach Bar">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="ls-type">Type / Category</label>
+                            <input type="text" id="ls-type" placeholder="e.g., Beach Bar, Fine Dining">
+                        </div>
+                        <div class="form-group">
+                            <label for="ls-city">City</label>
+                            <input type="text" id="ls-city" placeholder="e.g., South Padre Island">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ls-description">Description</label>
+                        <textarea id="ls-description" placeholder="Short description..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="ls-image">Image URL</label>
+                        <input type="text" id="ls-image" placeholder="https://... or assets/image.jpg">
+                    </div>
+                    <div class="form-group">
+                        <label for="ls-link">Website Link</label>
+                        <input type="text" id="ls-link" placeholder="https://...">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="ls-price">Price Range</label>
+                            <input type="text" id="ls-price" placeholder="e.g., $$$">
+                        </div>
+                        <div class="form-group">
+                            <label for="ls-stars">Stars (hotels)</label>
+                            <input type="number" id="ls-stars" min="1" max="5" placeholder="4">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ls-features">Features (comma-separated)</label>
+                        <input type="text" id="ls-features" placeholder="Live Music, VIP Tables, Cocktails">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="ls-sort-order">Sort Order</label>
+                            <input type="number" id="ls-sort-order" value="0" min="0">
+                        </div>
+                        <div class="form-group">
+                            <div class="toggle-wrapper" style="margin-top: 1.75rem;">
+                                <label class="toggle">
+                                    <input type="checkbox" id="ls-published" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                                <span class="toggle-label">Published</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="lifestyle-modal-cancel">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="lifestyle-submit-btn">
+                        <span class="btn-text">Save</span>
+                        <span class="btn-loading" style="display: none;">Saving...</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirm Modal -->
+    <div id="delete-modal" class="modal-overlay">
+        <div class="modal" style="max-width: 400px;">
+            <div class="modal-body">
+                <div class="confirm-dialog">
+                    <h3>Delete Item?</h3>
+                    <p>This action cannot be undone.</p>
+                    <div class="confirm-actions">
+                        <button type="button" class="btn btn-secondary" id="delete-cancel">Cancel</button>
+                        <button type="button" class="btn btn-danger" id="delete-confirm">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script type="module" src="settings.js"></script>
+</body>
+
+</html>
