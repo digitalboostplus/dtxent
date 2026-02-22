@@ -36,20 +36,20 @@
     ],
     "headers": [
       {
-        "source": "**/*.@(html|js|css)",
-        "headers": [
-          {
-            "key": "Cache-Control",
-            "value": "no-cache, no-store, must-revalidate"
-          }
-        ]
-      },
-      {
         "source": "**/*.@(jpg|jpeg|png|gif|webp|svg)",
         "headers": [
           {
             "key": "Cache-Control",
             "value": "max-age=86400"
+          }
+        ]
+      },
+      {
+        "source": "**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, no-store, must-revalidate"
           }
         ]
       }
