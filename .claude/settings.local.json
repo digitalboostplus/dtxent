@@ -12,7 +12,8 @@
       "Bash(git push:*)",
       "Bash(git commit:*)",
       "WebSearch",
-      "WebFetch(domain:developer.ticketmaster.com)"
+      "WebFetch(domain:developer.ticketmaster.com)",
+      "Bash(ls:*)"
     ]
   }
 }
