@@ -1,5 +1,6 @@
 // Service Worker for Dynamic TX Entertainment
-const CACHE_NAME = 'dtxent-v1.0.0';
+// IMPORTANT: Increment this version on every deploy that changes JS/CSS
+const CACHE_NAME = 'dtxent-v2.0.0';
 const STATIC_CACHE = [
     '/',
     '/index.html',

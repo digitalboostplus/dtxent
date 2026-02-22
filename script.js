@@ -49,9 +49,11 @@ document.addEventListener('DOMContentLoaded', () => {
         link.addEventListener('click', closeMobileMenu);
     });
 
-    // Close menu on escape key
+    // Close menu on escape key (skip if modal is active to avoid conflict)
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && navLinks.classList.contains('active')) {
+            const modal = document.getElementById('event-modal');
+            if (modal && modal.classList.contains('active')) return;
             closeMobileMenu();
             mobileMenuBtn.focus(); // Return focus to menu button
         }

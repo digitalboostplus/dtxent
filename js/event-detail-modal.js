@@ -8,6 +8,8 @@ import { getEventDetails } from './ticketmaster-api.js';
 class EventDetailModal {
     constructor() {
         this.modal = null;
+        this.previousFocus = null;
+        this._handleKeydown = this._handleKeydown.bind(this);
         this.init();
     }
 
@@ -46,13 +48,41 @@ class EventDetailModal {
             if (e.target === this.modal) this.close();
         });
 
-        window.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && this.modal && this.modal.classList.contains('active')) {
-                this.close();
-            }
-        });
+        window.addEventListener('keydown', this._handleKeydown);
 
         this.initialized = true;
+    }
+
+    _handleKeydown(e) {
+        if (!this.modal || !this.modal.classList.contains('active')) return;
+
+        if (e.key === 'Escape') {
+            this.close();
+            return;
+        }
+
+        // Focus trap: cycle Tab within modal
+        if (e.key === 'Tab') {
+            const focusable = this.modal.querySelectorAll(
+                'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+            );
+            if (focusable.length === 0) return;
+
+            const first = focusable[0];
+            const last = focusable[focusable.length - 1];
+
+            if (e.shiftKey) {
+                if (document.activeElement === first) {
+                    e.preventDefault();
+                    last.focus();
+                }
+            } else {
+                if (document.activeElement === last) {
+                    e.preventDefault();
+                    first.focus();
+                }
+            }
+        }
     }
 
     async open(eventData) {
@@ -71,12 +101,19 @@ class EventDetailModal {
                 throw new Error('Modal element not found after initialization');
             }
 
+            // Store previous focus for restoration on close
+            this.previousFocus = document.activeElement;
+
             // Prevent background scrolling
             document.body.style.overflow = 'hidden';
 
             // Initial render with local data
             this.renderInitial(eventData);
             this.modal.classList.add('active');
+
+            // Move focus into the modal
+            this.modal.setAttribute('tabindex', '-1');
+            this.modal.focus();
 
             // If it's a Ticketmaster event, fetch real-time data
             if (eventData.tmEventId) {
@@ -105,6 +142,13 @@ class EventDetailModal {
     close() {
         this.modal.classList.remove('active');
         document.body.style.overflow = '';
+
+        // Restore focus to the element that opened the modal
+        if (this.previousFocus) {
+            this.previousFocus.focus();
+            this.previousFocus = null;
+        }
+
         // Small delay to clear content after animation
         setTimeout(() => {
             this.contentArea.innerHTML = '';
@@ -209,10 +253,10 @@ class EventDetailModal {
     renderTMData(localEvent, tm) {
         const priceRange = tm.priceRanges ? tm.priceRanges[0] : null;
         const seatmap = tm.seatmap ? tm.seatmap.staticUrl : null;
-        const status = tm.dates.status.code;
+        const status = tm?.dates?.status?.code;
         const info = tm.info || tm.pleaseNote || "";
-        const presales = tm.sales.presales || [];
-        const venue = tm._embedded.venues ? tm._embedded.venues[0] : null;
+        const presales = tm?.sales?.presales ?? [];
+        const venue = tm?._embedded?.venues?.[0] ?? null;
 
         // Update the content with real-time data
         const mainArea = this.contentArea.querySelector('.modal-main');
@@ -286,7 +330,7 @@ class EventDetailModal {
                     <span class="icon">📍</span>
                     <div>
                         <h4>Venue</h4>
-                        <p>${venue.name}<br>${venue.address.line1}<br>${venue.city.name}, ${venue.state.stateCode}</p>
+                        <p>${venue.name || ''}<br>${venue?.address?.line1 || ''}<br>${venue?.city?.name || ''}, ${venue?.state?.stateCode || ''}</p>
                     </div>
                 </div>
                 ${venue.parkingDetail ? `

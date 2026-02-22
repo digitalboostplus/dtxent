@@ -176,7 +176,9 @@ function processEventsForDisplay(events) {
     const groupedMap = new Map();
 
     normalizedEvents.forEach(event => {
-        const key = `${event.artistName.toLowerCase().trim()}|${event.venueName.toLowerCase().trim()}`;
+        const safeArtist = (event.artistName || '').toLowerCase().trim();
+        const safeVenue = (event.venueName || '').toLowerCase().trim();
+        const key = `${safeArtist}|${safeVenue}`;
 
         if (groupedMap.has(key)) {
             const existing = groupedMap.get(key);
@@ -287,6 +289,10 @@ export function stopEventUpdates() {
     if (unsubscribeEvents) {
         unsubscribeEvents();
         unsubscribeEvents = null;
+    }
+    if (countdownInterval) {
+        clearInterval(countdownInterval);
+        countdownInterval = null;
     }
 }
 
@@ -443,8 +449,9 @@ async function enrichTicketmasterEvents(events) {
             }
 
             // Update Status Badge
-            if (data.dates.status.code && statusEl) {
-                const status = data.dates.status.code;
+            const statusCode = data?.dates?.status?.code;
+            if (statusCode && statusEl) {
+                const status = statusCode;
                 if (status === 'onsale') {
                     statusEl.innerHTML = '<span class="badge badge-onsale">On Sale</span>';
                 } else if (status === 'offsale' || status === 'cancelled') {

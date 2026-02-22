@@ -2,10 +2,15 @@
  * Ticketmaster Discovery API v2 Wrapper
  * Handles fetching real-time event data, pricing, and seatmaps.
  * Includes client-side caching to stay within rate limits.
+ *
+ * SECURITY WARNING: This API key is exposed in client-side JavaScript.
+ * TODO: Migrate Ticketmaster API calls to a Firebase Cloud Function proxy
+ * so the key is never shipped to the browser. See:
+ * https://firebase.google.com/docs/functions/callable
  */
 
 const TM_API_BASE = 'https://app.ticketmaster.com/discovery/v2';
-const TM_API_KEY = 'nZ2fivZWnA0Z3ViOdjpbGc4vOB2GGxyM';
+const TM_API_KEY = window.__TM_API_KEY || 'nZ2fivZWnA0Z3ViOdjpbGc4vOB2GGxyM';
 const CACHE_TTL = 15 * 60 * 1000; // 15 minutes in milliseconds
 
 /**

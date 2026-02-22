@@ -231,24 +231,36 @@ export function animateEventCards() {
     });
 }
 
+/**
+ * Wait for GSAP to be available, polling every 50ms up to maxWait.
+ * Returns true if GSAP loaded, false if timed out.
+ */
+async function waitForGSAP(maxWait = 3000) {
+    const start = Date.now();
+    while (typeof gsap === 'undefined' && Date.now() - start < maxWait) {
+        await new Promise(r => setTimeout(r, 50));
+    }
+    return typeof gsap !== 'undefined';
+}
+
 // Initialize when DOM is ready and GSAP is loaded
+async function bootstrapAnimations() {
+    try {
+        const gsapReady = await waitForGSAP(3000);
+        if (gsapReady) {
+            initGSAPAnimations();
+        } else {
+            console.warn('GSAP did not load within 3s, forcing elements visible');
+            forceShowAll();
+        }
+    } catch (err) {
+        console.error('GSAP init failed, forcing elements visible:', err);
+        forceShowAll();
+    }
+}
+
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        try {
-            initGSAPAnimations();
-        } catch (err) {
-            console.error('GSAP init failed, forcing elements visible:', err);
-            forceShowAll();
-        }
-    });
+    document.addEventListener('DOMContentLoaded', bootstrapAnimations);
 } else {
-    // Small delay to ensure GSAP scripts are loaded
-    setTimeout(() => {
-        try {
-            initGSAPAnimations();
-        } catch (err) {
-            console.error('GSAP init failed, forcing elements visible:', err);
-            forceShowAll();
-        }
-    }, 100);
+    bootstrapAnimations();
 }
