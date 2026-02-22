@@ -103,7 +103,7 @@ export async function requireAdminAccess(loginUrl = '/admin/login.html') {
 export async function requireOwnerAccess(loginUrl = '/admin/login.html') {
     const user = await requireAdminAccess(loginUrl);
     if (user.role !== 'owner') {
-        window.location.href = '/admin/index.html?error=insufficient_permissions';
+        window.location.href = '/admin/admin.html?error=insufficient_permissions';
         throw new Error('Insufficient permissions');
     }
     return user;
@@ -113,7 +113,7 @@ export async function requireOwnerAccess(loginUrl = '/admin/login.html') {
  * Redirect to dashboard if already authenticated
  * @param {string} dashboardUrl - URL to redirect to if authenticated
  */
-export function redirectIfAuthenticated(dashboardUrl = '/admin/index.html') {
+export function redirectIfAuthenticated(dashboardUrl = '/admin/admin.html') {
     onAuthStateChanged((user) => {
         if (user) {
             window.location.href = dashboardUrl;

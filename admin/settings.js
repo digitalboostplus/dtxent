@@ -53,7 +53,7 @@ async function init() {
         const user = await requireAdminAccess('/admin/login.html');
         // Only admin and owner can access settings
         if (user.role === 'editor') {
-            window.location.href = '/admin/index.html?error=insufficient_permissions';
+            window.location.href = '/admin/admin.html?error=insufficient_permissions';
             throw new Error('Insufficient permissions');
         }
         currentUserEmail = user.email;
@@ -371,7 +371,7 @@ async function loadLifestyleCollection(collectionName) {
 
 function renderLifestyleGrid(collectionName) {
     const gridId = collectionName === 'clubs' ? 'clubs-grid' :
-                   collectionName === 'restaurants' ? 'restaurants-grid' : 'hotels-grid';
+        collectionName === 'restaurants' ? 'restaurants-grid' : 'hotels-grid';
     const grid = document.getElementById(gridId);
     if (!grid) return;
 
@@ -421,7 +421,7 @@ function openLifestyleModal(collectionName, item = null) {
     editingLifestyleId = item?.id || null;
 
     const typeLabel = collectionName === 'clubs' ? 'Club' :
-                      collectionName === 'restaurants' ? 'Restaurant' : 'Hotel';
+        collectionName === 'restaurants' ? 'Restaurant' : 'Hotel';
     lifestyleModalTitle.textContent = item ? `Edit ${typeLabel}` : `Add ${typeLabel}`;
     lifestyleSubmitBtn.querySelector('.btn-text').textContent = item ? 'Update' : 'Save';
 

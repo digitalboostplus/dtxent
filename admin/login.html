@@ -69,7 +69,7 @@
         import { signIn, redirectIfAuthenticated } from '../js/auth.js';
 
         // Redirect if already logged in (commented out to prevent auto-login loop)
-        // redirectIfAuthenticated('/admin/index.html');
+        // redirectIfAuthenticated('/admin/admin.html');
 
         // Show unauthorized error if redirected
         const urlParams = new URLSearchParams(window.location.search);
@@ -110,7 +110,7 @@
 
             try {
                 await signIn(email, password);
-                window.location.href = '/admin/index.html';
+                window.location.href = '/admin/admin.html';
             } catch (error) {
                 console.error('Login error:', error);
                 let message = 'An error occurred. Please try again.';
