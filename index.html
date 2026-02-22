@@ -4,9 +4,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DTXENT | Premium Live Entertainment & Events in Texas</title>
+    <title>DTXENT | Concerts, Nightlife & Events in the Rio Grande Valley, TX</title>
     <meta name="description"
-        content="Dynamic TX Entertainment - Promoting the hottest concerts, nightlife, and live events at Payne Arena and South Padre Island.">
+        content="Dynamic TX Entertainment brings the hottest concerts, VIP nightlife, and curated dining experiences to the Rio Grande Valley — Payne Arena in Hidalgo, South Padre Island, McAllen, and beyond.">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://dtxent.com/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://dtxent.com/">
+    <meta property="og:title" content="DTXENT | Concerts, Nightlife & Events in the Rio Grande Valley">
+    <meta property="og:description" content="Premium live entertainment, VIP nightlife, and curated dining across the RGV — Payne Arena, South Padre Island, McAllen, and beyond.">
+    <meta property="og:image" content="https://dtxent.com/assets/dtxent-logo.png">
+    <meta property="og:site_name" content="Dynamic TX Entertainment">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@dtxent">
+    <meta name="twitter:title" content="DTXENT | Concerts, Nightlife & Events in the RGV">
+    <meta name="twitter:description" content="Premium live entertainment, VIP nightlife, and curated dining across the Rio Grande Valley.">
+    <meta name="twitter:image" content="https://dtxent.com/assets/dtxent-logo.png">
+
+    <!-- Geo Meta Tags -->
+    <meta name="geo.region" content="US-TX">
+    <meta name="geo.placename" content="Rio Grande Valley">
 
     <!-- Preload Critical Assets -->
     <link rel="preload" href="assets/dtxent-logo.png" as="image">
@@ -19,6 +42,7 @@
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="manifest" href="manifest.json">
 
     <!-- Styles -->
     <link rel="stylesheet" href="styles.css">
@@ -68,8 +92,7 @@
             <div class="hero-content container">
                 <h1 id="hero-title" class="hero-title">Own <span class="text-gradient">The Night.</span><br>Live Life
                     Out Loud.</h1>
-                <p class="hero-subtitle" id="hero-subtitle">Premium live entertainment and curated experiences across
-                    Texas.</p>
+                <p class="hero-subtitle" id="hero-subtitle">Premium live entertainment, nightlife, and curated dining across the Rio Grande Valley — from Payne Arena in Hidalgo to South Padre Island.</p>
                 <div class="hero-btns">
                     <a href="#upcoming" class="btn btn-primary btn-lg" id="hero-cta">Find Your Show</a>
                     <a href="/dining/" class="btn btn-outline btn-lg">Explore Dining</a>
@@ -99,6 +122,11 @@
                         <div class="loader"></div>
                         <p>Loading the hottest shows...</p>
                     </div>
+                    <noscript>
+                        <p style="text-align:center; padding:2rem; color:#b8b8b8;">
+                            Visit <a href="https://dtxent.com" style="color:#FFCC00;">dtxent.com</a> with JavaScript enabled to browse upcoming concerts and events at Payne Arena (Hidalgo, TX), South Padre Island, and venues across the Rio Grande Valley. Buy tickets for live shows including concerts, comedy, and nightlife events.
+                        </p>
+                    </noscript>
                 </div>
 
                 <div class="events-status-container">
@@ -187,6 +215,46 @@
             </div>
         </section>
 
+        <!-- About Section -->
+        <section id="about" class="section about" aria-labelledby="about-title">
+            <div class="container">
+                <div class="section-header">
+                    <h2 id="about-title" class="section-title">About <span class="text-highlight">DTXENT</span></h2>
+                </div>
+                <div class="about-content">
+                    <p>Dynamic TX Entertainment (DTXENT) is the Rio Grande Valley's premier entertainment and lifestyle brand. Based in South Texas, we promote and curate the best concerts, VIP nightlife, and luxury dining experiences across the RGV — from Payne Arena in Hidalgo and beachfront events on South Padre Island to top-rated restaurants and nightlife in McAllen, Edinburg, and beyond.</p>
+                    <p>Whether you're looking for upcoming concerts at Payne Arena, exclusive nightlife in the Valley, or curated dining experiences, DTXENT is your go-to source for premium entertainment in South Texas.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section id="faq" class="section faq" aria-labelledby="faq-title">
+            <div class="container">
+                <div class="section-header">
+                    <h2 id="faq-title" class="section-title">Frequently Asked <span class="text-highlight">Questions</span></h2>
+                </div>
+                <div class="faq-list">
+                    <details class="faq-item">
+                        <summary class="faq-question">Where are DTXENT events held?</summary>
+                        <p class="faq-answer">Our events take place at premier venues across the Rio Grande Valley and South Texas, including Payne Arena in Hidalgo, beachfront venues on South Padre Island, and select nightlife and dining locations in McAllen, Edinburg, and Corpus Christi.</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary class="faq-question">How do I buy tickets for upcoming shows?</summary>
+                        <p class="faq-answer">You can purchase tickets directly through our website by browsing the Upcoming Shows section and clicking "Tickets" on any event. We link to trusted ticketing partners including Ticketmaster and TixPlug for secure purchases.</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary class="faq-question">What types of events does DTXENT promote?</summary>
+                        <p class="faq-answer">We promote a wide range of live entertainment including major concerts, comedy shows, Latin music events, VIP nightlife experiences, and curated dining events throughout the Rio Grande Valley.</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary class="faq-question">How can I stay updated on new events?</summary>
+                        <p class="faq-answer">Join our VIP list by subscribing with your email below. You'll get early access to tickets, exclusive promo codes, and updates on upcoming shows and dining experiences. You can also follow us on Instagram, Facebook, and X (Twitter) at @dtxent.</p>
+                    </details>
+                </div>
+            </div>
+        </section>
+
         <section id="contact" class="section contact" aria-labelledby="contact-title">
             <div class="container">
                 <div class="section-header">
@@ -219,7 +287,7 @@
                 <a href="#" class="logo">
                     <img src="assets/dtxent-logo.png" alt="DTXENT Logo" class="logo-img">
                 </a>
-                <p>&copy; 2025 Dynamic TX Entertainment. All rights reserved.</p>
+                <p>&copy; 2026 Dynamic TX Entertainment. All rights reserved.</p>
             </div>
             <div class="footer-social">
                 <a href="https://facebook.com/dtxent" aria-label="Follow us on Facebook" target="_blank"
@@ -247,16 +315,104 @@
         </div>
     </footer>
 
-    <!-- Schema.org Structured Data -->
+    <!-- Schema.org Structured Data: Organization + LocalBusiness -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "Organization",
+      "@type": ["Organization", "EntertainmentBusiness"],
       "name": "Dynamic TX Entertainment",
+      "alternateName": "DTXENT",
       "url": "https://dtxent.com",
       "logo": "https://dtxent.com/assets/dtxent-logo.png",
-      "description": "Dynamic TX Entertainment promotes the hottest concerts and live events at Payne Arena and South Padre Island.",
-      "sameAs": []
+      "image": "https://dtxent.com/assets/dtxent-logo.png",
+      "description": "Dynamic TX Entertainment (DTXENT) is the Rio Grande Valley's premier entertainment brand, promoting concerts, VIP nightlife, and curated dining experiences at Payne Arena, South Padre Island, McAllen, and across South Texas.",
+      "areaServed": [
+        {
+          "@type": "Place",
+          "name": "Rio Grande Valley, Texas"
+        },
+        {
+          "@type": "Place",
+          "name": "South Padre Island, Texas"
+        },
+        {
+          "@type": "City",
+          "name": "McAllen",
+          "containedInPlace": { "@type": "State", "name": "Texas" }
+        },
+        {
+          "@type": "City",
+          "name": "Hidalgo",
+          "containedInPlace": { "@type": "State", "name": "Texas" }
+        }
+      ],
+      "address": {
+        "@type": "PostalAddress",
+        "addressRegion": "TX",
+        "addressCountry": "US"
+      },
+      "sameAs": [
+        "https://facebook.com/dtxent",
+        "https://instagram.com/dtxent",
+        "https://twitter.com/dtxent"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        "url": "https://dtxent.com/#contact"
+      }
+    }
+    </script>
+
+    <!-- Schema.org: FAQPage -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Where are DTXENT events held?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Our events take place at premier venues across the Rio Grande Valley and South Texas, including Payne Arena in Hidalgo, beachfront venues on South Padre Island, and select nightlife and dining locations in McAllen, Edinburg, and Corpus Christi."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I buy tickets for upcoming shows?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "You can purchase tickets directly through our website by browsing the Upcoming Shows section and clicking Tickets on any event. We link to trusted ticketing partners including Ticketmaster and TixPlug for secure purchases."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What types of events does DTXENT promote?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "We promote a wide range of live entertainment including major concerts, comedy shows, Latin music events, VIP nightlife experiences, and curated dining events throughout the Rio Grande Valley."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How can I stay updated on new events?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Join our VIP list by subscribing with your email on our website. You'll get early access to tickets, exclusive promo codes, and updates on upcoming shows and dining experiences. You can also follow us on Instagram, Facebook, and X (Twitter) at @dtxent."
+          }
+        }
+      ]
+    }
+    </script>
+
+    <!-- Schema.org: WebSite with SearchAction -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "DTXENT",
+      "url": "https://dtxent.com"
     }
     </script>
 
@@ -268,8 +424,8 @@
     <script type="module" src="js/lifestyle-public.js"></script>
 
     <!-- GSAP Animation Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
     <!-- Three.js for Hero Particles -->
     <script type="module" src="js/hero-particles.js"></script>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found | DTXENT</title>
+    <meta name="robots" content="noindex">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        .error-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .error-code {
+            font-size: 6rem;
+            font-weight: 800;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+
+        .error-message {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            max-width: 480px;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header" role="banner">
+        <nav class="nav container" role="navigation" aria-label="Main navigation">
+            <a href="/" class="logo">
+                <img src="/assets/dtxent-logo.png" alt="DTXENT Logo" class="logo-img">
+            </a>
+        </nav>
+    </header>
+
+    <main class="error-page">
+        <div class="error-code">404</div>
+        <h1>Page Not Found</h1>
+        <p class="error-message">The page you're looking for doesn't exist or has been moved. Check out our upcoming shows or head back to the homepage.</p>
+        <div style="display:flex; gap:1rem; flex-wrap:wrap; justify-content:center;">
+            <a href="/" class="btn btn-primary btn-lg">Go Home</a>
+            <a href="/#upcoming" class="btn btn-outline btn-lg">View Shows</a>
+        </div>
+    </main>
+</body>
+
+</html>
