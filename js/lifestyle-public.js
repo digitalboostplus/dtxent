@@ -81,7 +81,7 @@ function renderFeaturedDining(dataSource = DINING_RESTAURANTS) {
     const grid = document.getElementById('dining-grid');
     if (!grid) return;
 
-    const featured = dataSource.filter(r => r.featured).slice(0, 4);
+    const featured = dataSource.filter(r => r.featured).slice(0, 3);
     if (featured.length === 0) {
         // Ultimate fallback to generic cards if no featured found
         renderGrid('dining-grid', dataSource, createDiningCard);
