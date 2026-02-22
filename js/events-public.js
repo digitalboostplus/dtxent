@@ -269,9 +269,9 @@ function createEventCardHTML(event) {
     const imageUrl = event.imageUrl || 'assets/dtxent-logo.png';
     const imageAlt = event.imageAlt || `${event.artistName} - ${event.eventName}`;
     const venueFullName = event.venueFullName || `${event.venueName}, ${event.venueCity}, ${event.venueState}`;
-    const eventDateISO = event.eventDate instanceof Date
-        ? event.eventDate.toISOString()
-        : new Date(event.eventDate).toISOString();
+    const dateObj = event.eventDate instanceof Date ? event.eventDate : new Date(event.eventDate);
+    const isValidDate = !isNaN(dateObj.getTime());
+    const eventDateISO = isValidDate ? dateObj.toISOString() : new Date().toISOString();
 
     const eventId = event.id || Math.random().toString(36).substr(2, 9);
     const hasMultipleDates = event.dates && event.dates.length > 1;

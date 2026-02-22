@@ -2,51 +2,36 @@
 <html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DTXENT | Premium Live Entertainment & Events in Texas</title>
+    <meta name="description"
+        content="Dynamic TX Entertainment - Promoting the hottest concerts, nightlife, and live events at Payne Arena and South Padre Island.">
+
+    <!-- Preload Critical Assets -->
+    <link rel="preload" href="assets/dtxent-logo.png" as="image">
+    <link rel="preload" href="styles.css" as="style">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CKRTCSV8QH"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RZY6W9D8H0"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
 
-        gtag('config', 'G-CKRTCSV8QH');
+        gtag('config', 'G-RZY6W9D8H0');
     </script>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic TX Entertainment | Live Concerts & Events</title>
-    <meta name="description"
-        content="Dynamic TX Entertainment promotes the hottest concerts and live events at Payne Arena and South Padre Island. Get your tickets now!">
-
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://dtxent.com/">
-    <meta property="og:title" content="Dynamic TX Entertainment | Live Concerts & Events">
-    <meta property="og:description"
-        content="Dynamic TX Entertainment promotes the hottest concerts and live events at Payne Arena and South Padre Island. Get your tickets now!">
-    <meta property="og:image" content="https://dtxent.com/assets/dtxent-logo.png">
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://dtxent.com/">
-    <meta property="twitter:title" content="Dynamic TX Entertainment | Live Concerts & Events">
-    <meta property="twitter:description"
-        content="Dynamic TX Entertainment promotes the hottest concerts and live events at Payne Arena and South Padre Island. Get your tickets now!">
-    <meta property="twitter:image" content="https://dtxent.com/assets/dtxent-logo.png">
-
-    <!-- Additional SEO -->
-    <meta name="keywords"
-        content="texas concerts, live events, payne arena, south padre island, dynamic tx entertainment, concert tickets, texas entertainment">
-    <meta name="author" content="Dynamic TX Entertainment">
-    <meta name="theme-color" content="#FFCC00">
-    <link rel="canonical" href="https://dtxent.com/">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://www.ticketmaster.com" crossorigin>
-    <link rel="preconnect" href="https://tixplug.com" crossorigin>
-    <link rel="dns-prefetch" href="https://images.unsplash.com">
-    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
@@ -65,6 +50,7 @@
                 <li><a href="#nightlife">Nightlife</a></li>
                 <li><a href="#dining">Dining</a></li>
                 <li><a href="#stay">Stay</a></li>
+                <!-- <li><a href="#venues">Venues</a></li> -->
                 <li><a href="#contact">Contact</a></li>
                 <li><a href="#upcoming" class="btn btn-primary">Buy Tickets</a></li>
             </ul>
@@ -82,9 +68,11 @@
             <div class="hero-content container">
                 <h1 id="hero-title" class="hero-title">Own <span class="text-gradient">The Night.</span><br>Live Life
                     Out Loud.</h1>
-                <p class="hero-subtitle" id="hero-subtitle">Premium live entertainment and curated experiences across Texas.</p>
+                <p class="hero-subtitle" id="hero-subtitle">Premium live entertainment and curated experiences across
+                    Texas.</p>
                 <div class="hero-btns">
                     <a href="#upcoming" class="btn btn-primary btn-lg" id="hero-cta">Find Your Show</a>
+                    <a href="/dining/" class="btn btn-outline btn-lg">Explore Dining</a>
                 </div>
             </div>
             <!-- Video background placeholder -->
@@ -93,7 +81,6 @@
                     <source src="assets/hero-bg.mp4" type="video/mp4">
                 </video> -->
             </div>
-
             <!-- Three.js Particle Canvas -->
             <canvas id="hero-canvas" class="hero-canvas" aria-hidden="true"></canvas>
         </section>
@@ -106,69 +93,120 @@
                     <p class="section-desc">Don't miss out on the biggest events of the year.</p>
                 </div>
 
-                <!-- Screen reader announcement for loaded events -->
-                <div role="status" aria-live="polite" aria-atomic="true" class="visually-hidden" id="events-status">
+                <div class="events-grid" role="list">
+                    <!-- Events will be loaded here via Firebase (events-public.js) -->
+                    <div class="events-loading" aria-live="polite">
+                        <div class="loader"></div>
+                        <p>Loading the hottest shows...</p>
+                    </div>
                 </div>
 
-                <div class="events-grid" role="list" aria-label="Upcoming concerts and events">
-                    <!-- Events are loaded dynamically from Firebase with skeleton loading -->
+                <div class="events-status-container">
+                    <span id="events-status" class="visually-hidden" aria-live="polite"></span>
                 </div>
             </div>
         </section>
 
-        <!-- Nightlife Section -->
-        <section id="nightlife" class="section nightlife" aria-labelledby="nightlife-title">
+        <!-- Venues Section -->
+        <!-- 
+        <section id="venues" class="section venues" aria-labelledby="venues-title">
             <div class="container">
                 <div class="section-header">
-                    <h2 id="nightlife-title" class="section-title">The <span class="text-highlight">After Party</span>
+                    <h2 id="venues-title" class="section-title">Premier <span class="text-highlight">Venues</span></h2>
+                    <p class="section-desc">We bring the party to the best spots in the RGV.</p>
+                </div>
+                <div class="venues-grid">
+                    <article class="venue-card">
+                        <div class="venue-image">
+                            <img src="https://images.unsplash.com/photo-1514525253361-bee8a487227d?q=80&w=2030&auto=format&fit=crop" alt="Payne Arena">
+                        </div>
+                        <div class="venue-info">
+                            <h3>Payne Arena</h3>
+                            <p>Hidalgo, TX</p>
+                        </div>
+                    </article>
+                    <article class="venue-card">
+                        <div class="venue-image">
+                            <img src="https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?q=80&w=2030&auto=format&fit=crop" alt="South Padre Island">
+                        </div>
+                        <div class="venue-info">
+                            <h3>South Padre Island</h3>
+                            <p>Beachfront Events</p>
+                        </div>
+                    </article>
+                    <article class="venue-card">
+                        <div class="venue-image">
+                            <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2070&auto=format&fit=crop" alt="Major Venues">
+                        </div>
+                        <div class="venue-info">
+                            <h3>Special Events</h3>
+                            <p>Valley-wide Promos</p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+        -->
+
+        <!-- Nightlife & Dining Sections -->
+        <section id="nightlife" class="section nightlife lifestyle" aria-labelledby="nightlife-title">
+            <div class="container">
+                <div class="section-header">
+                    <h2 id="nightlife-title" class="section-title">Party in <span class="text-highlight">Style</span>
                     </h2>
-                    <p class="section-desc">Keep the energy alive at South Texas' premier nightlife destinations.</p>
+                    <p class="section-desc">The ultimate VIP nightlife experience.</p>
                 </div>
-                <div class="lifestyle-grid" id="nightlife-grid">
-                    <!-- Loaded dynamically -->
+                <div id="nightlife-grid" class="lifestyle-grid">
+                    <!-- Will be populated by lifestyle-public.js -->
                 </div>
             </div>
         </section>
 
-        <!-- Dining Section -->
-        <section id="dining" class="section dining" aria-labelledby="dining-title">
+        <section id="dining" class="section dining lifestyle" aria-labelledby="dining-title">
             <div class="container">
                 <div class="section-header">
-                    <h2 id="dining-title" class="section-title">Eat <span class="text-highlight">Local</span></h2>
-                    <p class="section-desc">From pre-show dinners to late-night bites.</p>
+                    <h2 id="dining-title" class="section-title">Dine in <span class="text-highlight">Style</span></h2>
+                    <p class="section-desc">Exclusive dining curated for the elite.</p>
                 </div>
-                <div class="lifestyle-grid" id="dining-grid">
-                    <!-- Loaded dynamically -->
+                <div id="dining-grid" class="lifestyle-grid">
+                    <!-- Will be populated by lifestyle-public.js -->
                 </div>
             </div>
         </section>
 
         <!-- Stay Section -->
-        <section id="stay" class="section stay" aria-labelledby="stay-title">
+        <section id="stay" class="section stay lifestyle" aria-labelledby="stay-title">
             <div class="container">
                 <div class="section-header">
                     <h2 id="stay-title" class="section-title">Stay in <span class="text-highlight">Style</span></h2>
-                    <p class="section-desc">Preferred accommodations for the ultimate experience.</p>
+                    <p class="section-desc">Luxury accommodations near your favorite events.</p>
                 </div>
-                <div class="lifestyle-grid" id="stay-grid">
-                    <!-- Loaded dynamically -->
+                <div id="stay-grid" class="lifestyle-grid">
+                    <!-- Loaded via lifestyle-public.js -->
                 </div>
             </div>
         </section>
 
-
         <section id="contact" class="section contact" aria-labelledby="contact-title">
-            <div class="container contact-container">
+            <div class="container">
+                <div class="section-header">
+                    <h2 id="contact-title" class="section-title">Stay <span class="text-highlight">Connected</span>
+                    </h2>
+                    <p class="section-desc">Be the first to know about upcoming events and exclusive experiences.</p>
+                </div>
                 <div class="contact-content">
-                    <h2 id="contact-title">Join the <span class="text-gradient">Party</span></h2>
-                    <p id="newsletter-desc">Sign up for our newsletter to get early access to tickets and exclusive
-                        offers.</p>
-                    <form class="newsletter-form" aria-label="Newsletter subscription">
-                        <input type="email" placeholder="Enter your email" required aria-label="Email address"
-                            aria-describedby="newsletter-desc">
-                        <button type="submit" class="btn btn-primary">Subscribe</button>
-                    </form>
-                    <div role="status" aria-live="polite" aria-atomic="true" class="visually-hidden" id="form-status">
+                    <div class="subscribe-card">
+                        <h3>Join the VIP List</h3>
+                        <p id="newsletter-desc">Get early access to tickets, exclusive promo codes, and luxury dining
+                            offers.</p>
+                        <form class="newsletter-form" aria-label="Newsletter subscription">
+                            <input type="email" placeholder="Enter your email" required aria-label="Email address"
+                                aria-describedby="newsletter-desc">
+                            <button type="submit" class="btn btn-primary">Subscribe</button>
+                        </form>
+                        <div role="status" aria-live="polite" aria-atomic="true" class="visually-hidden"
+                            id="form-status">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -228,7 +266,6 @@
     <script src="script.js"></script>
     <script type="module" src="js/events-public.js"></script>
     <script type="module" src="js/lifestyle-public.js"></script>
-    <script type="module" src="js/site-config.js"></script>
 
     <!-- GSAP Animation Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>

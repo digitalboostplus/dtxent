@@ -492,6 +492,7 @@ h3 {
         radial-gradient(circle at 80% 80%, rgba(255, 250, 179, 0.08) 0%, transparent 50%);
     animation: heroGlow 10s ease-in-out infinite alternate;
     z-index: 2;
+    pointer-events: none;
 }
 
 @keyframes heroGlow {
@@ -515,6 +516,7 @@ h3 {
     background:
         linear-gradient(135deg, rgba(10, 10, 10, 0.7) 0%, rgba(10, 10, 10, 0.85) 100%);
     z-index: 2;
+    pointer-events: none;
 }
 
 .hero-content {
@@ -596,6 +598,7 @@ h3 {
     flex-wrap: wrap;
     position: relative;
     z-index: 10;
+    margin-top: 2rem;
 }
 
 @keyframes heroBtnsReveal {
@@ -799,6 +802,40 @@ h3 {
 .card-price {
     color: var(--primary-color);
     font-weight: bold;
+}
+
+/* Featured Dining Cards (Main Page) */
+.featured-dining-card {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: flex-end;
+}
+
+.featured-dining-card .card-content {
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 20%, rgba(0, 0, 0, 0.4) 60%, transparent 100%);
+    width: 100%;
+}
+
+.featured-logo-holder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 70px;
+    margin-bottom: 1rem;
+}
+
+.featured-logo-holder img {
+    max-height: 70px;
+    max-width: 140px;
+    object-fit: contain;
+    filter: brightness(0.95);
+}
+
+.lifestyle-card .dining-followers {
+    font-size: 0.8rem;
+    color: var(--text-muted);
 }
 
 /* Events Loading/Empty/Error States */

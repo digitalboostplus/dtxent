@@ -1,0 +1,372 @@
+/* ========================================
+   DINING PAGE STYLES
+   Supplements styles.css
+   ======================================== */
+
+/* Hero — Compact 60vh */
+.dining-hero {
+    height: 60vh;
+    min-height: 400px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    padding-top: 100px;
+}
+
+.dining-hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(to bottom, rgba(10, 10, 10, 0.6), rgba(10, 10, 10, 0.95)),
+        url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat;
+    z-index: 1;
+}
+
+.dining-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 700px;
+    padding: 0 2rem;
+}
+
+.dining-eyebrow {
+    color: var(--primary);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+}
+
+.dining-hero-title {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+    line-height: 1;
+}
+
+.dining-hero-subtitle {
+    color: var(--text-muted);
+    font-size: 1.15rem;
+    line-height: 1.7;
+    max-width: 550px;
+    margin: 0 auto;
+}
+
+/* ========================================
+   STICKY CATEGORY FILTER BAR
+   ======================================== */
+.dining-filter-bar {
+    position: sticky;
+    top: 72px;
+    z-index: 100;
+    background: rgba(10, 10, 10, 0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 1rem 0;
+}
+
+.filter-inner {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 0 1rem;
+}
+
+.filter-inner::-webkit-scrollbar {
+    display: none;
+}
+
+.filter-pill {
+    flex-shrink: 0;
+    padding: 0.5rem 1.25rem;
+    border-radius: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    white-space: nowrap;
+    font-family: var(--font-main);
+}
+
+.filter-pill:hover {
+    border-color: rgba(255, 204, 0, 0.4);
+    color: var(--text-main);
+    background: rgba(255, 204, 0, 0.08);
+}
+
+.filter-pill.active {
+    background: var(--primary);
+    color: #000;
+    border-color: var(--primary);
+    font-weight: 700;
+}
+
+.filter-count {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-left: auto;
+    flex-shrink: 0;
+    padding-left: 1rem;
+}
+
+/* ========================================
+   RESTAURANT GRID
+   ======================================== */
+.dining-section {
+    padding: clamp(3rem, 6vh, 5rem) 0;
+}
+
+.dining-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 2rem;
+}
+
+/* ========================================
+   RESTAURANT CARD
+   ======================================== */
+.dining-card-wrapper {
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.dining-card-wrapper.hidden {
+    display: none;
+}
+
+.dining-card {
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.35s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* Gold top-border accent */
+.dining-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--primary-hover));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dining-card:hover {
+    transform: translateY(-6px);
+    box-shadow:
+        0 16px 48px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(255, 204, 0, 0.15);
+}
+
+.dining-card:hover::before {
+    transform: scaleX(1);
+}
+
+/* Card header row */
+.dining-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+}
+
+.dining-category-pill {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 0.3rem 0.75rem;
+    border-radius: 50px;
+    background: rgba(255, 204, 0, 0.12);
+    color: var(--primary);
+    white-space: nowrap;
+}
+
+.dining-followers {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.dining-followers::before {
+    content: '';
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b8b8b8' stroke-width='2'%3E%3Cpath d='M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='9' cy='7' r='4'/%3E%3Cpath d='M22 21v-2a4 4 0 0 0-3-3.87'/%3E%3Cpath d='M16 3.13a4 4 0 0 1 0 7.75'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+
+/* Logo area */
+.dining-logo-holder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    height: 80px;
+}
+
+.dining-logo-holder img {
+    max-height: 80px;
+    max-width: 160px;
+    object-fit: contain;
+    filter: brightness(0.95);
+    transition: filter 0.3s ease;
+}
+
+.dining-card:hover .dining-logo-holder img {
+    filter: brightness(1) drop-shadow(0 0 8px rgba(255, 204, 0, 0.3));
+}
+
+/* Card body */
+.dining-card-name {
+    font-size: 1.25rem;
+    font-weight: 800;
+    margin-bottom: 0.35rem;
+    letter-spacing: -0.01em;
+}
+
+.dining-card-address {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+}
+
+.dining-card-bio {
+    font-size: 0.9rem;
+    color: #ccc;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 1.25rem;
+    flex-grow: 1;
+}
+
+/* Card footer: contact + CTA */
+.dining-card-contact {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+    gap: 0.5rem;
+}
+
+.dining-card-contact a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.dining-card-contact a:hover {
+    color: var(--primary);
+}
+
+.dining-card-divider {
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    margin-bottom: 1rem;
+}
+
+.dining-card-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: var(--transition);
+}
+
+.dining-card-cta:hover {
+    color: var(--text-main);
+}
+
+.dining-card-cta .arrow {
+    transition: transform 0.3s ease;
+}
+
+.dining-card-cta:hover .arrow {
+    transform: translateX(5px);
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 768px) {
+    .dining-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dining-hero {
+        height: 50vh;
+        min-height: 350px;
+    }
+
+    .dining-hero-title {
+        font-size: 2.5rem;
+    }
+
+    .filter-count {
+        display: none;
+    }
+
+    .dining-filter-bar {
+        top: 65px;
+    }
+}
+
+@media (max-width: 480px) {
+    .dining-card {
+        padding: 1.5rem;
+    }
+}
+
+/* ========================================
+   REDUCED MOTION
+   ======================================== */
+@media (prefers-reduced-motion: reduce) {
+    .dining-card {
+        transition: none;
+    }
+
+    .dining-card::before {
+        transform: scaleX(1);
+        transition: none;
+    }
+
+    .dining-card:hover {
+        transform: none;
+    }
+
+    .dining-card-wrapper {
+        transition: none;
+    }
+}

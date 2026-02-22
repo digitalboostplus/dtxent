@@ -63,8 +63,9 @@ function initHeroAnimation() {
         .from('.hero-btns .btn', {
             y: 30,
             opacity: 0,
-            stagger: 0.15,
-            duration: 0.6
+            stagger: 0.2,
+            duration: 0.8,
+            clearProps: 'all'
         }, '-=0.4');
 }
 
