@@ -79,10 +79,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, 200);
 
-    // Safety: force-show any hidden animated elements after 5s
+    // Safety: force-show any hidden animated elements after 3s
     // This catches edge cases where neither GSAP nor the fallback observer triggered
     setTimeout(() => {
-        document.querySelectorAll('.section-header, .contact-content').forEach(el => {
+        document.querySelectorAll('.hero-title, .hero-subtitle, .hero-btns, .section-header, .contact-content').forEach(el => {
             const computedOpacity = getComputedStyle(el).opacity;
             if (computedOpacity === '0') {
                 console.warn('[Safety] Forcing visibility on hidden element:', el);
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 el.style.transition = 'opacity 0.5s ease';
             }
         });
-    }, 5000);
+    }, 3000);
 
     function initFallbackAnimations() {
         const observerOptions = {

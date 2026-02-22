@@ -37,7 +37,7 @@ function initGSAPAnimations() {
  * Force all animated elements to be visible (fallback for failures)
  */
 function forceShowAll() {
-    document.querySelectorAll('.section-header, .contact-content').forEach(el => {
+    document.querySelectorAll('.hero-title, .hero-subtitle, .hero-btns, .section-header, .contact-content').forEach(el => {
         el.style.opacity = '1';
         el.style.transform = 'none';
     });
@@ -45,27 +45,33 @@ function forceShowAll() {
 
 /**
  * Hero entrance animation
+ * Elements start hidden via CSS (opacity: 0), GSAP animates them in.
  */
 function initHeroAnimation() {
     const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
-    tl.from('.hero-title', {
-        y: 100,
-        opacity: 0,
+    // Set initial transforms before animating
+    gsap.set('.hero-title', { y: 60, scale: 0.95 });
+    gsap.set('.hero-subtitle', { y: 30 });
+    gsap.set('.hero-btns', { y: 20 });
+
+    tl.to('.hero-title', {
+        y: 0,
+        scale: 1,
+        opacity: 1,
         duration: 1.2,
         delay: 0.3
     })
-        .from('.hero-subtitle', {
-            y: 50,
-            opacity: 0,
+        .to('.hero-subtitle', {
+            y: 0,
+            opacity: 1,
             duration: 0.8
         }, '-=0.6')
-        .from('.hero-btns .btn', {
-            y: 30,
-            opacity: 0,
-            stagger: 0.2,
+        .to('.hero-btns', {
+            y: 0,
+            opacity: 1,
             duration: 0.8,
-            clearProps: 'all'
+            clearProps: 'transform'
         }, '-=0.4');
 }
 

@@ -533,23 +533,8 @@ h3 {
     text-transform: uppercase;
     letter-spacing: -0.04em;
     line-height: 0.95;
-    animation: heroTitleReveal 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     opacity: 0;
     text-shadow: 0 0 80px rgba(255, 204, 0, 0.3);
-}
-
-@keyframes heroTitleReveal {
-    0% {
-        opacity: 0;
-        transform: translateY(60px) scale(0.95);
-        filter: blur(10px);
-    }
-
-    100% {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-        filter: blur(0);
-    }
 }
 
 /* Glowing text effect on hero title */
@@ -572,23 +557,11 @@ h3 {
     font-size: clamp(1.125rem, 2.5vw, 1.5rem);
     color: var(--text-muted);
     margin-bottom: 3rem;
-    animation: heroSubtitleReveal 1s ease-out 0.5s backwards;
+    opacity: 0;
     max-width: 650px;
     margin-left: auto;
     margin-right: auto;
     line-height: 1.7;
-}
-
-@keyframes heroSubtitleReveal {
-    0% {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
 }
 
 .hero-btns {
@@ -599,18 +572,7 @@ h3 {
     position: relative;
     z-index: 10;
     margin-top: 2rem;
-}
-
-@keyframes heroBtnsReveal {
-    0% {
-        opacity: 0;
-        transform: translateY(40px);
-    }
-
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    opacity: 0;
 }
 
 /* Hero button enhanced hover */
