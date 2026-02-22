@@ -28,7 +28,7 @@
     "rewrites": [
       {
         "source": "/dining",
-        "destination": "/dining/index.html"
+        "destination": "/dining/dining.html"
       }
     ],
     "headers": [
