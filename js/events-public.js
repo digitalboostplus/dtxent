@@ -233,20 +233,21 @@ function renderEventsList(displayEvents, container) {
     // Render event cards
     container.innerHTML = displayEvents.map(event => createEventCardHTML(event)).join('');
 
-    // Attach click handlers for modal
-    attachEventClickHandlers(displayEvents);
-
-    // Enrich Ticketmaster events with real-time data
-    enrichTicketmasterEvents(displayEvents);
-
-    // Generate and inject Schema.org data
-    injectSchemaOrg(displayEvents);
-
-    // Re-initialize animations for dynamically loaded cards
-    initEventAnimations();
-
-    // Initialize countdown timers
+    // Initialize countdown timers FIRST — most visible to users
     initCountdownTimers();
+
+    // Non-critical enrichments — isolated so failures don't cascade
+    try { attachEventClickHandlers(displayEvents); }
+    catch (err) { console.error('Failed to attach click handlers:', err); }
+
+    try { enrichTicketmasterEvents(displayEvents); }
+    catch (err) { console.error('Failed to enrich TM events:', err); }
+
+    try { injectSchemaOrg(displayEvents); }
+    catch (err) { console.error('Failed to inject schema:', err); }
+
+    try { initEventAnimations(); }
+    catch (err) { console.error('Failed to init animations:', err); }
 
     // Announce to screen readers
     announceEventsLoaded(displayEvents.length);
@@ -271,7 +272,7 @@ function createEventCardHTML(event) {
     const venueFullName = event.venueFullName || `${event.venueName}, ${event.venueCity}, ${event.venueState}`;
     const dateObj = event.eventDate instanceof Date ? event.eventDate : new Date(event.eventDate);
     const isValidDate = !isNaN(dateObj.getTime());
-    const eventDateISO = isValidDate ? dateObj.toISOString() : new Date().toISOString();
+    const eventDateTimestamp = isValidDate ? dateObj.getTime() : 0;
 
     const eventId = event.id || Math.random().toString(36).substr(2, 9);
     const hasMultipleDates = event.dates && event.dates.length > 1;
@@ -340,7 +341,7 @@ function createEventCardHTML(event) {
                 <h3 class="event-artist">${escapeHtml(event.artistName)}</h3>
                 <p class="event-info">${escapeHtml(event.eventName)}</p>
 
-                <div class="event-countdown" data-date="${eventDateISO}">
+                <div class="event-countdown" data-date="${eventDateTimestamp}">
                     <div class="countdown-item">
                         <span class="countdown-value days">--</span>
                         <span class="countdown-label">Days</span>
@@ -535,7 +536,9 @@ function initCountdownTimers() {
 
     const updateAllCountdowns = () => {
         document.querySelectorAll('.event-countdown').forEach(countdown => {
-            const eventDate = new Date(countdown.dataset.date).getTime();
+            const eventDate = parseInt(countdown.dataset.date, 10);
+            if (!eventDate) return; // Skip invalid dates
+
             const now = Date.now();
             const distance = eventDate - now;
 
