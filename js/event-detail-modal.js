@@ -141,7 +141,7 @@ class EventDetailModal {
                     <h3 class="modal-section-title">Available Dates</h3>
                     <div class="modal-dates-list">
                         ${event.dates.map(d => {
-                const dDate = new Date(d.eventDate);
+                const dDate = new Date(d.eventDate || d.date);
                 const day = dDate.toLocaleDateString('en-US', { weekday: 'short' });
                 const mo = dDate.toLocaleDateString('en-US', { month: 'short' });
                 const dt = dDate.getDate();

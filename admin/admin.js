@@ -730,7 +730,7 @@ function openModal(event = null) {
         // Additional dates (skip first entry which matches primary date)
         if (event.dates && Array.isArray(event.dates) && event.dates.length > 1) {
             event.dates.slice(1).forEach(d => {
-                const dateStr = d.date || '';
+                const dateStr = d.eventDate || d.date || '';
                 const url = d.ticketUrl || '';
                 addDateItem(dateStr, url);
             });
@@ -903,7 +903,7 @@ function getFormData() {
         const dateVal = row.querySelector('.date-value').value;
         const url = row.querySelector('.date-ticket-url').value.trim();
         if (dateVal) {
-            additionalDates.push({ date: dateVal, ticketUrl: url || ticketUrl });
+            additionalDates.push({ eventDate: dateVal, ticketUrl: url || ticketUrl });
         }
     });
 
@@ -930,7 +930,7 @@ function getFormData() {
     if (additionalDates.length > 0) {
         const primaryDateStr = document.getElementById('eventDate').value;
         data.dates = [
-            { date: primaryDateStr, ticketUrl },
+            { eventDate: primaryDateStr, ticketUrl },
             ...additionalDates
         ];
     }

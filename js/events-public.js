@@ -208,15 +208,42 @@ function processEventsForDisplay(events) {
 
     // Final pass to add display formats
     return Array.from(groupedMap.values()).map(event => {
-        const monthShort = event.eventDate.toLocaleString('en-US', { month: 'short' });
-        const dayNum = event.eventDate.getDate();
+        // Robust date extraction helper
+        const getValidDate = (d) => {
+            if (!d) return new Date();
+            let dateObj;
+            if (d instanceof Date) {
+                dateObj = d;
+            } else if (d.seconds) {
+                dateObj = new Date(d.seconds * 1000);
+            } else if (typeof d === 'string' && /^\d+$/.test(d)) {
+                dateObj = new Date(parseInt(d, 10));
+            } else {
+                dateObj = new Date(d);
+            }
+            return isNaN(dateObj.getTime()) ? new Date() : dateObj;
+        };
 
         // Sort dates within the group if they exist
         if (event.dates && event.dates.length > 1) {
-            event.dates.sort((a, b) => new Date(a.eventDate) - new Date(b.eventDate));
-            // Update main date to the first one (already sorted but being explicit)
-            event.eventDate = new Date(event.dates[0].eventDate);
+            event.dates.sort((a, b) => {
+                const dateA = getValidDate(a.eventDate || a.date);
+                const dateB = getValidDate(b.eventDate || b.date);
+                return dateA - dateB;
+            });
+            // Update items in dates array to use eventDate consistently for rendering
+            event.dates = event.dates.map(d => ({
+                ...d,
+                eventDate: getValidDate(d.eventDate || d.date)
+            }));
+            // Update main date to the first one
+            event.eventDate = event.dates[0].eventDate;
+        } else {
+            event.eventDate = getValidDate(event.eventDate);
         }
+
+        const monthShort = event.eventDate.toLocaleString('en-US', { month: 'short' });
+        const dayNum = event.eventDate.getDate();
 
         return {
             ...event,
