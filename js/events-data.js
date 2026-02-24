@@ -361,7 +361,7 @@ export const DINING_RESTAURANTS = [
         website: "https://grupomendezusa.com/home",
         phone: null,
         followers: "5.8K",
-        logoFile: "ambra_by_altura_concepts_logo.png", // Using Ambra (same group) for now
+        logoFile: "ladoblem.jpeg",
         imageFile: null,
         featured: true
     },
@@ -375,7 +375,7 @@ export const DINING_RESTAURANTS = [
         website: "santafemcallen.com",
         phone: "(956) 630-2331",
         followers: "6.2K",
-        logoFile: "santa_fe_steakhouse_logo.png",
+        logoFile: "SantaFeSteak.png",
         imageFile: null,
         featured: true
     },
@@ -389,7 +389,7 @@ export const DINING_RESTAURANTS = [
         website: "www.mousaimcallen.com",
         phone: null,
         followers: "9.8K",
-        logoFile: "mousai_logo.png",
+        logoFile: "MousaiMcallen.png",
         imageFile: "mousai.jpg",
         featured: true
     },
