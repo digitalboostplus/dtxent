@@ -310,47 +310,89 @@ export const LOCAL_CLUBS = [
 
 export const LOCAL_RESTAURANTS = [
     {
-        id: "food-1",
-        name: "SALT - New American Table",
-        type: "Fine Dining",
+        id: "food-santa-fe",
+        name: "Santa Fe Steakhouse & Cantina",
+        type: "Intimate Steakhouse",
         city: "McAllen",
         price: "$$$",
-        image: "assets/salt-1.jpg",
-        description: "Chef-driven cuisine focusing on fresh, local ingredients.",
-        features: ["Farm-to-Table", "Craft Cocktails", "Date Night"],
-        link: "https://saltnewamericantable.com",
-        lat: 26.230,
-        lng: -98.240
+        image: "assets/santa_fe.jpg",
+        description: "A McAllen original featuring premium high-quality steaks, an extensive wine list, and an enchanting patio getaway.",
+        features: ["Premium Steaks", "600+ Wine Selection", "Rooftop Terrace"],
+        link: "https://santafemcallen.com/",
+        lat: 26.189,
+        lng: -98.231
     },
     {
-        id: "food-2",
-        name: "Sea Ranch Restaurant",
-        type: "Seafood",
-        city: "South Padre Island",
-        price: "$$$",
-        image: "assets/SeaRanchRestaurant.jpg",
-        description: "Premier waterfront dining featuring wild-caught gulf seafood.",
-        features: ["Waterfront View", "Fresh Seafood", "Marina"],
-        link: "http://searanchrestaurant.com",
-        lat: 26.100,
-        lng: -97.170
-    },
-    {
-        id: "food-3",
-        name: "Taco Palenque",
-        type: "Casual Dining",
+        id: "food-la-doble-m",
+        name: "La Doble M",
+        type: "Mexican Fine Dining",
         city: "McAllen",
-        price: "$",
-        image: "assets/taco-palenque.png",
-        description: "Authentic Mexican cuisine. Perfect for late-night cravings after the show.",
-        features: ["Late Night", "Drive-thru", "Authentic Flavor"],
-        link: "https://tacopalenque.com",
-        lat: 26.200,
-        lng: -98.230
+        price: "$$$",
+        image: "assets/la_doble_m.jpg",
+        description: "Contemporary Mexican cuisine inspired by the flavors of northern Mexico. Flame-grilled 'brasa' specialties in a sophisticated atmosphere.",
+        features: ["Grilled Cuisine", "Upscale Atmosphere", "Live Music"],
+        link: "https://grupomendezusa.com/home",
+        lat: 26.197,
+        lng: -98.272
+    },
+    {
+        id: "food-mousai",
+        name: "Mousai Mcallen",
+        type: "Asian Fusion",
+        city: "McAllen",
+        price: "$$$",
+        image: "assets/mousai.jpg",
+        description: "Chic contemporary Asian dining fusing traditional techniques with modern style. Mood-driven energy with hand-crafted sushi.",
+        features: ["Hand-crafted Sushi", "Cocktail Bar", "Digital Ambiance"],
+        link: "http://mousaimcallen.com/",
+        lat: 26.242,
+        lng: -98.212
     }
 ];
 
 export const DINING_RESTAURANTS = [
+    {
+        id: "dining-la-doble-m",
+        name: "La Doble M",
+        instagram: "ladoblem_",
+        category: "Mexican Fine Dining",
+        bio: "Contemporary Mexican cuisine inspired by northern flavors. Flame-grilled 'brasa' specialties in an upscale setting.",
+        address: "McAllen, TX",
+        website: "https://grupomendezusa.com/home",
+        phone: null,
+        followers: "5.8K",
+        logoFile: "ambra_by_altura_concepts_logo.png", // Using Ambra (same group) for now
+        imageFile: null,
+        featured: true
+    },
+    {
+        id: "dining-santa-fe",
+        name: "Santa Fe Steakhouse & Cantina",
+        instagram: "santafesteakhouse",
+        category: "Steakhouse",
+        bio: "McAllen's premier steakhouse featuring award-winning steaks, 600+ wine selection, and live music.",
+        address: "704 E Griffin Pkwy, McAllen, TX",
+        website: "santafemcallen.com",
+        phone: "(956) 630-2331",
+        followers: "6.2K",
+        logoFile: "santa_fe_steakhouse_logo.png",
+        imageFile: null,
+        featured: true
+    },
+    {
+        id: "dining-mousai",
+        name: "Mousai Mcallen",
+        instagram: "mousaimcallen",
+        category: "Asian Fusion",
+        bio: "Immersive contemporary Asian dining experience with hand-crafted sushi and curated energy.",
+        address: "McAllen, TX",
+        website: "www.mousaimcallen.com",
+        phone: null,
+        followers: "9.8K",
+        logoFile: "mousai_logo.png",
+        imageFile: "mousai.jpg",
+        featured: true
+    },
     {
         id: "dining-01",
         name: "RU",
@@ -430,19 +472,6 @@ export const DINING_RESTAURANTS = [
         featured: false
     },
     {
-        id: "dining-07",
-        name: "Mousai",
-        instagram: "mousaimcallen",
-        category: "Fine Dining",
-        bio: "Lunch, bottomless brunch, happy hour, and live shows under one roof.",
-        address: null,
-        website: "www.mousaimcallen.com/reservations",
-        phone: null,
-        followers: "9,755",
-        logoFile: "mousai_logo.png",
-        featured: false
-    },
-    {
         id: "dining-08",
         name: "Ambra",
         instagram: "ambramcallen",
@@ -454,7 +483,7 @@ export const DINING_RESTAURANTS = [
         followers: "17.5K",
         logoFile: "ambra_by_altura_concepts_logo.png",
         imageFile: "ambra_bg.jpg",
-        featured: true
+        featured: false
     },
     {
         id: "dining-09",
@@ -481,19 +510,6 @@ export const DINING_RESTAURANTS = [
         followers: "18.9K",
         logoFile: "tabu_bistro_lounge_logo.webp",
         imageFile: "tabu_bg.webp",
-        featured: true
-    },
-    {
-        id: "dining-11",
-        name: "Santa Fe Steakhouse & Cantina",
-        instagram: "santafesteakhouse",
-        category: "Steakhouse",
-        bio: "Award-winning steaks, fine wines, and cocktails. Claim your steak.",
-        address: null,
-        website: "santafemcallen.com",
-        phone: null,
-        followers: "6,177",
-        logoFile: "santa_fe_steakhouse_logo.png",
         featured: false
     },
     {
@@ -508,7 +524,7 @@ export const DINING_RESTAURANTS = [
         followers: "17.6K",
         logoFile: "the_loretto_at_mission_logo.png",
         imageFile: "loretto_bg.jpg",
-        featured: true
+        featured: false
     },
     {
         id: "dining-13",
@@ -599,7 +615,7 @@ export const DINING_RESTAURANTS = [
         phone: null,
         followers: "97.2K",
         logoFile: "casa_madre_logo.png",
-        featured: true
+        featured: false
     },
     {
         id: "dining-20",

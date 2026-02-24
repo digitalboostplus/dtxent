@@ -35,9 +35,9 @@ WORKSPACE_ROOT = REPO_ROOT.parent               # dtxent-builder/
 
 EVENTS_DATA_PATH = REPO_ROOT / "js" / "events-data.js"
 OUTPUT_DIR = REPO_ROOT / ".tmp" / "social_posts"
-ENV_PATH = WORKSPACE_ROOT / ".env"
+ENV_PATH = REPO_ROOT / ".env"
 
-MODEL = "gemini-3-pro-preview"
+MODEL = "gemini-3-flash-preview"
 
 # Platform character limits (caption only, excluding hashtags)
 PLATFORM_LIMITS = {
@@ -104,9 +104,9 @@ def generate_post_text(
     """
     from google import genai
 
-    api_key = os.getenv("GEMINI_API_KEY")
+    api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
     if not api_key:
-        raise EnvironmentError("GEMINI_API_KEY not set in .env")
+        raise EnvironmentError("GEMINI_API_KEY or GOOGLE_API_KEY not set in .env")
 
     client = genai.Client(api_key=api_key)
 
@@ -194,9 +194,9 @@ def generate_promo_image(events: list[dict]) -> bytes | None:
     from google import genai
     from google.genai import types
 
-    api_key = os.getenv("GEMINI_API_KEY")
+    api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
     if not api_key:
-        raise EnvironmentError("GEMINI_API_KEY not set in .env")
+        raise EnvironmentError("GEMINI_API_KEY or GOOGLE_API_KEY not set in .env")
 
     client = genai.Client(api_key=api_key)
 
@@ -312,9 +312,9 @@ def generate_filler_post() -> dict:
     """Generate a generic 'stay tuned' post when no events are upcoming."""
     from google import genai
 
-    api_key = os.getenv("GEMINI_API_KEY")
+    api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
     if not api_key:
-        raise EnvironmentError("GEMINI_API_KEY not set in .env")
+        raise EnvironmentError("GEMINI_API_KEY or GOOGLE_API_KEY not set in .env")
 
     client = genai.Client(api_key=api_key)
 
