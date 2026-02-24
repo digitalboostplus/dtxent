@@ -2107,3 +2107,312 @@ input:invalid:not(:placeholder-shown)+.form-error {
     line-height: 1.7;
     font-size: 0.95rem;
 }
+
+/* ==========================================
+   Transportation Page Styles
+   ========================================== */
+
+.transportation-hero {
+    height: 90vh;
+    min-height: 600px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    padding-top: 100px;
+    background: url('https://images.unsplash.com/photo-1549487532-6dcde1363f84?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat;
+}
+
+.transportation-hero .hero-overlay {
+    background: linear-gradient(135deg, rgba(10, 10, 10, 0.85) 0%, rgba(10, 10, 10, 0.6) 100%);
+}
+
+.contact-number-top {
+    margin-top: 2.5rem;
+    font-size: 1.1rem;
+    animation: fadeIn 1s ease-out 1s both;
+}
+
+.contact-number-top a {
+    text-decoration: none;
+    font-size: 1.25rem;
+    color: var(--primary);
+    position: relative;
+    padding-bottom: 2px;
+}
+
+.contact-number-top a:hover {
+    color: #fff;
+    text-shadow: 0 0 10px var(--primary-glow);
+}
+
+.vehicle-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2.5rem;
+}
+
+.vehicle-card {
+    background: var(--card-bg);
+    border-radius: 20px;
+    overflow: hidden;
+    transition: var(--transition);
+    border: 1px solid rgba(255, 204, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.vehicle-card:hover {
+    transform: translateY(-10px);
+    border-color: rgba(255, 204, 0, 0.4);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 204, 0, 0.1);
+}
+
+.vehicle-image {
+    height: 250px;
+    overflow: hidden;
+}
+
+.vehicle-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.vehicle-card:hover .vehicle-image img {
+    transform: scale(1.05);
+}
+
+.vehicle-info {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.vehicle-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+}
+
+.vehicle-header h3 {
+    font-size: 1.5rem;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.vehicle-header .capacity {
+    background: rgba(255, 204, 0, 0.1);
+    color: var(--primary);
+    padding: 0.4rem 0.8rem;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    white-space: nowrap;
+    border: 1px solid rgba(255, 204, 0, 0.2);
+}
+
+.amenities {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 2rem 0;
+    flex-grow: 1;
+}
+
+.amenities li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 0.8rem;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+.amenities li::before {
+    content: '✦';
+    position: absolute;
+    left: 0;
+    color: var(--primary);
+    font-size: 0.8rem;
+    top: 2px;
+}
+
+.vehicle-actions {
+    margin-top: auto;
+}
+
+/* Process Steps */
+.process-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+@media (max-width: 768px) {
+    .process-steps {
+        grid-template-columns: 1fr;
+    }
+}
+
+.step-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 2.5rem;
+    text-align: center;
+    transition: var(--transition);
+    position: relative;
+}
+
+.step-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateY(-5px);
+    border-color: rgba(255, 204, 0, 0.2);
+}
+
+.step-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #000;
+    box-shadow: 0 10px 20px rgba(255, 204, 0, 0.2);
+}
+
+.step-card h3 {
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+}
+
+.step-card p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* Lead Capture Form */
+.quote {
+    background: linear-gradient(to bottom, var(--dark-bg), #111);
+}
+
+.quote-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 4rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    padding: 3rem;
+    overflow: hidden;
+    position: relative;
+}
+
+@media (max-width: 900px) {
+    .quote-wrapper {
+        grid-template-columns: 1fr;
+        padding: 2rem;
+        gap: 2.5rem;
+    }
+}
+
+.quote-features {
+    list-style: none;
+    padding: 0;
+    margin: 2rem 0;
+}
+
+.quote-features li {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    font-size: 1.05rem;
+}
+
+.quote-contact-direct {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.lead-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.lead-form .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+}
+
+@media (max-width: 600px) {
+    .lead-form .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+}
+
+.lead-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-main);
+}
+
+.lead-form input,
+.lead-form select,
+.lead-form textarea {
+    width: 100%;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    color: var(--text-main);
+    font-family: var(--font-main);
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+.lead-form select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1em;
+}
+
+.lead-form select option {
+    background: #1a1a1a;
+    color: white;
+}
+
+.lead-form input:focus,
+.lead-form select:focus,
+.lead-form textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 0 3px rgba(255, 204, 0, 0.1);
+}
+
+.lead-form textarea {
+    resize: vertical;
+    min-height: 100px;
+}
