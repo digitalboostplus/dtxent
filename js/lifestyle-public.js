@@ -108,9 +108,11 @@ function createFeaturedDiningCard(r) {
                     <div class="card-tag">${r.category}</div>
                     <div class="dining-followers">${r.followers} followers</div>
                 </div>
+                ${bgImgSrc ? '' : `
                 <div class="featured-logo-holder">
                     <img src="${logoSrc}" alt="${r.name} logo" loading="lazy" width="140" height="70">
                 </div>
+                `}
                 <h3 class="card-title">${r.name}</h3>
                 <p class="card-desc">${r.bio}</p>
                 <a href="${ctaHref}" target="_blank" rel="noopener noreferrer" class="card-link">Visit <span class="arrow">&rarr;</span></a>
