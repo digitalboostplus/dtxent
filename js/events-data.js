@@ -375,8 +375,8 @@ export const DINING_RESTAURANTS = [
         website: "santafemcallen.com",
         phone: "(956) 630-2331",
         followers: "6.2K",
-        logoFile: "SantaFeSteak.png",
-        imageFile: "logos/SantaFeSteak.png",
+        logoFile: "../SantaFeSteak.png",
+        imageFile: "../SantaFeSteak.png",
         featured: true
     },
     {
