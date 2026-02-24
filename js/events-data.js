@@ -356,13 +356,13 @@ export const DINING_RESTAURANTS = [
         name: "La Doble M",
         instagram: "ladoblem_",
         category: "Mexican Fine Dining",
-        bio: "Contemporary Mexican cuisine inspired by northern flavors. Flame-grilled 'brasa' specialties in an upscale setting.",
+        bio: "Contemporary Mexican cuisine inspired by northern flavors.",
         address: "McAllen, TX",
         website: "https://grupomendezusa.com/home",
         phone: null,
         followers: "5.8K",
         logoFile: "ladoblem.jpeg",
-        imageFile: null,
+        imageFile: "logos/ladoblem.jpeg",
         featured: true
     },
     {
@@ -370,13 +370,13 @@ export const DINING_RESTAURANTS = [
         name: "Santa Fe Steakhouse & Cantina",
         instagram: "santafesteakhouse",
         category: "Steakhouse",
-        bio: "McAllen's premier steakhouse featuring award-winning steaks, 600+ wine selection, and live music.",
+        bio: "McAllen's premier steakhouse — fine wines and live music.",
         address: "704 E Griffin Pkwy, McAllen, TX",
         website: "santafemcallen.com",
         phone: "(956) 630-2331",
         followers: "6.2K",
         logoFile: "SantaFeSteak.png",
-        imageFile: null,
+        imageFile: "logos/SantaFeSteak.png",
         featured: true
     },
     {
@@ -384,13 +384,13 @@ export const DINING_RESTAURANTS = [
         name: "Mousai Mcallen",
         instagram: "mousaimcallen",
         category: "Asian Fusion",
-        bio: "Immersive contemporary Asian dining experience with hand-crafted sushi and curated energy.",
+        bio: "Immersive Asian fusion with hand-crafted sushi and curated energy.",
         address: "McAllen, TX",
         website: "www.mousaimcallen.com",
         phone: null,
         followers: "9.8K",
         logoFile: "MousaiMcallen.png",
-        imageFile: "mousai.jpg",
+        imageFile: "logos/MousaiMcallen.png",
         featured: true
     },
     {
