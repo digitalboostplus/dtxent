@@ -84,6 +84,20 @@ service cloud.firestore {
         (!data.keys().hasAny(['specialRequests']) || data.specialRequests is string);
     }
 
+    // Validates a Contact Request
+    function isValidContactRequest() {
+      let data = request.resource.data;
+      return
+        data.keys().hasAll(['name', 'email', 'phone', 'subject', 'message', 'status', 'createdAt']) &&
+        data.name is string &&
+        data.email is string &&
+        data.phone is string &&
+        data.subject is string &&
+        data.message is string &&
+        data.status is string &&
+        data.createdAt is timestamp;
+    }
+
     // --- Collection Rules ---
 
     // Events collection
@@ -123,6 +137,14 @@ service cloud.firestore {
     match /vip_requests/{request} {
       // Anyone can submit a VIP request
       allow create: if isValidVipRequest();
+      // Only Admins can view and manage requests
+      allow read, update, delete: if request.auth != null && isAdmin(request.auth.token.email);
+    }
+
+    // Contact Requests collection
+    match /contact_requests/{request} {
+      // Anyone can submit a contact request
+      allow create: if isValidContactRequest();
       // Only Admins can view and manage requests
       allow read, update, delete: if request.auth != null && isAdmin(request.auth.token.email);
     }
