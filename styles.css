@@ -1076,9 +1076,16 @@ h3 {
 }
 
 .newsletter-form {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1rem;
     margin-top: 2rem;
+    align-items: stretch;
+}
+
+.newsletter-form>* {
+    width: 100%;
+    margin: 0;
 }
 
 .newsletter-form input {
@@ -1241,7 +1248,7 @@ h3 {
 
 
     .newsletter-form {
-        flex-direction: column;
+        grid-template-columns: 1fr;
     }
 
     .footer-content {

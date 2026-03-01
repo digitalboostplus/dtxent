@@ -14,7 +14,7 @@ const GHL_NEWSLETTER_WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/K
 /**
  * Subscribe email to newsletter
  */
-async function subscribeToNewsletter(email) {
+async function subscribeToNewsletter(name, email) {
     try {
         // Check if already subscribed
         const q = query(
@@ -32,6 +32,7 @@ async function subscribeToNewsletter(email) {
 
         // Add new subscriber
         await addDoc(collection(db, 'newsletter'), {
+            name: name,
             email: email.toLowerCase(),
             subscribedAt: serverTimestamp(),
             source: 'landing_page',
@@ -46,6 +47,7 @@ async function subscribeToNewsletter(email) {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
+                    name: name,
                     email: email.toLowerCase(),
                     source: 'landing_page',
                     subscribedAt: new Date().toISOString()
@@ -113,11 +115,20 @@ function initNewsletterForm() {
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
+        const nameInput = form.querySelector('input[type="text"]');
         const emailInput = form.querySelector('input[type="email"]');
         const submitBtn = form.querySelector('button[type="submit"]');
+
+        const name = nameInput ? nameInput.value.trim() : 'Unknown';
         const email = emailInput.value.trim();
 
         // Validate
+        if (nameInput && !name) {
+            showFormMessage(form, 'Please enter your name', 'error');
+            nameInput.focus();
+            return;
+        }
+
         if (!isValidEmail(email)) {
             showFormMessage(form, 'Please enter a valid email address', 'error');
             emailInput.focus();
@@ -129,7 +140,7 @@ function initNewsletterForm() {
         submitBtn.disabled = true;
 
         // Submit to Firestore
-        const result = await subscribeToNewsletter(email);
+        const result = await subscribeToNewsletter(name, email);
 
         // Show result
         showFormMessage(form, result.message, result.success ? 'success' : 'error');

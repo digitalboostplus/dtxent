@@ -41,7 +41,8 @@ service cloud.firestore {
     function isValidNewsletterSubscription() {
       let data = request.resource.data;
       return
-        data.keys().hasAll(['email', 'subscribedAt', 'status']) &&
+        data.keys().hasAll(['name', 'email', 'subscribedAt', 'status']) &&
+        data.name is string &&
         data.email is string &&
         data.email.size() > 5 &&
         data.email.size() < 255 &&

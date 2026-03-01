@@ -47,7 +47,7 @@
     <link rel="manifest" href="manifest.json">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=2">
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-RZY6W9D8H0"></script>
@@ -293,7 +293,8 @@
                         <p id="newsletter-desc">Get early access to tickets, exclusive promo codes, and luxury dining
                             offers.</p>
                         <form class="newsletter-form" aria-label="Newsletter subscription">
-                            <input type="email" placeholder="Enter your email" required aria-label="Email address"
+                            <input type="text" placeholder="Full Name" required aria-label="Full Name">
+                            <input type="email" placeholder="Email Address" required aria-label="Email address"
                                 aria-describedby="newsletter-desc">
                             <button type="submit" class="btn btn-primary">Subscribe</button>
                         </form>
