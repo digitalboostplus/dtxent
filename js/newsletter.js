@@ -9,6 +9,8 @@ import {
     serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
+const GHL_NEWSLETTER_WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/Kuo7nUJmD2RL3ZGpdRA4/webhook-trigger/4815405c-0190-4bfd-a17c-1dee361d7a19';
+
 /**
  * Subscribe email to newsletter
  */
@@ -35,6 +37,23 @@ async function subscribeToNewsletter(email) {
             source: 'landing_page',
             status: 'active'
         });
+
+        // Send to Go High Level Webhook
+        try {
+            await fetch(GHL_NEWSLETTER_WEBHOOK_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: email.toLowerCase(),
+                    source: 'landing_page',
+                    subscribedAt: new Date().toISOString()
+                })
+            });
+        } catch (webhookError) {
+            console.error('Error forwarding to CRM Webhook:', webhookError);
+        }
 
         return {
             success: true,
