@@ -67,6 +67,22 @@ service cloud.firestore {
         (!data.keys().hasAny(['additionalNotes']) || data.additionalNotes is string);
     }
 
+    // Validates a VIP Request
+    function isValidVipRequest() {
+      let data = request.resource.data;
+      return
+        data.keys().hasAll(['fullName', 'phone', 'email', 'eventDetails', 'groupSize', 'requestedServices', 'status', 'submittedAt']) &&
+        data.fullName is string &&
+        data.phone is string &&
+        data.email is string &&
+        data.eventDetails is string &&
+        data.groupSize is number && data.groupSize > 0 &&
+        data.requestedServices is string &&
+        data.status is string &&
+        data.submittedAt is timestamp &&
+        (!data.keys().hasAny(['specialRequests']) || data.specialRequests is string);
+    }
+
     // --- Collection Rules ---
 
     // Events collection
@@ -99,6 +115,14 @@ service cloud.firestore {
       // Anyone can submit a quote request
       allow create: if isValidTransportationQuote();
       // Only Admins can view and manage quotes
+      allow read, update, delete: if request.auth != null && isAdmin(request.auth.token.email);
+    }
+
+    // VIP Requests collection
+    match /vip_requests/{request} {
+      // Anyone can submit a VIP request
+      allow create: if isValidVipRequest();
+      // Only Admins can view and manage requests
       allow read, update, delete: if request.auth != null && isAdmin(request.auth.token.email);
     }
 
