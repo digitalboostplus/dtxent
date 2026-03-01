@@ -49,6 +49,24 @@ service cloud.firestore {
         data.status in ['active', 'unsubscribed'];
     }
 
+    // Validates a Transportation Quote request
+    function isValidTransportationQuote() {
+      let data = request.resource.data;
+      return
+        data.keys().hasAll(['fullName', 'phone', 'email', 'eventDate', 'passengers', 'vehiclePreference', 'pickupLocation', 'status', 'submittedAt']) &&
+        data.fullName is string &&
+        data.phone is string &&
+        data.email is string &&
+        data.eventDate is string &&
+        data.passengers is number && data.passengers > 0 &&
+        data.vehiclePreference is string &&
+        data.pickupLocation is string &&
+        data.status is string &&
+        data.submittedAt is timestamp &&
+        (!data.keys().hasAny(['eventShow']) || data.eventShow is string) &&
+        (!data.keys().hasAny(['additionalNotes']) || data.additionalNotes is string);
+    }
+
     // --- Collection Rules ---
 
     // Events collection
@@ -74,6 +92,14 @@ service cloud.firestore {
       allow create: if isValidNewsletterSubscription();
       // Only Owners and Admins can manage subscribers
       allow update, delete: if request.auth != null && isAdmin(request.auth.token.email);
+    }
+
+    // Transportation Quotes collection
+    match /transportation_quotes/{quote} {
+      // Anyone can submit a quote request
+      allow create: if isValidTransportationQuote();
+      // Only Admins can view and manage quotes
+      allow read, update, delete: if request.auth != null && isAdmin(request.auth.token.email);
     }
 
     // Deny all other collections
