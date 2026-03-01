@@ -2,7 +2,7 @@ import { db } from './firebase-config.js';
 import { collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
 // TODO: Replace with your actual Go High Level Inbound Webhook URL
-const GHL_WEBHOOK_URL = '';
+const GHL_WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/Kuo7nUJmD2RL3ZGpdRA4/webhook-trigger/f879a658-d303-435b-a53c-ddab4c52bc6f';
 
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('vip-lead-form');
