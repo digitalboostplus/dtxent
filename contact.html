@@ -79,9 +79,42 @@
                 <h1 id="hero-title" class="hero-title">CONTACT <span class="text-gradient">US</span></h1>
                 <p class="hero-subtitle">Have questions about our shows, want to book a private event, or need
                     assistance? Reach out to our team today.</p>
+                <p class="last-updated" style="margin-top: 1rem; opacity: 0.8; font-size: 0.9rem; font-weight: 500;">
+                    Last Updated: March 2026</p>
                 <div class="hero-btns">
                     <a href="mailto:info@dtxent.com" class="btn btn-outline btn-lg">Email Us</a>
                     <a href="#contact-form-section" class="btn btn-primary btn-lg">Send a Message</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section id="contact-faq" class="section" aria-labelledby="faq-title"
+            style="background-color: var(--dark-bg); padding: 4rem 0;">
+            <div class="container">
+                <div class="section-header text-center">
+                    <h2 id="faq-title" class="section-title">Frequently Asked <span
+                            class="text-highlight">Questions</span></h2>
+                    <p class="section-desc">Common questions we get asked at DTXENT.</p>
+                </div>
+                <div class="faq-grid" style="display: grid; gap: 1.5rem; max-width: 800px; margin: 0 auto;">
+                    <details class="faq-item"
+                        style="background: var(--card-bg); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--primary);">
+                        <summary style="font-weight: 700; font-size: 1.2rem; cursor: pointer; color: white;">What is the
+                            best way to contact DTXENT for ticketing issues?</summary>
+                        <p style="margin-top: 1rem; color: var(--text-muted); line-height: 1.6;">For the fastest
+                            resolution regarding ticketing issues, please use the contact form below and select
+                            "Ticketing Issue" as the subject. Include your full name and the email associated with your
+                            purchase.</p>
+                    </details>
+                    <details class="faq-item"
+                        style="background: var(--card-bg); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--primary);">
+                        <summary style="font-weight: 700; font-size: 1.2rem; cursor: pointer; color: white;">How do I
+                            book DTXENT for a private event?</summary>
+                        <p style="margin-top: 1rem; color: var(--text-muted); line-height: 1.6;">We offer comprehensive
+                            event production and talent booking for private and corporate events. Contact us using the
+                            form below and select "Private Event Booking" to start the conversation.</p>
+                    </details>
                 </div>
             </div>
         </section>
@@ -91,7 +124,8 @@
             <div class="container">
                 <div class="quote-wrapper">
                     <div class="quote-info">
-                        <h2 id="quote-title" class="section-title">Get In <span class="text-highlight">Touch</span></h2>
+                        <h2 id="quote-title" class="section-title">How To <span class="text-highlight">Contact</span>
+                            DTX Entertainment?</h2>
                         <p class="section-desc">Fill out the form below, and a member of our team will get back to you
                             as soon as possible.</p>
                         <div class="quote-contact-direct" style="margin-top: 2rem;">
@@ -199,17 +233,41 @@
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     282:
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-    283:
-    284: <!-- GSAP Animations -->
-    285:
+
+    <!-- GSAP Animations -->
+
     <script type="module" src="js/animations.js?v=2"></script>
-    286:
-    287: <!-- Contact Form Firebase Integration -->
-    288:
+
+    <!-- Contact Form Firebase Integration -->
     <script type="module" src="js/contact.js?v=1"></script>
-    289:
+
+    <!-- Schema.org: ContactPage -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ContactPage",
+      "name": "Contact Dynamic TX Entertainment",
+      "description": "Contact us for general inquiries, private event booking, ticketing issues, and VIP reservations across the Rio Grande Valley.",
+      "url": "https://dtxent.com/contact.html",
+      "mainEntity": {
+        "@type": "Organization",
+        "name": "Dynamic TX Entertainment",
+        "contactPoint": [
+          {
+            "@type": "ContactPoint",
+            "telephone": "+1-956-454-6358",
+            "contactType": "VIP Reservations",
+            "areaServed": "US"
+          },
+          {
+            "@type": "ContactPoint",
+            "email": "info@dtxent.com",
+            "contactType": "Customer Service"
+          }
+        ]
+      }
+    }
+    </script>
 </body>
-290:
-291:
 
 </html>

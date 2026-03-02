@@ -1,0 +1,31 @@
+{
+  "name": "dtxent",
+  "version": "1.0.0",
+  "description": "Dynamic TX Entertainment - Live concerts and events in Texas",
+  "main": "script.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "lint": "eslint js/ script.js sw.js admin/",
+    "lint:fix": "eslint js/ script.js sw.js admin/ --fix",
+    "validate": "node tests/validate_events.mjs",
+    "check": "npm run lint && npm run validate",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/digitalboostplus/dtxent.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/digitalboostplus/dtxent/issues"
+  },
+  "homepage": "https://github.com/digitalboostplus/dtxent#readme",
+  "devDependencies": {
+    "eslint": "^10.0.2"
+  }
+}

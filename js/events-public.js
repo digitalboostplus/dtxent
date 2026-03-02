@@ -539,7 +539,7 @@ function initEventAnimations() {
     }, observerOptions);
 
     // Observe all event cards
-    document.querySelectorAll('.event-card').forEach((card, index) => {
+    document.querySelectorAll('.event-card').forEach((card) => {
         card.style.opacity = '0';
         card.style.transform = 'translateY(40px) scale(0.95)';
         card.style.transition = 'opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)';

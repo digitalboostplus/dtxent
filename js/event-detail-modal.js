@@ -275,7 +275,6 @@ class EventDetailModal {
         // Price Badge
         if (priceRange) {
             const min = Math.round(priceRange.min);
-            const max = Math.round(priceRange.max);
             badgesHTML += `<span class="badge badge-price">Tickets from $${min}</span>`;
         }
 

@@ -15,7 +15,7 @@ const CACHE_TTL = 15 * 60 * 1000; // 15 minutes in milliseconds
 
 /**
  * Fetch event details by Ticketmaster Event ID
- * @param {string} eventId 
+ * @param {string} eventId
  * @returns {Promise<Object|null>}
  */
 export async function getEventDetails(eventId) {
@@ -48,7 +48,7 @@ export async function getEventDetails(eventId) {
 
 /**
  * Extract Ticketmaster Event ID from a TicketUrl
- * @param {string} url 
+ * @param {string} url
  * @returns {string|null}
  */
 export function extractEventId(url) {
@@ -91,7 +91,7 @@ function getFromCache(key) {
             sessionStorage.removeItem(key);
             return null;
         }
-    } catch (e) {
+    } catch {
         return null;
     }
 }

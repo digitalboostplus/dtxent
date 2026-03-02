@@ -1,5 +1,5 @@
 // Admin Users Management
-import { db, auth } from '../js/firebase-config.js';
+import { db } from '../js/firebase-config.js';
 import { requireOwnerAccess, signOut } from '../js/auth.js';
 import {
     collection,
@@ -82,6 +82,7 @@ async function handleLogout() {
         await signOut();
         window.location.href = '/admin/login.html';
     } catch (error) {
+        console.error('Logout error:', error);
         showToast('Error signing out', 'error');
     }
 }

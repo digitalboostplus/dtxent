@@ -1,6 +1,6 @@
 // Admin Dashboard - Event Management
 import { db, storage, auth } from '../js/firebase-config.js';
-import { requireAdminAccess, signOut, onAuthStateChanged } from '../js/auth.js';
+import { requireAdminAccess, signOut } from '../js/auth.js';
 import {
     collection,
     addDoc,
@@ -305,7 +305,6 @@ function clearFilters() {
 
 function getFilteredEvents() {
     let filtered = [...events];
-    const now = new Date();
 
     // Text search
     if (filterState.search) {
@@ -408,6 +407,7 @@ async function handleLogout() {
         await signOut();
         window.location.href = '/admin/login.html';
     } catch (error) {
+        console.error('Logout error:', error);
         showToast('Error signing out', 'error');
     }
 }
