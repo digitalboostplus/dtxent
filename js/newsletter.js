@@ -7,7 +7,7 @@ import {
     query,
     where,
     serverTimestamp
-} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 const GHL_NEWSLETTER_WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/Kuo7nUJmD2RL3ZGpdRA4/webhook-trigger/4815405c-0190-4bfd-a17c-1dee361d7a19';
 

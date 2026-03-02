@@ -12,7 +12,7 @@ import {
     query,
     orderBy,
     serverTimestamp
-} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 // DOM Elements
 const loadingOverlay = document.getElementById('loading-overlay');

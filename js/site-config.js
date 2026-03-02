@@ -7,7 +7,7 @@ import { db } from './firebase-config.js';
 import {
     doc,
     getDoc
-} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 async function loadSiteConfig() {
     try {

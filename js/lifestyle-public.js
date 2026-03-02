@@ -5,7 +5,7 @@ import {
     getDocs,
     query,
     orderBy
-} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 /**
  * Loads lifestyle data from Firestore first, falls back to LOCAL_* arrays.

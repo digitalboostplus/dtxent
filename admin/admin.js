@@ -12,13 +12,13 @@ import {
     orderBy,
     serverTimestamp,
     Timestamp
-} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import {
     ref,
     uploadBytes,
     getDownloadURL,
     deleteObject
-} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
+} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-storage.js';
 
 // DOM Elements
 const loadingOverlay = document.getElementById('loading-overlay');

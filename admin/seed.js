@@ -1,7 +1,7 @@
 import { LOCAL_EVENTS } from '../js/events-data.js';
 import { db, auth } from '../js/firebase-config.js';
-import { collection, addDoc, getDocs, query, where, Timestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+import { collection, addDoc, getDocs, query, where, Timestamp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 
 const startBtn = document.getElementById('start-btn');
 const logOutput = document.getElementById('log-output');

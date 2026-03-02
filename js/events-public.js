@@ -1,6 +1,6 @@
 // Public Events Loader - Fetches and displays events on the landing page (Real-time)
 import { db } from './firebase-config.js';
-import { collection, query, where, orderBy, Timestamp, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { collection, query, where, orderBy, Timestamp, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 // Store unsubscribe function for cleanup
 let unsubscribeEvents = null;

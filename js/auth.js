@@ -6,11 +6,11 @@ import {
     onAuthStateChanged as firebaseOnAuthStateChanged,
     browserLocalPersistence,
     setPersistence
-} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import {
     doc,
     getDoc
-} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 /**
  * Sign in user with email and password
