@@ -34,90 +34,11 @@ export function loadPublicEvents() {
     if (initialLocalEvents.length > 0) {
         renderEventsList(processEventsForDisplay(initialLocalEvents), eventsGrid);
     } else {
-        // Show skeleton while waiting for Firestore
         eventsGrid.innerHTML = `
-            <div class="skeleton-grid">
-                ${[1, 2, 3].map(() => `
-                    <div class="skeleton-card" role="article" aria-label="Loading event">
-                        <div class="skeleton-image"></div>
-                        <div class="skeleton-content">
-                            <div class="skeleton-line skeleton-line-sm"></div>
-                            <div class="skeleton-line skeleton-line-lg"></div>
-                            <div class="skeleton-line skeleton-line-md"></div>
-                            <div class="skeleton-button"></div>
-                        </div>
-                    </div>
-                `).join('')}
+            <div class="events-empty">
+                <p>No upcoming events at this time. Check back soon!</p>
             </div>
         `;
-    }
-
-    // Step 2: Set up real-time listener from Firestore
-    try {
-        const q = query(
-            collection(db, 'events'),
-            where('isPublished', '==', true),
-            orderBy('eventDate', 'asc')
-        );
-
-        unsubscribeEvents = onSnapshot(q, (querySnapshot) => {
-            const firestoreEvents = [];
-            querySnapshot.forEach((doc) => {
-                const event = doc.data();
-                let eventDate = event.eventDate;
-                if (eventDate instanceof Timestamp) {
-                    eventDate = eventDate.toDate();
-                } else if (eventDate && eventDate.seconds) {
-                    eventDate = new Date(eventDate.seconds * 1000);
-                }
-
-                firestoreEvents.push({
-                    ...event,
-                    id: doc.id,
-                    eventDate: eventDate
-                });
-            });
-
-            const upcomingFirestore = firestoreEvents.filter(e =>
-                e.eventDate >= pastCutoff && e.isClosed !== true
-            );
-
-            if (upcomingFirestore.length > 0) {
-                console.log(`Loaded ${upcomingFirestore.length} events from Firestore.`);
-                renderEventsList(processEventsForDisplay(upcomingFirestore), eventsGrid);
-            } else {
-                console.log('Firestore is empty or has no upcoming events. Staying with/reverting to local data.');
-                // If Firestore is empty but we have local data, ensure local data is shown
-                const upcomingLocal = LOCAL_EVENTS.filter(event => {
-                    if (event.isPublished === false) return false;
-                    const eventDate = new Date(event.eventDate);
-                    return !isNaN(eventDate.getTime()) && eventDate >= pastCutoff;
-                });
-
-                if (upcomingLocal.length > 0) {
-                    renderEventsList(processEventsForDisplay(upcomingLocal), eventsGrid);
-                } else {
-                    eventsGrid.innerHTML = `
-                        <div class="events-empty">
-                            <p>No upcoming events at this time. Check back soon!</p>
-                        </div>
-                    `;
-                }
-            }
-        }, (error) => {
-            console.warn('Firestore listener error, continuing with local data:', error);
-            // Error case: already handled by initial load, but let's re-verify local data
-            if (eventsGrid.querySelector('.skeleton-grid')) {
-                const upcomingLocal = LOCAL_EVENTS.filter(event => {
-                    if (event.isPublished === false) return false;
-                    const eventDate = new Date(event.eventDate);
-                    return !isNaN(eventDate.getTime()) && eventDate >= pastCutoff;
-                });
-                renderEventsList(processEventsForDisplay(upcomingLocal), eventsGrid);
-            }
-        });
-    } catch (err) {
-        console.error('Error setting up event listener:', err);
     }
 }
 
