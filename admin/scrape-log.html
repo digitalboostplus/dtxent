@@ -14,7 +14,7 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Users | Dynamic TX Entertainment</title>
+    <title>Scrape Log | Dynamic TX Entertainment</title>
     <meta name="robots" content="noindex, nofollow">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -41,9 +41,9 @@
                 </a>
                 <nav class="admin-nav">
                     <a href="admin.html" class="admin-nav-link">Events</a>
-                    <a href="users.html" class="admin-nav-link active">Users</a>
+                    <a href="users.html" class="admin-nav-link">Users</a>
                     <a href="settings.html" class="admin-nav-link">Settings</a>
-                    <a href="scrape-log.html" class="admin-nav-link">Scrape Log</a>
+                    <a href="scrape-log.html" class="admin-nav-link active">Scrape Log</a>
                 </nav>
             </div>
             <div class="admin-header-right">
@@ -55,53 +55,51 @@
         <!-- Main Content -->
         <main class="admin-main">
             <div class="page-header">
-                <h1>Admin Users</h1>
+                <h1>Scrape Log</h1>
+                <button class="btn btn-secondary btn-sm" id="refresh-btn">Refresh</button>
             </div>
 
-            <!-- Add Admin Form -->
-            <div class="add-admin-form">
-                <input type="email" id="new-admin-email" placeholder="Enter email address..." required>
-                <select id="new-admin-role" class="admin-select">
-                    <option value="editor">Editor</option>
-                    <option value="admin" selected>Admin</option>
-                    <option value="owner">Owner</option>
-                </select>
-                <button class="btn btn-primary" id="add-admin-btn">Add User</button>
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Last Scrape</div>
+                    <div class="stat-value stat-value-sm" id="stat-last-scrape">--</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Total Runs</div>
+                    <div class="stat-value" id="stat-total-runs">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Events Posted</div>
+                    <div class="stat-value" id="stat-events-posted">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Errors</div>
+                    <div class="stat-value" id="stat-errors">0</div>
+                </div>
             </div>
 
-            <!-- Admin Users List -->
-            <div id="admins-list" class="admin-users-list">
-                <!-- Admin cards rendered here -->
+            <!-- Log Entries -->
+            <div id="log-entries" class="scrape-log-list">
+                <!-- Rendered by JS -->
             </div>
 
             <!-- Empty State -->
             <div id="empty-state" class="empty-state" style="display: none;">
-                <h3>No Admin Users</h3>
-                <p>Add your first admin user above.</p>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <h3>No Scrape Logs Yet</h3>
+                <p>Logs will appear here after the scraping scripts are run.</p>
             </div>
         </main>
-    </div>
-
-    <!-- Delete Confirm Modal -->
-    <div id="delete-modal" class="modal-overlay">
-        <div class="modal" style="max-width: 400px;">
-            <div class="modal-body">
-                <div class="confirm-dialog">
-                    <h3>Remove Admin?</h3>
-                    <p id="delete-msg">This user will no longer have admin access.</p>
-                    <div class="confirm-actions">
-                        <button type="button" class="btn btn-secondary" id="delete-cancel">Cancel</button>
-                        <button type="button" class="btn btn-danger" id="delete-confirm">Remove</button>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- Toast Container -->
     <div id="toast-container" class="toast-container"></div>
 
-    <script type="module" src="users.js"></script>
+    <script type="module" src="scrape-log.js"></script>
 </body>
 
 </html>

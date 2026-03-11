@@ -1412,6 +1412,168 @@
     box-shadow: 0 0 0 3px rgba(255, 204, 0, 0.1);
 }
 
+/* ============================================
+   Scrape Log Page Styles
+   ============================================ */
+
+.stat-value-sm {
+    font-size: 1.1rem;
+}
+
+.scrape-log-list {
+    display: grid;
+    gap: 1rem;
+}
+
+.scrape-log-card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.scrape-log-card:hover {
+    border-color: rgba(255, 204, 0, 0.2);
+}
+
+.scrape-log-header {
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    gap: 1rem;
+}
+
+.scrape-log-header:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.scrape-log-meta {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.scrape-log-timestamp {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.scrape-log-sources {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.source-badge {
+    display: inline-flex;
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.source-badge.tixplug {
+    background: rgba(139, 92, 246, 0.15);
+    color: #a78bfa;
+    border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.source-badge.paynearena {
+    background: rgba(59, 130, 246, 0.15);
+    color: #60a5fa;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.source-badge.error {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.source-badge.unknown {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-muted);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.scrape-log-summary {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    align-items: center;
+    white-space: nowrap;
+}
+
+.scrape-log-detail {
+    display: none;
+    padding: 0 1.5rem 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.scrape-log-card.expanded .scrape-log-detail {
+    display: block;
+}
+
+.expand-arrow {
+    transition: transform 0.2s ease;
+    color: var(--text-muted);
+    font-size: 0.7rem;
+}
+
+.scrape-log-card.expanded .expand-arrow {
+    transform: rotate(180deg);
+}
+
+/* Scrape log events table */
+.scrape-events-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    margin-top: 1rem;
+}
+
+.scrape-events-table th {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.scrape-events-table td {
+    padding: 0.6rem 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.scrape-events-table tr:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.posted-badge {
+    display: inline-flex;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.posted-badge.yes {
+    background: rgba(34, 197, 94, 0.15);
+    color: #4ade80;
+}
+
+.posted-badge.no {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+}
+
 /* Settings Mobile Responsive */
 @media (max-width: 768px) {
     .settings-tabs {
@@ -1433,5 +1595,26 @@
 
     .lifestyle-admin-grid {
         grid-template-columns: 1fr;
+    }
+
+    /* Scrape Log Mobile */
+    .scrape-log-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .scrape-log-summary {
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .scrape-events-table {
+        font-size: 0.75rem;
+    }
+
+    .scrape-events-table th,
+    .scrape-events-table td {
+        padding: 0.5rem;
     }
 }
