@@ -2,7 +2,7 @@
 :: DTXent Website Updater - Daily scheduled run
 :: Logs output to execution\update_log.txt
 
-set DTXENT_DIR=C:\Users\Brian\Documents\dtxent
+set DTXENT_DIR=C:\Users\Brian\dtxent
 set LOG_FILE=%DTXENT_DIR%\execution\update_log.txt
 set PYTHON=python
 

@@ -41,8 +41,8 @@
   </Settings>
   <Actions Context="Author">
     <Exec>
-      <Command>C:\Users\Brian\Documents\dtxent\run_update.bat</Command>
-      <WorkingDirectory>C:\Users\Brian\Documents\dtxent</WorkingDirectory>
+      <Command>C:\Users\Brian\dtxent\run_update.bat</Command>
+      <WorkingDirectory>C:\Users\Brian\dtxent</WorkingDirectory>
     </Exec>
   </Actions>
 </Task>

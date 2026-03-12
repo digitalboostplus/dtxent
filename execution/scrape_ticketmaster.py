@@ -93,18 +93,19 @@ def fetch_venue_events(venue: dict, api_key: str) -> list[dict]:
 
     while True:
         params = {
-            "apikey": api_key,
             "venueId": venue_id,
             "size": page_size,
             "page": page,
             "sort": "date,asc",
             "source": "ticketmaster",
         }
+        headers = {"Authorization": f"apikey {api_key}"}
 
         try:
             resp = requests.get(
                 f"{TM_BASE_URL}/events.json",
                 params=params,
+                headers=headers,
                 timeout=15,
             )
             resp.raise_for_status()
@@ -198,7 +199,6 @@ def main():
         print("  [ERROR] TM_API_KEY not set. Add it to .env or set as environment variable.")
         print("  Get a free key at: https://developer.ticketmaster.com/")
         sys.exit(1)
-    print(f"  Using API key: {api_key[:8]}...")
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 

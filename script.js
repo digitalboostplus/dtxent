@@ -2,11 +2,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // Header scroll effect
     const header = document.querySelector('.header');
 
+    let headerScrollTicking = false;
     window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            header.classList.add('scrolled');
-        } else {
-            header.classList.remove('scrolled');
+        if (!headerScrollTicking) {
+            requestAnimationFrame(() => {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+                headerScrollTicking = false;
+            });
+            headerScrollTicking = true;
         }
     });
 
@@ -124,12 +131,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Parallax effect for hero (fallback)
+        let parallaxTicking = false;
         window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const hero = document.querySelector('.hero-content');
-            if (hero && scrolled < window.innerHeight) {
-                hero.style.transform = `translateY(${scrolled * 0.5}px)`;
-                hero.style.opacity = 1 - (scrolled / window.innerHeight) * 0.5;
+            if (!parallaxTicking) {
+                requestAnimationFrame(() => {
+                    const scrolled = window.pageYOffset;
+                    const hero = document.querySelector('.hero-content');
+                    if (hero && scrolled < window.innerHeight) {
+                        hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+                        hero.style.opacity = 1 - (scrolled / window.innerHeight) * 0.5;
+                    }
+                    parallaxTicking = false;
+                });
+                parallaxTicking = true;
             }
         });
     }

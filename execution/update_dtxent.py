@@ -29,7 +29,9 @@ EVENTS_DATA_FILE = DTXENT_DIR / "js" / "events-data.js"
 # Artists to exclude (case-insensitive substring match)
 EXCLUDE_ARTISTS = [
     "Los Angeles Lakers",
-    "Alex Warren"
+    "Alex Warren",
+    "Tacos, Tequilas",
+    "Snow Tha Product"
 ]
 
 
