@@ -14,6 +14,7 @@ import os
 import re
 import subprocess
 import sys
+from collections import defaultdict
 from pathlib import Path
 from datetime import datetime
 
@@ -164,6 +165,35 @@ def load_scraped_events() -> tuple[list[dict], list[dict]]:
 
 def deduplicate_events(events: list[dict]) -> list[dict]:
     """Remove duplicate events and group multi-date shows into single entries."""
+    # Pass 0: merge same-artist+date pairs where one entry has empty venue
+    # This handles the case where a scraper fetches an event without venue info
+    # and a manual entry exists for the same event with venue filled in.
+    by_artist_date = defaultdict(list)
+    for event in events:
+        artist = re.sub(r"[^a-z0-9]", "", event.get("artistName", "").lower())
+        date = event.get("eventDate", "")[:10]
+        by_artist_date[f"{artist}_{date}"].append(event)
+
+    pre_merged = []
+    for group in by_artist_date.values():
+        if len(group) == 1:
+            pre_merged.append(group[0])
+            continue
+        empty_venue = [e for e in group if not e.get("venueName", "").strip()]
+        with_venue = [e for e in group if e.get("venueName", "").strip()]
+        if empty_venue and with_venue:
+            base = with_venue[0].copy()
+            donor = empty_venue[0]
+            for field in ("imageUrl", "schedule", "eventName", "imageName"):
+                if not base.get(field) and donor.get(field):
+                    base[field] = donor[field]
+            pre_merged.append(base)
+            pre_merged.extend(with_venue[1:])
+            print(f"  [INFO] Merged empty-venue duplicate: {base.get('artistName')}")
+        else:
+            pre_merged.extend(group)
+    events = pre_merged
+
     # First pass: exact duplicates (same artist + date + venue)
     seen_exact = {}
     unique = []

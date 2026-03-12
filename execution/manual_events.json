@@ -30,21 +30,6 @@
     ]
   },
   {
-    "artistName": "The Ultimate Selena Experience",
-    "eventName": "(Citrus Live) April 11th, 2026",
-    "eventDate": "2026-04-11T20:00:00",
-    "venueName": "Citrus Live",
-    "venueCity": "Edinburg",
-    "venueState": "TX",
-    "imageName": "the-ultimate-selena-experience.jpg",
-    "imageUrl": "",
-    "ticketUrl": "https://tixplug.com/shop/the-ultimate-selena-experience/",
-    "isPublished": true,
-    "schedule": [
-      { "time": "7:00 PM", "description": "Doors Open" }
-    ]
-  },
-  {
     "artistName": "Highly Motavated 420 Comedy Special",
     "eventName": "",
     "eventDate": "2026-04-20T20:00:00",
@@ -109,21 +94,6 @@
     "imageUrl": "",
     "ticketUrl": "https://tixplug.com/shop/tacos-tequilas-chelas/",
     "isPublished": true
-  },
-  {
-    "artistName": "NB Ridaz",
-    "eventName": "Runaway Throwback Night (Citrus Live) May 29th, 2026",
-    "eventDate": "2026-05-29T20:00:00",
-    "venueName": "Citrus Live",
-    "venueCity": "Edinburg",
-    "venueState": "TX",
-    "imageName": "nb-ridaz-runaway-throwback-night.jpg",
-    "imageUrl": "",
-    "ticketUrl": "https://tixplug.com/shop/nb-ridaz-runaway-throwback-night/",
-    "isPublished": true,
-    "schedule": [
-      { "time": "7:00 PM", "description": "Doors Open" }
-    ]
   },
   {
     "artistName": "Seltzer Island",
