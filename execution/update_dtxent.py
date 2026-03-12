@@ -1,12 +1,14 @@
 """
 update_dtxent.py — Merge scraped events and update the dtxent GitHub repo.
 
-1. Runs scrape_tixplug.py to fetch events from tixplug.com
-2. Runs scrape_paynearena.py to fetch events from paynearena.com
-3. Merges, deduplicates, and sorts events
-4. Downloads event poster images to assets/
-5. Regenerates js/events-data.js with the LOCAL_EVENTS array
-6. Commits and pushes changes to GitHub
+1. Runs scrape_ticketmaster.py to fetch events from Ticketmaster Discovery API
+2. Runs scrape_zaeee.py to fetch events from zaeee.saffire.com
+3. Loads manual_events.json for TixPlug or other custom events
+4. Merges, deduplicates, and sorts events
+5. Downloads event poster images to assets/
+6. Regenerates js/events-data.js with the LOCAL_EVENTS array
+7. Syncs events to Firestore (for admin dashboard functionality)
+8. Commits and推送 changes to GitHub
 """
 
 import json
@@ -69,28 +71,75 @@ def run_scraper(scraper_name: str, output_filename: str, source_url: str) -> tup
     }
 
 
-def load_scraped_events() -> tuple[list[dict], list[dict]]:
-    """Run all scrapers and return merged events + per-source status.
+def run_ticketmaster_scraper() -> tuple[list[dict], dict]:
+    """Run scrape_ticketmaster.py and return events + status."""
+    return run_scraper(
+        "scrape_ticketmaster.py", 
+        "ticketmaster_events.json", 
+        "https://www.ticketmaster.com"
+    )
 
-    Returns:
-        Tuple of (events list, sources_status list)
-    """
+
+def run_zaeee_scraper() -> tuple[list[dict], dict]:
+    """Run scrape_zaeee.py and return events + status."""
+    return run_scraper(
+        "scrape_zaeee.py", 
+        "zaeee_events.json", 
+        "https://zaeee.saffire.com/p/tickets"
+    )
+
+
+def load_manual_events() -> tuple[list[dict], dict]:
+    """Load manually curated events (TixPlug / custom venues)."""
+    manual_path = Path(__file__).resolve().parent / "manual_events.json"
+    if not manual_path.exists():
+        print("  [INFO] No manual_events.json found — skipping")
+        return [], {
+            "name": "manual",
+            "url": "manual_events.json",
+            "eventsFound": 0,
+            "status": "skipped",
+            "errorMessage": "manual_events.json not found",
+        }
+
+    with open(manual_path, "r", encoding="utf-8") as f:
+        raw = json.load(f)
+
+    # Strip comment entries and unpublished events
+    events = [
+        {**e, "source": e.get("source", "manual")}
+        for e in raw
+        if not e.get("_comment") and e.get("isPublished", True)
+    ]
+    print(f"  Loaded {len(events)} manual events")
+    return events, {
+        "name": "manual",
+        "url": "manual_events.json",
+        "eventsFound": len(events),
+        "status": "success",
+        "errorMessage": None,
+    }
+
+
+def load_scraped_events() -> tuple[list[dict], list[dict]]:
+    """Run all scrapers and return merged events + per-source status."""
     events = []
     sources_status = []
 
-    # Source 1: TixPlug (WP REST API)
-    tixplug_events, tixplug_status = run_scraper(
-        "scrape_tixplug.py", "tixplug_events.json", "https://tixplug.com"
-    )
-    events.extend(tixplug_events)
-    sources_status.append(tixplug_status)
+    # Source 1: Ticketmaster Discovery API
+    tm_events, tm_status = run_ticketmaster_scraper()
+    events.extend(tm_events)
+    sources_status.append(tm_status)
 
-    # Source 2: Payne Arena (HTML scraper)
-    payne_events, payne_status = run_scraper(
-        "scrape_paynearena.py", "paynearena_events.json", "https://paynearena.com"
-    )
-    events.extend(payne_events)
-    sources_status.append(payne_status)
+    # Source 2: Z-94.5 (Saffire)
+    zaeee_events, zaeee_status = run_zaeee_scraper()
+    events.extend(zaeee_events)
+    sources_status.append(zaeee_status)
+
+    # Source 3: Manual events file (TixPlug fallback / custom)
+    manual_events, manual_status = load_manual_events()
+    events.extend(manual_events)
+    sources_status.append(manual_status)
 
     return events, sources_status
 
@@ -128,14 +177,9 @@ def deduplicate_events(events: list[dict]) -> list[dict]:
     final = []
     for group_key, group_events in grouped.items():
         if len(group_events) == 1:
-            # Single date event - keep as-is
             final.append(group_events[0])
         else:
-            # Multi-date show - consolidate into one entry with dates array
-            # Sort by date
             group_events.sort(key=lambda e: e.get("eventDate") or "9999")
-
-            # Use first event as base, add dates array
             base = group_events[0].copy()
             base["dates"] = []
             for evt in group_events:
@@ -143,177 +187,109 @@ def deduplicate_events(events: list[dict]) -> list[dict]:
                     "eventDate": evt.get("eventDate"),
                     "ticketUrl": evt.get("ticketUrl")
                 })
-
-            # Keep the first date as primary eventDate (for sorting)
-            # ticketUrl will be the first date's URL (fallback)
             print(f"  [INFO] Grouped {len(group_events)} dates for: {base.get('artistName')}")
             final.append(base)
 
     removed = len(events) - len(final)
     if removed > 0:
-        print(f"  Consolidated {removed} events into multi-date shows")
+        print(f"  Consolidated {removed} events total")
 
     return final
 
 
 def download_image(image_url: str, filename: str) -> bool:
-    """Download an event image to the assets directory."""
-    if not image_url or not filename:
+    """Download image to assets folder."""
+    if not image_url:
         return False
-
-    dest = ASSETS_DIR / filename
-    if dest.exists():
-        print(f"    Image already exists: {filename}")
-        return True
-
+    
+    target_path = ASSETS_DIR / filename
+    if target_path.exists():
+        return False  # Already have it
+        
     try:
-        resp = requests.get(image_url, timeout=15, stream=True)
+        headers = {"User-Agent": "Mozilla/5.0"}
+        resp = requests.get(image_url, headers=headers, stream=True, timeout=10)
         resp.raise_for_status()
-
-        with open(dest, "wb") as f:
+        with open(target_path, "wb") as f:
             for chunk in resp.iter_content(chunk_size=8192):
                 f.write(chunk)
-
-        print(f"    [OK] Downloaded: {filename}")
         return True
     except Exception as e:
-        print(f"    [ERROR] Failed to download {filename}: {e}")
+        print(f"  [WARN] Failed to download {image_url}: {e}")
         return False
 
 
-def generate_events_data_js(events: list[dict]) -> str:
-    """Generate the events-data.js file content."""
+def generate_events_data_js(events: list[dict]):
+    """Update js/events-data.js with the new events list."""
+    if not EVENTS_DATA_FILE.exists():
+        print(f"  [ERROR] {EVENTS_DATA_FILE} not found")
+        return
 
-    # Build the LOCAL_EVENTS entries
-    event_entries = []
-    for event in events:
-        entry_lines = []
-        entry_lines.append(f'        artistName: {json.dumps(event.get("artistName", ""), ensure_ascii=False)},')
-        entry_lines.append(f'        eventName: {json.dumps(event.get("eventName", ""), ensure_ascii=False)},')
-        entry_lines.append(f'        eventDate: {json.dumps(event.get("eventDate", ""), ensure_ascii=False)},')
-        entry_lines.append(f'        venueName: {json.dumps(event.get("venueName", ""), ensure_ascii=False)},')
-        entry_lines.append(f'        venueCity: {json.dumps(event.get("venueCity", ""), ensure_ascii=False)},')
-        entry_lines.append(f'        venueState: {json.dumps(event.get("venueState", "TX"), ensure_ascii=False)},')
-        entry_lines.append(f'        imageName: {json.dumps(event.get("imageName", ""), ensure_ascii=False)},')
-        entry_lines.append(f'        ticketUrl: {json.dumps(event.get("ticketUrl", ""), ensure_ascii=False)},')
+    with open(EVENTS_DATA_FILE, "r", encoding="utf-8") as f:
+        content = f.read()
 
-        # Include schedule if present
-        schedule = event.get("schedule")
-        if schedule:
-            schedule_items = []
-            for item in schedule:
-                schedule_items.append(
-                    f'            {{ time: {json.dumps(item["time"])}, description: {json.dumps(item["description"])} }}'
-                )
-            entry_lines.append(f'        schedule: [\n' + ",\n".join(schedule_items) + "\n        ],")
+    # Create the JS array content
+    events_json = json.dumps(events, indent=4, ensure_ascii=False)
+    # Remove the surrounding brackets for the variable string injection
+    # Actually, we keep them because it's a full array
+    
+    pattern = r"const LOCAL_EVENTS = \[.*?\];"
+    replacement = f"const LOCAL_EVENTS = {events_json};"
+    
+    new_content = re.sub(pattern, replacement, content, flags=re.DOTALL)
+    
+    # Update timestamp
+    timestamp_pattern = r"// Last updated: .*"
+    timestamp_replacement = f"// Last updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+    new_content = re.sub(timestamp_pattern, timestamp_replacement, new_content)
 
-        # Include dates array for multi-date shows
-        dates = event.get("dates")
-        if dates and len(dates) > 1:
-            date_items = []
-            for d in dates:
-                date_items.append(
-                    f'            {{ eventDate: {json.dumps(d["eventDate"])}, ticketUrl: {json.dumps(d["ticketUrl"])} }}'
-                )
-            entry_lines.append(f'        dates: [\n' + ",\n".join(date_items) + "\n        ],")
-
-        entry_lines.append(f'        isPublished: true')
-
-        event_entries.append("    {\n" + "\n".join(entry_lines) + "\n    }")
-
-    events_array = ",\n".join(event_entries)
-
-    # Read existing file to preserve LOCAL_CLUBS, LOCAL_RESTAURANTS, LOCAL_HOTELS
-    existing_extras = ""
-    if EVENTS_DATA_FILE.exists():
-        with open(EVENTS_DATA_FILE, "r", encoding="utf-8") as f:
-            content = f.read()
-
-        # Extract everything after LOCAL_EVENTS closing bracket
-        # Find where LOCAL_CLUBS starts
-        clubs_match = re.search(r"(export const LOCAL_CLUBS\s*=)", content)
-        if clubs_match:
-            existing_extras = "\n" + content[clubs_match.start():]
-
-    js_content = f"""/**
- * Events data - Auto-generated by update_dtxent workflow
- * Last updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
- * Sources: tixplug.com, paynearena.com
- */
-export const LOCAL_EVENTS = [
-{events_array}
-];
-{existing_extras}"""
-
-    return js_content
+    with open(EVENTS_DATA_FILE, "w", encoding="utf-8") as f:
+        f.write(new_content)
 
 
 def git_operations():
-    """Stage, commit, and push changes to GitHub."""
-    print("\n  Running git operations...")
-
+    """Commit and push changes to GitHub."""
+    print("\n3. Running git operations...")
     try:
-        # Pull latest first
-        subprocess.run(
-            ["git", "-C", str(DTXENT_DIR), "pull", "--rebase"],
-            check=True,
-            capture_output=True,
-            text=True,
-        )
-        print("    [OK] Pulled latest changes")
-
-        # Stage events-data.js
-        subprocess.run(
-            ["git", "-C", str(DTXENT_DIR), "add", "js/events-data.js"],
-            check=True,
-            capture_output=True,
-            text=True,
-        )
-        # Stage assets directory
-        subprocess.run(
-            ["git", "-C", str(DTXENT_DIR), "add", "assets/"],
-            check=True,
-            capture_output=True,
-            text=True,
-        )
-        print("    [OK] Staged changes")
-
+        # Check for remote changes first
+        subprocess.run(["git", "fetch", "origin"], check=True)
+        
+        # Add changed files
+        subprocess.run(["git", "add", "js/events-data.js", "assets/"], check=True)
+        subprocess.run(["git", "add", "execution/"], check=True)
+        
         # Check if there are changes to commit
-        result = subprocess.run(
-            ["git", "-C", str(DTXENT_DIR), "diff", "--cached", "--name-only"],
-            capture_output=True,
-            text=True,
-        )
-
-        if not result.stdout.strip():
-            print("    [INFO] No changes to commit")
+        status = subprocess.run(["git", "diff", "--cached", "--quiet"])
+        if status.returncode == 0:
+            print("  No changes to commit.")
             return
 
         # Commit
-        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
-        commit_msg = f"chore: update events data from tixplug + paynearena ({timestamp})"
-        subprocess.run(
-            ["git", "-C", str(DTXENT_DIR), "commit", "-m", commit_msg],
-            check=True,
-            capture_output=True,
-            text=True,
-        )
-        print(f"    [OK] Committed: {commit_msg}")
-
-        # Push
-        subprocess.run(
-            ["git", "-C", str(DTXENT_DIR), "push"],
-            check=True,
-            capture_output=True,
-            text=True,
-        )
-        print("    [OK] Pushed to GitHub")
+        msg = f"chore: update events data ({datetime.now().strftime('%Y-%m-%d')})"
+        subprocess.run(["git", "commit", "-m", msg], check=True)
+        
+        # Push with rebase to handle remote changes
+        subprocess.run(["git", "pull", "--rebase", "origin", "main"], check=True)
+        subprocess.run(["git", "push", "origin", "main"], check=True)
+        print("  [OK] Changes pushed successfully")
 
     except subprocess.CalledProcessError as e:
-        print(f"    [ERROR] Git error: {e}")
-        if e.stderr:
-            print(f"      stderr: {e.stderr}")
-        print("    [INFO] You may need to push manually: git -C dtxent-site/ push")
+        print(f"  [WARN] Git operations failed: {e}")
+
+
+def sync_to_firestore(events: list[dict]):
+    """Sync events to Firestore (for admin dashboard)."""
+    print("\n4. Syncing to Firestore...")
+    try:
+        # Import sync_firestore locally to avoid dependency issues if not installed
+        import sys
+        sys.path.append(str(DTXENT_DIR / "execution"))
+        from sync_firestore import sync_events_to_firestore
+        
+        sync_events_to_firestore(events)
+        print("  [OK] Firestore sync complete")
+    except Exception as e:
+        print(f"  [WARN] Firestore sync failed: {e}")
 
 
 def main():
@@ -321,97 +297,57 @@ def main():
     print("DTXent Website Updater")
     print("=" * 60)
 
-    # Verify dtxent-site exists
-    if not DTXENT_DIR.exists():
-        print(f"  [ERROR] dtxent-site directory not found at {DTXENT_DIR}")
-        print("  Run: git clone https://github.com/digitalboostplus/dtxent.git dtxent-site")
-        sys.exit(1)
-
-    # Load scraped events
+    # 1. Load Events
     print("\n1. Loading scraped events...")
-    events, sources_status = load_scraped_events()
+    all_events, sources_status = load_scraped_events()
 
-    if not events:
-        print("  [ERROR] No events found from either scraper. Check your network connection.")
-        sys.exit(1)
+    if not all_events:
+        print("  [ERROR] No events found from any source.")
+        return
 
-    # Deduplicate
-    print("\n2. Deduplicating...")
-    events = deduplicate_events(events)
-
+    # 2. Process Events
+    print(f"\n2. Processing {len(all_events)} events...")
+    
+    # Remove past events
+    now_str = datetime.now().strftime("%Y-%m-%d")
+    current_events = [e for e in all_events if (e.get("eventDate") or "0000") >= now_str]
+    print(f"  Removed {len(all_events) - len(current_events)} past events")
+    
+    # Deduplicate and group
+    processed_events = deduplicate_events(current_events)
+    
     # Sort by date
-    events.sort(key=lambda e: e.get("eventDate") or "9999")
-    
-    # Filter out past events (older than 6 hours ago)
-    now = datetime.now()
-    cutoff_time = now.timestamp() - (6 * 60 * 60)
-    
-    upcoming_events = []
-    for e in events:
-        event_date_str = e.get("eventDate")
-        if not event_date_str:
-            upcoming_events.append(e) # Keep events with no date for manual review? Or skip?
-            continue
-            
-        try:
-            # Format is 2026-02-07T20:00:00
-            event_dt = datetime.fromisoformat(event_date_str)
-            if event_dt.timestamp() >= cutoff_time:
-                upcoming_events.append(e)
-        except ValueError:
-            print(f"  [WARN] Invalid date format for {e.get('artistName')}: {event_date_str}")
-            upcoming_events.append(e)
+    processed_events.sort(key=lambda e: e.get("eventDate") or "9999")
 
-    events = upcoming_events
-    print(f"  {len(events)} unique upcoming events, sorted by date")
-
-    # Download images
+    # Image Downloads
     print("\n3. Downloading event images...")
-    for event in events:
-        image_url = event.get("imageUrl")
-        image_name = event.get("imageName")
-        if image_url and image_name:
-            download_image(image_url, image_name)
+    new_images = 0
+    for event in processed_events:
+        if event.get("imageUrl") and event.get("imageName"):
+            if download_image(event["imageUrl"], event["imageName"]):
+                new_images += 1
+    print(f"  Downloaded {new_images} new images")
 
-    # Generate events-data.js
-    print("\n4. Generating events-data.js...")
-    js_content = generate_events_data_js(events)
-    with open(EVENTS_DATA_FILE, "w", encoding="utf-8") as f:
-        f.write(js_content)
-    print(f"  [OK] Written to {EVENTS_DATA_FILE}")
+    # Update JS Data File
+    print("\n4. Updating website data file...")
+    generate_events_data_js(processed_events)
+    print(f"  [OK] Updated {EVENTS_DATA_FILE}")
 
-    # Git operations
-    print("\n5. Pushing to GitHub...")
+    # Firestore Sync
+    sync_to_firestore(processed_events)
+
+    # Git Operations
     git_operations()
 
-    # Firestore sync
-    print("\n6. Syncing to Firestore...")
-    sync_stats = {"created": 0, "updated": 0, "errors": 0}
-    try:
-        from sync_firestore import sync_events_to_firestore, mark_closed_events, write_scrape_log
-        sync_stats = sync_events_to_firestore(events)
-        mark_closed_events()
-        print("  [OK] Firestore sync complete")
-
-        # Write scrape log
-        print("\n7. Writing scrape log...")
-        write_scrape_log(sources_status, events, sync_stats)
-    except ImportError as e:
-        print(f"  [WARN] Firestore sync skipped (firebase-admin not installed): {e}")
-    except FileNotFoundError as e:
-        print(f"  [WARN] Firestore sync skipped (service account not found): {e}")
-    except Exception as e:
-        print(f"  [WARN] Firestore sync failed: {e}")
-
-    print(f"\n{'=' * 60}")
-    print(f"[OK] Done! Updated {len(events)} events on dtxent.com")
+    print("\n" + "=" * 60)
+    print(f"[OK] Done! Updated {len(processed_events)} events on dtxent.com")
     print("=" * 60)
 
     # Summary grouped by source
-    for src_label in ["tixplug", "paynearena"]:
-        src_events = [e for e in events if e.get("source", "") == src_label]
+    for src_label in ["ticketmaster", "zaeee", "manual"]:
+        src_events = [e for e in all_events if e.get("source", "manual") == src_label]
         if src_events:
-            print(f"\n  [{src_label}] {len(src_events)} events:")
+            print(f"\n  [{src_label.upper()}] {len(src_events)} events:")
             for e in src_events:
                 print(f"    • {e['artistName']}: {e.get('eventName', '') or '—'} — {e.get('eventDate', 'TBD')[:10]}")
 
