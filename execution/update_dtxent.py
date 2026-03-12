@@ -249,6 +249,11 @@ def generate_events_data_js(events: list[dict]):
     timestamp_replacement = f"// Last updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
     new_content = re.sub(timestamp_pattern, timestamp_replacement, new_content)
 
+    # Update sources
+    sources_pattern = r" \* Sources: .*"
+    sources_replacement = " * Sources: Ticketmaster, ZAEEE, manual_events.json"
+    new_content = re.sub(sources_pattern, sources_replacement, new_content)
+
     with open(EVENTS_DATA_FILE, "w", encoding="utf-8") as f:
         f.write(new_content)
 
