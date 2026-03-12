@@ -1,0 +1,143 @@
+[
+  {
+    "artistName": "Citrus Break Comedy Show w/ MIKE Winfield (Citrus LIVE)",
+    "eventName": "March 21st, 2026",
+    "eventDate": "2026-03-21T20:00:00",
+    "venueName": "Citrus Live",
+    "venueCity": "Edinburg",
+    "venueState": "TX",
+    "imageName": "citrus-break-comedy-show.jpg",
+    "imageUrl": "",
+    "ticketUrl": "https://tixplug.com/shop/citrus-break-comedy-show/",
+    "isPublished": true,
+    "schedule": [
+      { "time": "7:00 PM", "description": "Doors Open" }
+    ]
+  },
+  {
+    "artistName": "SOL PADRE (South Padre Island)- April 3rd, 2026",
+    "eventName": "",
+    "eventDate": "2026-04-03T20:00:00",
+    "venueName": "Cameron County Amphitheater",
+    "venueCity": "South Padre Island",
+    "venueState": "TX",
+    "imageName": "sol-padre.jpg",
+    "imageUrl": "",
+    "ticketUrl": "https://tixplug.com/shop/sol-padre/",
+    "isPublished": true,
+    "schedule": [
+      { "time": "7:00 PM", "description": "Doors Open" }
+    ]
+  },
+  {
+    "artistName": "The Ultimate Selena Experience",
+    "eventName": "(Citrus Live) April 11th, 2026",
+    "eventDate": "2026-04-11T20:00:00",
+    "venueName": "Citrus Live",
+    "venueCity": "Edinburg",
+    "venueState": "TX",
+    "imageName": "the-ultimate-selena-experience.jpg",
+    "imageUrl": "",
+    "ticketUrl": "https://tixplug.com/shop/the-ultimate-selena-experience/",
+    "isPublished": true,
+    "schedule": [
+      { "time": "7:00 PM", "description": "Doors Open" }
+    ]
+  },
+  {
+    "artistName": "Highly Motavated 420 Comedy Special",
+    "eventName": "",
+    "eventDate": "2026-04-20T20:00:00",
+    "venueName": "Citrus Live",
+    "venueCity": "Edinburg",
+    "venueState": "TX",
+    "imageName": "highly-motivated-420-comedy-special.jpg",
+    "imageUrl": "",
+    "ticketUrl": "https://tixplug.com/shop/highly-motivated-420-comedy-special/",
+    "isPublished": true,
+    "schedule": [
+      { "time": "7:00 PM", "description": "Doors Open" }
+    ]
+  },
+  {
+    "artistName": "Snow Tha Product",
+    "eventName": "BEFORE I CRASHOUT",
+    "eventDate": "2026-05-01T20:00:00",
+    "venueName": "HAPO Center",
+    "venueCity": "Pasco",
+    "venueState": "WA",
+    "imageName": "snow-tha-product-before-i-crashout.jpg",
+    "imageUrl": "",
+    "ticketUrl": "https://tixplug.com/shop/snow-tha-product-before-i-crashout/",
+    "isPublished": true
+  },
+  {
+    "artistName": "City of Alamo Watermelon Fest '26",
+    "eventName": "",
+    "eventDate": "2026-05-09T20:00:00",
+    "venueName": "Alamo Sports Complex",
+    "venueCity": "Alamo",
+    "venueState": "TX",
+    "imageName": "city-of-alamo-watermelon-fest-26.jpg",
+    "imageUrl": "",
+    "ticketUrl": "https://tixplug.com/shop/city-of-alamo-watermelon-fest-26/",
+    "isPublished": true
+  },
+  {
+    "artistName": "Lost in Hollywood (SOD Tribute) & Testify (RAM Tribute)",
+    "eventName": "Citrus Live",
+    "eventDate": "2026-05-15T20:00:00",
+    "venueName": "Citrus Live",
+    "venueCity": "Edinburg",
+    "venueState": "TX",
+    "imageName": "lost-in-hollywood-testify.png",
+    "imageUrl": "",
+    "ticketUrl": "https://tixplug.com/shop/lost-in-hollywood-testify/",
+    "isPublished": true,
+    "schedule": [
+      { "time": "7:00 PM", "description": "Doors Open" }
+    ]
+  },
+  {
+    "artistName": "Tacos, Tequilas & Chelas Festival ( Tri-Cities, WA)",
+    "eventName": "",
+    "eventDate": "2026-05-16T20:00:00",
+    "venueName": "Benton County Fairgrounds",
+    "venueCity": "Kennewick",
+    "venueState": "WA",
+    "imageName": "tacos-tequilas-chelas.jpg",
+    "imageUrl": "",
+    "ticketUrl": "https://tixplug.com/shop/tacos-tequilas-chelas/",
+    "isPublished": true
+  },
+  {
+    "artistName": "NB Ridaz",
+    "eventName": "Runaway Throwback Night (Citrus Live) May 29th, 2026",
+    "eventDate": "2026-05-29T20:00:00",
+    "venueName": "Citrus Live",
+    "venueCity": "Edinburg",
+    "venueState": "TX",
+    "imageName": "nb-ridaz-runaway-throwback-night.jpg",
+    "imageUrl": "",
+    "ticketUrl": "https://tixplug.com/shop/nb-ridaz-runaway-throwback-night/",
+    "isPublished": true,
+    "schedule": [
+      { "time": "7:00 PM", "description": "Doors Open" }
+    ]
+  },
+  {
+    "artistName": "Seltzer Island",
+    "eventName": "",
+    "eventDate": "2026-06-20T20:00:00",
+    "venueName": "Cameron County Amphitheater",
+    "venueCity": "South Padre Island",
+    "venueState": "TX",
+    "imageName": "seltzer-island.jpg",
+    "imageUrl": "",
+    "ticketUrl": "https://tixplug.com/shop/seltzer-island/",
+    "isPublished": true,
+    "schedule": [
+      { "time": "3:00 PM", "description": "Doors Open" }
+    ]
+  }
+]
