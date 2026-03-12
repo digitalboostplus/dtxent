@@ -1,9 +1,7 @@
 """
-update_dtxent.py — Merge scraped events and update the dtxent GitHub repo.
-
-1. Runs scrape_ticketmaster.py to fetch events from Ticketmaster Discovery API
-2. Runs scrape_zaeee.py to fetch events from zaeee.saffire.com
-3. Loads manual_events.json for TixPlug or other custom events
+1. Runs scrape_tixplug.py to fetch events from tixplug.com
+2. Runs scrape_paynearena.py to fetch events from paynearena.com
+3. Runs scrape_zaeee.py to fetch events from zaeee.saffire.com
 4. Merges, deduplicates, and sorts events
 5. Downloads event poster images to assets/
 6. Regenerates js/events-data.js with the LOCAL_EVENTS array
@@ -77,12 +75,21 @@ def run_scraper(scraper_name: str, output_filename: str, source_url: str) -> tup
     }
 
 
-def run_ticketmaster_scraper() -> tuple[list[dict], dict]:
-    """Run scrape_ticketmaster.py and return events + status."""
+def run_paynearena_scraper() -> tuple[list[dict], dict]:
+    """Run scrape_paynearena.py and return events + status."""
     return run_scraper(
-        "scrape_ticketmaster.py", 
-        "ticketmaster_events.json", 
-        "https://www.ticketmaster.com"
+        "scrape_paynearena.py", 
+        "paynearena_events.json", 
+        "https://paynearena.com"
+    )
+
+
+def run_tixplug_scraper() -> tuple[list[dict], dict]:
+    """Run scrape_tixplug.py and return events + status."""
+    return run_scraper(
+        "scrape_tixplug.py", 
+        "tixplug_events.json", 
+        "https://tixplug.com"
     )
 
 
@@ -132,17 +139,22 @@ def load_scraped_events() -> tuple[list[dict], list[dict]]:
     events = []
     sources_status = []
 
-    # Source 1: Ticketmaster Discovery API
-    tm_events, tm_status = run_ticketmaster_scraper()
-    events.extend(tm_events)
-    sources_status.append(tm_status)
+    # Source 1: Payne Arena (HTML Scraping)
+    payne_events, payne_status = run_paynearena_scraper()
+    events.extend(payne_events)
+    sources_status.append(payne_status)
 
-    # Source 2: Z-94.5 (Saffire)
+    # Source 2: TixPlug (WordPress API)
+    tixplug_events, tixplug_status = run_tixplug_scraper()
+    events.extend(tixplug_events)
+    sources_status.append(tixplug_status)
+
+    # Source 3: Z-94.5 (Saffire)
     zaeee_events, zaeee_status = run_zaeee_scraper()
     events.extend(zaeee_events)
     sources_status.append(zaeee_status)
 
-    # Source 3: Manual events file (TixPlug fallback / custom)
+    # Source 4: Manual events file (if any)
     manual_events, manual_status = load_manual_events()
     events.extend(manual_events)
     sources_status.append(manual_status)
@@ -251,7 +263,7 @@ def generate_events_data_js(events: list[dict]):
 
     # Update sources
     sources_pattern = r" \* Sources: .*"
-    sources_replacement = " * Sources: Ticketmaster, ZAEEE, manual_events.json"
+    sources_replacement = " * Sources: paynearena.com, tixplug.com, zaeee.saffire.com"
     new_content = re.sub(sources_pattern, sources_replacement, new_content)
 
     with open(EVENTS_DATA_FILE, "w", encoding="utf-8") as f:
@@ -366,7 +378,7 @@ def main():
     print("=" * 60)
 
     # Summary grouped by source
-    for src_label in ["ticketmaster", "zaeee", "manual"]:
+    for src_label in ["paynearena", "tixplug", "zaeee", "manual"]:
         src_events = [e for e in all_events if e.get("source", "manual") == src_label]
         if src_events:
             print(f"\n  [{src_label.upper()}] {len(src_events)} events:")
