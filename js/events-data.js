@@ -93,20 +93,20 @@ export const LOCAL_EVENTS = [
         "artistName": "The Ultimate Selena Experience",
         "eventName": "(Citrus Live) April 11th, 2026",
         "eventDate": "2026-04-11T20:00:00",
-        "venueName": "",
-        "venueCity": "",
+        "venueName": "Citrus Live",
+        "venueCity": "Edinburg",
         "venueState": "TX",
         "imageName": "the-ultimate-selena-experience.jpg",
         "imageUrl": "https://tixplug.com/wp-content/uploads/2026/02/1000288387-768x960.jpg",
         "ticketUrl": "https://tixplug.com/shop/the-ultimate-selena-experience/",
         "isPublished": true,
-        "source": "tixplug",
         "schedule": [
             {
                 "time": "7:00 PM",
                 "description": "Doors Open"
             }
-        ]
+        ],
+        "source": "manual"
     },
     {
         "artistName": "Highly Motavated 420 Comedy Special",
@@ -286,20 +286,20 @@ export const LOCAL_EVENTS = [
         "artistName": "NB Ridaz",
         "eventName": "Runaway Throwback Night (Citrus Live) May 29th, 2026",
         "eventDate": "2026-05-29T20:00:00",
-        "venueName": "",
-        "venueCity": "",
+        "venueName": "Citrus Live",
+        "venueCity": "Edinburg",
         "venueState": "TX",
         "imageName": "nb-ridaz-runaway-throwback-night.jpg",
         "imageUrl": "https://tixplug.com/wp-content/uploads/2026/02/1000287239-768x960.jpg",
         "ticketUrl": "https://tixplug.com/shop/nb-ridaz-runaway-throwback-night/",
         "isPublished": true,
-        "source": "tixplug",
         "schedule": [
             {
                 "time": "7:00 PM",
                 "description": "Doors Open"
             }
-        ]
+        ],
+        "source": "manual"
     },
     {
         "artistName": "Braxton Keith",
