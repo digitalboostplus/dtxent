@@ -5,256 +5,303 @@
  */
 export const LOCAL_EVENTS = [
     {
-        artistName: "Los Angeles Lakers",
-        eventName: "vs. Chicago Bulls",
-        eventDate: "2026-03-12T19:30:00",
-        venueName: "Payne Arena",
-        venueCity: "Hidalgo",
-        venueState: "TX",
-        imageName: "payne-los-angeles-lakers.jpg",
-        ticketUrl: "https://www.ticketmaster.com/los-angeles-lakers-vs-chicago-bulls-los-angeles-california-03-12-2026/event/2C006308188A0B1E",
-        dates: [
-            { eventDate: "2026-03-12T19:30:00", ticketUrl: "https://www.ticketmaster.com/los-angeles-lakers-vs-chicago-bulls-los-angeles-california-03-12-2026/event/2C006308188A0B1E" },
-            { eventDate: "2026-03-14T17:30:00", ticketUrl: "https://www.ticketmaster.com/los-angeles-lakers-vs-denver-nuggets-los-angeles-california-03-14-2026/event/2C006308188C0B20" },
-            { eventDate: "2026-03-27T19:30:00", ticketUrl: "https://www.ticketmaster.com/los-angeles-lakers-vs-brooklyn-nets-los-angeles-california-03-27-2026/event/2C006308188F0B22" },
-            { eventDate: "2026-03-30T19:00:00", ticketUrl: "https://www.ticketmaster.com/los-angeles-lakers-vs-washington-wizards-los-angeles-california-03-30-2026/event/2C00630818910B24" },
-            { eventDate: "2026-03-31T19:30:00", ticketUrl: "https://www.ticketmaster.com/los-angeles-lakers-vs-cleveland-cavaliers-los-angeles-california-03-31-2026/event/2C00630818940B26" },
-            { eventDate: "2026-04-07T19:30:00", ticketUrl: "https://www.ticketmaster.com/los-angeles-lakers-vs-oklahoma-city-los-angeles-california-04-07-2026/event/2C00630818960B28" },
-            { eventDate: "2026-04-10T19:30:00", ticketUrl: "https://www.ticketmaster.com/los-angeles-lakers-vs-phoenix-suns-los-angeles-california-04-10-2026/event/2C00630818980B2A" },
-            { eventDate: "2026-04-12T17:30:00", ticketUrl: "https://www.ticketmaster.com/los-angeles-lakers-vs-utah-jazz-los-angeles-california-04-12-2026/event/2C006308189B0B2C" }
+        "artistName": "HIGH TIDE POOL PARTY",
+        "eventName": "Live at Peninsula Resort",
+        "eventDate": "2026-03-20T20:00:00",
+        "venueName": "Peninsula Island Resort",
+        "venueCity": "South Padre Island",
+        "venueState": "TX",
+        "imageName": "zaeee-high-tide-pool-party.jpg",
+        "imageUrl": "https://cdn.saffire.com/images.ashx?t=ig&rid=ZAEE&i=WhatsApp_Image_2026-01-27_at_5.58.29_PM.jpeg&cb=10bbbd35&w=600",
+        "ticketUrl": "https://zaeee.saffire.com/p/tickets",
+        "isPublished": true,
+        "source": "zaeee"
+    },
+    {
+        "artistName": "Citrus Break Comedy Show w/ MIKE Winfield (Citrus LIVE)",
+        "eventName": "March 21st, 2026",
+        "eventDate": "2026-03-21T20:00:00",
+        "venueName": "Citrus Live",
+        "venueCity": "Edinburg",
+        "venueState": "TX",
+        "imageName": "citrus-break-comedy-show.jpg",
+        "imageUrl": "",
+        "ticketUrl": "https://tixplug.com/shop/citrus-break-comedy-show/",
+        "isPublished": true,
+        "schedule": [
+            {
+                "time": "7:00 PM",
+                "description": "Doors Open"
+            }
         ],
-        isPublished: true
+        "source": "manual"
     },
     {
-        artistName: "HIGH TIDE POOL PARTY",
-        eventName: "Live at Peninsula Resort",
-        eventDate: "2026-03-20T20:00:00",
-        venueName: "Peninsula Island Resort",
-        venueCity: "South Padre Island",
-        venueState: "TX",
-        imageName: "zaeee-high-tide-pool-party.jpg",
-        ticketUrl: "https://zaeee.saffire.com/p/tickets",
-        isPublished: true
-    },
-    {
-        artistName: "Citrus Break Comedy Show w/ MIKE Winfield (Citrus LIVE)",
-        eventName: "March 21st, 2026",
-        eventDate: "2026-03-21T20:00:00",
-        venueName: "Citrus Live",
-        venueCity: "Edinburg",
-        venueState: "TX",
-        imageName: "citrus-break-comedy-show.jpg",
-        ticketUrl: "https://tixplug.com/shop/citrus-break-comedy-show/",
-        schedule: [
-            { time: "7:00 PM", description: "Doors Open" }
+        "artistName": "SOL PADRE (South Padre Island)- April 3rd, 2026",
+        "eventName": "",
+        "eventDate": "2026-04-03T20:00:00",
+        "venueName": "Cameron County Amphitheater",
+        "venueCity": "South Padre Island",
+        "venueState": "TX",
+        "imageName": "sol-padre.jpg",
+        "imageUrl": "",
+        "ticketUrl": "https://tixplug.com/shop/sol-padre/",
+        "isPublished": true,
+        "schedule": [
+            {
+                "time": "7:00 PM",
+                "description": "Doors Open"
+            }
         ],
-        isPublished: true
+        "source": "manual"
     },
     {
-        artistName: "SOL PADRE (South Padre Island)- April 3rd, 2026",
-        eventName: "",
-        eventDate: "2026-04-03T20:00:00",
-        venueName: "Cameron County Amphitheater",
-        venueCity: "South Padre Island",
-        venueState: "TX",
-        imageName: "sol-padre.jpg",
-        ticketUrl: "https://tixplug.com/shop/sol-padre/",
-        schedule: [
-            { time: "7:00 PM", description: "Doors Open" }
+        "artistName": "The Ultimate Selena Experience",
+        "eventName": "(Citrus Live) April 11th, 2026",
+        "eventDate": "2026-04-11T20:00:00",
+        "venueName": "Citrus Live",
+        "venueCity": "Edinburg",
+        "venueState": "TX",
+        "imageName": "the-ultimate-selena-experience.jpg",
+        "imageUrl": "",
+        "ticketUrl": "https://tixplug.com/shop/the-ultimate-selena-experience/",
+        "isPublished": true,
+        "schedule": [
+            {
+                "time": "7:00 PM",
+                "description": "Doors Open"
+            }
         ],
-        isPublished: true
+        "source": "manual"
     },
     {
-        artistName: "The Ultimate Selena Experience",
-        eventName: "(Citrus Live) April 11th, 2026",
-        eventDate: "2026-04-11T20:00:00",
-        venueName: "Citrus Live",
-        venueCity: "Edinburg",
-        venueState: "TX",
-        imageName: "the-ultimate-selena-experience.jpg",
-        ticketUrl: "https://tixplug.com/shop/the-ultimate-selena-experience/",
-        schedule: [
-            { time: "7:00 PM", description: "Doors Open" }
+        "artistName": "Highly Motavated 420 Comedy Special",
+        "eventName": "",
+        "eventDate": "2026-04-20T20:00:00",
+        "venueName": "Citrus Live",
+        "venueCity": "Edinburg",
+        "venueState": "TX",
+        "imageName": "highly-motivated-420-comedy-special.jpg",
+        "imageUrl": "",
+        "ticketUrl": "https://tixplug.com/shop/highly-motivated-420-comedy-special/",
+        "isPublished": true,
+        "schedule": [
+            {
+                "time": "7:00 PM",
+                "description": "Doors Open"
+            }
         ],
-        isPublished: true
+        "source": "manual"
     },
     {
-        artistName: "Highly Motavated 420 Comedy Special",
-        eventName: "",
-        eventDate: "2026-04-20T20:00:00",
-        venueName: "Citrus Live",
-        venueCity: "Edinburg",
-        venueState: "TX",
-        imageName: "highly-motivated-420-comedy-special.jpg",
-        ticketUrl: "https://tixplug.com/shop/highly-motivated-420-comedy-special/",
-        schedule: [
-            { time: "7:00 PM", description: "Doors Open" }
+        "artistName": "Snow Tha Product",
+        "eventName": "BEFORE I CRASHOUT",
+        "eventDate": "2026-05-01T20:00:00",
+        "venueName": "HAPO Center",
+        "venueCity": "Pasco",
+        "venueState": "WA",
+        "imageName": "snow-tha-product-before-i-crashout.jpg",
+        "imageUrl": "",
+        "ticketUrl": "https://tixplug.com/shop/snow-tha-product-before-i-crashout/",
+        "isPublished": true,
+        "source": "manual"
+    },
+    {
+        "artistName": "City of Alamo Watermelon Fest '26",
+        "eventName": "",
+        "eventDate": "2026-05-09T20:00:00",
+        "venueName": "Alamo Sports Complex",
+        "venueCity": "Alamo",
+        "venueState": "TX",
+        "imageName": "city-of-alamo-watermelon-fest-26.jpg",
+        "imageUrl": "",
+        "ticketUrl": "https://tixplug.com/shop/city-of-alamo-watermelon-fest-26/",
+        "isPublished": true,
+        "source": "manual"
+    },
+    {
+        "artistName": "Lost in Hollywood (SOD Tribute) & Testify (RAM Tribute)",
+        "eventName": "Citrus Live",
+        "eventDate": "2026-05-15T20:00:00",
+        "venueName": "Citrus Live",
+        "venueCity": "Edinburg",
+        "venueState": "TX",
+        "imageName": "lost-in-hollywood-testify.png",
+        "imageUrl": "",
+        "ticketUrl": "https://tixplug.com/shop/lost-in-hollywood-testify/",
+        "isPublished": true,
+        "schedule": [
+            {
+                "time": "7:00 PM",
+                "description": "Doors Open"
+            }
         ],
-        isPublished: true
+        "source": "manual"
     },
     {
-        artistName: "Snow Tha Product",
-        eventName: "BEFORE I CRASHOUT",
-        eventDate: "2026-05-01T20:00:00",
-        venueName: "HAPO Center",
-        venueCity: "Pasco",
-        venueState: "WA",
-        imageName: "snow-tha-product-before-i-crashout.jpg",
-        ticketUrl: "https://tixplug.com/shop/snow-tha-product-before-i-crashout/",
-        isPublished: true
+        "artistName": "Tacos, Tequilas & Chelas Festival ( Tri-Cities, WA)",
+        "eventName": "",
+        "eventDate": "2026-05-16T20:00:00",
+        "venueName": "Benton County Fairgrounds",
+        "venueCity": "Kennewick",
+        "venueState": "WA",
+        "imageName": "tacos-tequilas-chelas.jpg",
+        "imageUrl": "",
+        "ticketUrl": "https://tixplug.com/shop/tacos-tequilas-chelas/",
+        "isPublished": true,
+        "source": "manual"
     },
     {
-        artistName: "City of Alamo Watermelon Fest '26",
-        eventName: "",
-        eventDate: "2026-05-09T20:00:00",
-        venueName: "Alamo Sports Complex",
-        venueCity: "Alamo",
-        venueState: "TX",
-        imageName: "city-of-alamo-watermelon-fest-26.jpg",
-        ticketUrl: "https://tixplug.com/shop/city-of-alamo-watermelon-fest-26/",
-        isPublished: true
-    },
-    {
-        artistName: "Lost in Hollywood (SOD Tribute) & Testify (RAM Tribute)",
-        eventName: "Citrus Live",
-        eventDate: "2026-05-15T20:00:00",
-        venueName: "Citrus Live",
-        venueCity: "Edinburg",
-        venueState: "TX",
-        imageName: "lost-in-hollywood-testify.png",
-        ticketUrl: "https://tixplug.com/shop/lost-in-hollywood-testify/",
-        schedule: [
-            { time: "7:00 PM", description: "Doors Open" }
+        "artistName": "NB Ridaz",
+        "eventName": "Runaway Throwback Night (Citrus Live) May 29th, 2026",
+        "eventDate": "2026-05-29T20:00:00",
+        "venueName": "Citrus Live",
+        "venueCity": "Edinburg",
+        "venueState": "TX",
+        "imageName": "nb-ridaz-runaway-throwback-night.jpg",
+        "imageUrl": "",
+        "ticketUrl": "https://tixplug.com/shop/nb-ridaz-runaway-throwback-night/",
+        "isPublished": true,
+        "schedule": [
+            {
+                "time": "7:00 PM",
+                "description": "Doors Open"
+            }
         ],
-        isPublished: true
+        "source": "manual"
     },
     {
-        artistName: "Tacos, Tequilas & Chelas Festival ( Tri-Cities, WA)",
-        eventName: "",
-        eventDate: "2026-05-16T20:00:00",
-        venueName: "Benton County Fairgrounds",
-        venueCity: "Kennewick",
-        venueState: "WA",
-        imageName: "tacos-tequilas-chelas.jpg",
-        ticketUrl: "https://tixplug.com/shop/tacos-tequilas-chelas/",
-        isPublished: true
+        "artistName": "Ariana Grande",
+        "eventName": "The Eternal Sunshine Tour",
+        "eventDate": "2026-06-13T20:00:00",
+        "venueName": "Payne Arena",
+        "venueCity": "Hidalgo",
+        "venueState": "TX",
+        "imageName": "payne-ariana-grande.jpg",
+        "imageUrl": "https://s1.ticketm.net/dam/a/adb/fc874544-aef0-468d-8db5-0507863cbadb_SOURCE",
+        "ticketUrl": "https://www.ticketmaster.com/ariana-grande-the-eternal-sunshine-tour-los-angeles-california-06-13-2026/event/2C00631BD2240C78",
+        "isPublished": true,
+        "source": "ticketmaster",
+        "tmEventId": "G5eYZbsR3aZsz",
+        "dates": [
+            {
+                "eventDate": "2026-06-13T20:00:00",
+                "ticketUrl": "https://www.ticketmaster.com/ariana-grande-the-eternal-sunshine-tour-los-angeles-california-06-13-2026/event/2C00631BD2240C78"
+            },
+            {
+                "eventDate": "2026-06-14T20:00:00",
+                "ticketUrl": "https://www.ticketmaster.com/ariana-grande-the-eternal-sunshine-tour-los-angeles-california-06-14-2026/event/2C00631BD1F40C75"
+            }
+        ]
     },
     {
-        artistName: "NB Ridaz",
-        eventName: "Runaway Throwback Night (Citrus Live) May 29th, 2026",
-        eventDate: "2026-05-29T20:00:00",
-        venueName: "Citrus Live",
-        venueCity: "Edinburg",
-        venueState: "TX",
-        imageName: "nb-ridaz-runaway-throwback-night.jpg",
-        ticketUrl: "https://tixplug.com/shop/nb-ridaz-runaway-throwback-night/",
-        schedule: [
-            { time: "7:00 PM", description: "Doors Open" }
+        "artistName": "Diljit Dosanjh",
+        "eventName": "Aura World Tour 2026",
+        "eventDate": "2026-06-18T20:00:00",
+        "venueName": "Payne Arena",
+        "venueCity": "Hidalgo",
+        "venueState": "TX",
+        "imageName": "payne-diljit-dosanjh.jpg",
+        "imageUrl": "https://s1.ticketm.net/dam/a/cf8/2f428985-6fa0-4a27-9a65-a0f86a19ecf8_TABLET_LANDSCAPE_LARGE_16_9.jpg",
+        "ticketUrl": "https://www.ticketmaster.com/diljit-dosanjh-aura-world-tour-2026-los-angeles-california-06-18-2026/event/2C006442E51E0FA1",
+        "isPublished": true,
+        "source": "ticketmaster",
+        "tmEventId": "G5eYZ_75P6OX-"
+    },
+    {
+        "artistName": "Seltzer Island",
+        "eventName": "",
+        "eventDate": "2026-06-20T20:00:00",
+        "venueName": "Cameron County Amphitheater",
+        "venueCity": "South Padre Island",
+        "venueState": "TX",
+        "imageName": "seltzer-island.jpg",
+        "imageUrl": "",
+        "ticketUrl": "https://tixplug.com/shop/seltzer-island/",
+        "isPublished": true,
+        "schedule": [
+            {
+                "time": "3:00 PM",
+                "description": "Doors Open"
+            }
         ],
-        isPublished: true
+        "source": "manual"
     },
     {
-        artistName: "Alex Warren",
-        eventName: "Presents: Little Orphan Alex Live",
-        eventDate: "2026-06-06T19:30:00",
-        venueName: "Payne Arena",
-        venueCity: "Hidalgo",
-        venueState: "TX",
-        imageName: "payne-alex-warren.jpg",
-        ticketUrl: "https://www.ticketmaster.com/alex-warren-presents-little-orphan-alex-los-angeles-california-06-06-2026/event/2C006364EA500A5D",
-        isPublished: true
+        "artistName": "Summer Walker",
+        "eventName": "Still Finally Over It Tour",
+        "eventDate": "2026-06-25T19:30:00",
+        "venueName": "Payne Arena",
+        "venueCity": "Hidalgo",
+        "venueState": "TX",
+        "imageName": "payne-summer-walker.jpg",
+        "imageUrl": "https://s1.ticketm.net/dam/a/795/566595de-cd03-480c-93fb-f975eac1f795_SOURCE",
+        "ticketUrl": "https://www.ticketmaster.com/summer-walker-still-finally-over-it-los-angeles-california-06-25-2026/event/2C0064358E7B0C6C",
+        "isPublished": true,
+        "source": "ticketmaster",
+        "tmEventId": "G5eYZ_dpCrYsi"
     },
     {
-        artistName: "Ariana Grande",
-        eventName: "The Eternal Sunshine Tour",
-        eventDate: "2026-06-13T20:00:00",
-        venueName: "Payne Arena",
-        venueCity: "Hidalgo",
-        venueState: "TX",
-        imageName: "payne-ariana-grande.jpg",
-        ticketUrl: "https://www.ticketmaster.com/ariana-grande-the-eternal-sunshine-tour-los-angeles-california-06-13-2026/event/2C00631BD2240C78",
-        dates: [
-            { eventDate: "2026-06-13T20:00:00", ticketUrl: "https://www.ticketmaster.com/ariana-grande-the-eternal-sunshine-tour-los-angeles-california-06-13-2026/event/2C00631BD2240C78" },
-            { eventDate: "2026-06-14T20:00:00", ticketUrl: "https://www.ticketmaster.com/ariana-grande-the-eternal-sunshine-tour-los-angeles-california-06-14-2026/event/2C00631BD1F40C75" }
-        ],
-        isPublished: true
+        "artistName": "Kid Cudi",
+        "eventName": "KID CUDI PRESENTS: THE REBEL RAGERS TOUR 2026",
+        "eventDate": "2026-06-26T18:30:00",
+        "venueName": "Payne Arena",
+        "venueCity": "Hidalgo",
+        "venueState": "TX",
+        "imageName": "payne-kid-cudi.jpg",
+        "imageUrl": "https://s1.ticketm.net/dam/a/b38/6bdf69cb-1b2e-4f1a-949f-78ff42766b38_SOURCE",
+        "ticketUrl": "https://www.ticketmaster.com/kid-cudi-presents-the-rebel-ragers-los-angeles-california-06-26-2026/event/2C00642FBA0F0F25",
+        "isPublished": true,
+        "source": "ticketmaster",
+        "tmEventId": "G5eYZ_eXBdYHP"
     },
     {
-        artistName: "Diljit Dosanjh",
-        eventName: "Aura World Tour 2026",
-        eventDate: "2026-06-18T20:00:00",
-        venueName: "Payne Arena",
-        venueCity: "Hidalgo",
-        venueState: "TX",
-        imageName: "payne-diljit-dosanjh.jpg",
-        ticketUrl: "https://www.ticketmaster.com/diljit-dosanjh-aura-world-tour-2026-los-angeles-california-06-18-2026/event/2C006442E51E0FA1",
-        isPublished: true
+        "artistName": "Don Toliver",
+        "eventName": "Octane Tour",
+        "eventDate": "2026-06-28T19:30:00",
+        "venueName": "Payne Arena",
+        "venueCity": "Hidalgo",
+        "venueState": "TX",
+        "imageName": "payne-don-toliver.jpg",
+        "imageUrl": "https://s1.ticketm.net/dam/a/4d1/d0bc76d6-02e3-4e46-96fc-658377e464d1_SOURCE",
+        "ticketUrl": "https://www.ticketmaster.com/don-toliver-octane-tour-los-angeles-california-06-28-2026/event/2C0064459C3814E5",
+        "isPublished": true,
+        "source": "ticketmaster",
+        "tmEventId": "G5eYZ_7pjCvKP",
+        "dates": [
+            {
+                "eventDate": "2026-06-28T19:30:00",
+                "ticketUrl": "https://www.ticketmaster.com/don-toliver-octane-tour-los-angeles-california-06-28-2026/event/2C0064459C3814E5"
+            },
+            {
+                "eventDate": "2026-06-29T19:30:00",
+                "ticketUrl": "https://www.ticketmaster.com/don-toliver-octane-tour-los-angeles-california-06-29-2026/event/2C00643B030F1A67"
+            }
+        ]
     },
     {
-        artistName: "Seltzer Island",
-        eventName: "",
-        eventDate: "2026-06-20T20:00:00",
-        venueName: "Cameron County Amphitheater",
-        venueCity: "South Padre Island",
-        venueState: "TX",
-        imageName: "seltzer-island.jpg",
-        ticketUrl: "https://tixplug.com/shop/seltzer-island/",
-        schedule: [
-            { time: "3:00 PM", description: "Doors Open" }
-        ],
-        isPublished: true
-    },
-    {
-        artistName: "Summer Walker",
-        eventName: "Still Finally Over It Tour",
-        eventDate: "2026-06-25T19:30:00",
-        venueName: "Payne Arena",
-        venueCity: "Hidalgo",
-        venueState: "TX",
-        imageName: "payne-summer-walker.jpg",
-        ticketUrl: "https://www.ticketmaster.com/summer-walker-still-finally-over-it-los-angeles-california-06-25-2026/event/2C0064358E7B0C6C",
-        isPublished: true
-    },
-    {
-        artistName: "Kid Cudi",
-        eventName: "KID CUDI PRESENTS: THE REBEL RAGERS TOUR 2026",
-        eventDate: "2026-06-26T18:30:00",
-        venueName: "Payne Arena",
-        venueCity: "Hidalgo",
-        venueState: "TX",
-        imageName: "payne-kid-cudi.jpg",
-        ticketUrl: "https://www.ticketmaster.com/kid-cudi-presents-the-rebel-ragers-los-angeles-california-06-26-2026/event/2C00642FBA0F0F25",
-        isPublished: true
-    },
-    {
-        artistName: "Don Toliver",
-        eventName: "Octane Tour",
-        eventDate: "2026-06-28T19:30:00",
-        venueName: "Payne Arena",
-        venueCity: "Hidalgo",
-        venueState: "TX",
-        imageName: "payne-don-toliver.jpg",
-        ticketUrl: "https://www.ticketmaster.com/don-toliver-octane-tour-los-angeles-california-06-28-2026/event/2C0064459C3814E5",
-        dates: [
-            { eventDate: "2026-06-28T19:30:00", ticketUrl: "https://www.ticketmaster.com/don-toliver-octane-tour-los-angeles-california-06-28-2026/event/2C0064459C3814E5" },
-            { eventDate: "2026-06-29T19:30:00", ticketUrl: "https://www.ticketmaster.com/don-toliver-octane-tour-los-angeles-california-06-29-2026/event/2C00643B030F1A67" }
-        ],
-        isPublished: true
-    },
-    {
-        artistName: "J. Cole",
-        eventName: "The Fall-Off Tour",
-        eventDate: "2026-09-01T20:00:00",
-        venueName: "Payne Arena",
-        venueCity: "Hidalgo",
-        venueState: "TX",
-        imageName: "payne-j-cole.jpg",
-        ticketUrl: "https://www.ticketmaster.com/j-cole-the-falloff-tour-los-angeles-california-09-01-2026/event/2C006435D8180F20",
-        dates: [
-            { eventDate: "2026-09-01T20:00:00", ticketUrl: "https://www.ticketmaster.com/j-cole-the-falloff-tour-los-angeles-california-09-01-2026/event/2C006435D8180F20" },
-            { eventDate: "2026-09-07T20:00:00", ticketUrl: "https://www.ticketmaster.com/j-cole-the-falloff-tour-los-angeles-california-09-07-2026/event/2C0064529BE01DBE" }
-        ],
-        isPublished: true
+        "artistName": "J. Cole",
+        "eventName": "The Fall-Off Tour",
+        "eventDate": "2026-09-01T20:00:00",
+        "venueName": "Payne Arena",
+        "venueCity": "Hidalgo",
+        "venueState": "TX",
+        "imageName": "payne-j-cole.jpg",
+        "imageUrl": "https://s1.ticketm.net/dam/a/00a/087c7d8e-2940-4e0a-9600-f85e2193000a_SOURCE",
+        "ticketUrl": "https://www.ticketmaster.com/j-cole-the-falloff-tour-los-angeles-california-09-01-2026/event/2C006435D8180F20",
+        "isPublished": true,
+        "source": "ticketmaster",
+        "tmEventId": "G5eYZ_d9bkZHO",
+        "dates": [
+            {
+                "eventDate": "2026-09-01T20:00:00",
+                "ticketUrl": "https://www.ticketmaster.com/j-cole-the-falloff-tour-los-angeles-california-09-01-2026/event/2C006435D8180F20"
+            },
+            {
+                "eventDate": "2026-09-07T20:00:00",
+                "ticketUrl": "https://www.ticketmaster.com/j-cole-the-falloff-tour-los-angeles-california-09-07-2026/event/2C0064529BE01DBE"
+            }
+        ]
     }
 ];
 

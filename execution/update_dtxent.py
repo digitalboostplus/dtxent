@@ -27,6 +27,12 @@ TMP_DIR = DTXENT_DIR / ".tmp"
 ASSETS_DIR = DTXENT_DIR / "assets"
 EVENTS_DATA_FILE = DTXENT_DIR / "js" / "events-data.js"
 
+# Artists to exclude (case-insensitive substring match)
+EXCLUDE_ARTISTS = [
+    "Los Angeles Lakers",
+    "Alex Warren"
+]
+
 
 def run_scraper(scraper_name: str, output_filename: str, source_url: str) -> tuple[list[dict], dict]:
     """Run a scraper script and load its output JSON."""
@@ -308,10 +314,21 @@ def main():
     # 2. Process Events
     print(f"\n2. Processing {len(all_events)} events...")
     
+    # Filter out excluded artists
+    filtered_events = []
+    for e in all_events:
+        artist = e.get("artistName", "")
+        if any(ex.lower() in artist.lower() for ex in EXCLUDE_ARTISTS):
+            continue
+        filtered_events.append(e)
+    
+    if len(all_events) > len(filtered_events):
+        print(f"  Excluded {len(all_events) - len(filtered_events)} events based on EXCLUDE_ARTISTS list")
+
     # Remove past events
     now_str = datetime.now().strftime("%Y-%m-%d")
-    current_events = [e for e in all_events if (e.get("eventDate") or "0000") >= now_str]
-    print(f"  Removed {len(all_events) - len(current_events)} past events")
+    current_events = [e for e in filtered_events if (e.get("eventDate") or "0000") >= now_str]
+    print(f"  Removed {len(filtered_events) - len(current_events)} past events")
     
     # Deduplicate and group
     processed_events = deduplicate_events(current_events)
