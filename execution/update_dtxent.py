@@ -1,8 +1,8 @@
 """
 update_dtxent.py — Merge scraped events and update the dtxent GitHub repo.
 
-1. Runs scrape_ticketmaster.py to fetch events from the Ticketmaster Discovery API
-2. Loads manual_events.json for TixPlug / custom events
+1. Runs scrape_tixplug.py to fetch events from tixplug.com
+2. Runs scrape_paynearena.py to fetch events from paynearena.com
 3. Merges, deduplicates, and sorts events
 4. Downloads event poster images to assets/
 5. Regenerates js/events-data.js with the LOCAL_EVENTS array
@@ -26,83 +26,51 @@ ASSETS_DIR = DTXENT_DIR / "assets"
 EVENTS_DATA_FILE = DTXENT_DIR / "js" / "events-data.js"
 
 
-def run_ticketmaster_scraper() -> tuple[list[dict], dict]:
-    """Run scrape_ticketmaster.py and return events + status."""
-    scraper = Path(__file__).resolve().parent / "scrape_ticketmaster.py"
+def run_scraper(scraper_name: str, output_filename: str, source_url: str) -> tuple[list[dict], dict]:
+    """Run a scraper script and load its output JSON."""
+    scraper = Path(__file__).resolve().parent / scraper_name
     try:
         result = subprocess.run(
             [sys.executable, str(scraper)],
             capture_output=True,
             text=True,
-            timeout=60,
+            timeout=120,
         )
         if result.returncode != 0:
             raise RuntimeError(result.stderr or "non-zero exit")
         print(result.stdout.rstrip())
     except Exception as e:
-        print(f"  [WARN] Ticketmaster scraper failed: {e}")
+        print(f"  [WARN] {scraper_name} failed: {e}")
         return [], {
-            "name": "ticketmaster",
-            "url": "https://app.ticketmaster.com",
+            "name": scraper_name.replace(".py", ""),
+            "url": source_url,
             "eventsFound": 0,
             "status": "error",
             "errorMessage": str(e),
         }
 
-    tm_path = TMP_DIR / "ticketmaster_events.json"
-    if tm_path.exists():
-        with open(tm_path, "r", encoding="utf-8") as f:
+    out_path = TMP_DIR / output_filename
+    if out_path.exists():
+        with open(out_path, "r", encoding="utf-8") as f:
             events = json.load(f)
         return events, {
-            "name": "ticketmaster",
-            "url": "https://app.ticketmaster.com",
+            "name": scraper_name.replace(".py", ""),
+            "url": source_url,
             "eventsFound": len(events),
             "status": "success",
             "errorMessage": None,
         }
     return [], {
-        "name": "ticketmaster",
-        "url": "https://app.ticketmaster.com",
+        "name": scraper_name.replace(".py", ""),
+        "url": source_url,
         "eventsFound": 0,
         "status": "skipped",
-        "errorMessage": "ticketmaster_events.json not found after scrape",
-    }
-
-
-def load_manual_events() -> tuple[list[dict], dict]:
-    """Load manually curated events (TixPlug / custom venues)."""
-    manual_path = Path(__file__).resolve().parent / "manual_events.json"
-    if not manual_path.exists():
-        print("  [INFO] No manual_events.json found — skipping")
-        return [], {
-            "name": "manual",
-            "url": "manual_events.json",
-            "eventsFound": 0,
-            "status": "skipped",
-            "errorMessage": "manual_events.json not found",
-        }
-
-    with open(manual_path, "r", encoding="utf-8") as f:
-        raw = json.load(f)
-
-    # Strip comment entries and unpublished events
-    events = [
-        {**e, "source": e.get("source", "manual")}
-        for e in raw
-        if not e.get("_comment") and e.get("isPublished", True)
-    ]
-    print(f"  Loaded {len(events)} manual events")
-    return events, {
-        "name": "manual",
-        "url": "manual_events.json",
-        "eventsFound": len(events),
-        "status": "success",
-        "errorMessage": None,
+        "errorMessage": f"{output_filename} not found after scrape",
     }
 
 
 def load_scraped_events() -> tuple[list[dict], list[dict]]:
-    """Fetch and load events from all sources.
+    """Run all scrapers and return merged events + per-source status.
 
     Returns:
         Tuple of (events list, sources_status list)
@@ -110,15 +78,19 @@ def load_scraped_events() -> tuple[list[dict], list[dict]]:
     events = []
     sources_status = []
 
-    # Source 1: Ticketmaster Discovery API (replaces scrape_paynearena.py)
-    tm_events, tm_status = run_ticketmaster_scraper()
-    events.extend(tm_events)
-    sources_status.append(tm_status)
+    # Source 1: TixPlug (WP REST API)
+    tixplug_events, tixplug_status = run_scraper(
+        "scrape_tixplug.py", "tixplug_events.json", "https://tixplug.com"
+    )
+    events.extend(tixplug_events)
+    sources_status.append(tixplug_status)
 
-    # Source 2: Manual events file (replaces scrape_tixplug.py)
-    manual_events, manual_status = load_manual_events()
-    events.extend(manual_events)
-    sources_status.append(manual_status)
+    # Source 2: Payne Arena (HTML scraper)
+    payne_events, payne_status = run_scraper(
+        "scrape_paynearena.py", "paynearena_events.json", "https://paynearena.com"
+    )
+    events.extend(payne_events)
+    sources_status.append(payne_status)
 
     return events, sources_status
 
@@ -266,7 +238,7 @@ def generate_events_data_js(events: list[dict]) -> str:
     js_content = f"""/**
  * Events data - Auto-generated by update_dtxent workflow
  * Last updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
- * Sources: Ticketmaster Discovery API, manual_events.json
+ * Sources: tixplug.com, paynearena.com
  */
 export const LOCAL_EVENTS = [
 {events_array}
@@ -360,7 +332,7 @@ def main():
     events, sources_status = load_scraped_events()
 
     if not events:
-        print("  [ERROR] No events found. Run scrape_tixplug.py and scrape_paynearena.py first.")
+        print("  [ERROR] No events found from either scraper. Check your network connection.")
         sys.exit(1)
 
     # Deduplicate
@@ -436,8 +408,8 @@ def main():
     print("=" * 60)
 
     # Summary grouped by source
-    for src_label in ["ticketmaster", "manual"]:
-        src_events = [e for e in events if e.get("source", "manual") == src_label]
+    for src_label in ["tixplug", "paynearena"]:
+        src_events = [e for e in events if e.get("source", "") == src_label]
         if src_events:
             print(f"\n  [{src_label}] {len(src_events)} events:")
             for e in src_events:
