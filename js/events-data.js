@@ -131,8 +131,8 @@ export const LOCAL_EVENTS = [
         "artistName": "Pop Punk Party Night",
         "eventName": "Anthem 182 (A Tribute to Blink-182)",
         "eventDate": "2026-04-25T20:00:00",
-        "venueName": "Citrus Live",
-        "venueCity": "Edinburg",
+        "venueName": "",
+        "venueCity": "",
         "venueState": "TX",
         "imageName": "pop-punk-party-night-anthem-182-a-tribute-to-blink-182.jpg",
         "imageUrl": "https://tixplug.com/wp-content/uploads/2026/03/1000279251-768x960.jpg",
@@ -158,20 +158,6 @@ export const LOCAL_EVENTS = [
         "ticketUrl": "https://www.ticketmaster.com/an-evening-with-emerson-lake-palmer-hidalgo-texas-05-01-2026/event/3A006364BE3AA8B1",
         "isPublished": true,
         "source": "paynearena"
-    },
-    {
-        "artistName": "Snow Tha Product",
-        "eventName": "BEFORE I CRASHOUT",
-        "eventDate": "2026-05-01T20:00:00",
-        "venueName": "HAPO Center",
-        "venueCity": "Pasco",
-        "venueState": "WA",
-        "imageName": "snow-tha-product-before-i-crashout.jpg",
-        "imageUrl": "https://tixplug.com/wp-content/uploads/2025/12/1000256326-768x994.jpg",
-        "ticketUrl": "https://tixplug.com/shop/snow-tha-product-before-i-crashout/",
-        "isPublished": false,
-        "source": "tixplug",
-        "schedule": null
     },
     {
         "artistName": "Alejandro Sanz",
@@ -218,20 +204,6 @@ export const LOCAL_EVENTS = [
                 "description": "Doors Open"
             }
         ]
-    },
-    {
-        "artistName": "Tacos, Tequilas & Chelas Festival ( Tri-Cities, WA)",
-        "eventName": "",
-        "eventDate": "2026-05-16T20:00:00",
-        "venueName": "Benton County Fairgrounds",
-        "venueCity": "Kennewick",
-        "venueState": "WA",
-        "imageName": "tacos-tequilas-chelas.jpg",
-        "imageUrl": "https://tixplug.com/wp-content/uploads/2026/01/IMG_20260130_125707-768x960.jpg",
-        "ticketUrl": "https://tixplug.com/shop/tacos-tequilas-chelas/",
-        "isPublished": false,
-        "source": "tixplug",
-        "schedule": null
     },
     {
         "artistName": "Carin León",
@@ -319,7 +291,7 @@ export const LOCAL_EVENTS = [
         "eventName": "",
         "eventDate": "2026-06-20T20:00:00",
         "venueName": "Cameron County Amphitheater",
-        "venueCity": "South Padre Island",
+        "venueCity": "",
         "venueState": "TX",
         "imageName": "seltzer-island.jpg",
         "imageUrl": "https://tixplug.com/wp-content/uploads/2026/01/1000272073-768x960.jpg",
