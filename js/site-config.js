@@ -43,10 +43,12 @@ function applyHero(data) {
         const title = data.title || '';
         const highlighted = data.highlightedText || '';
         if (highlighted && title.includes(highlighted)) {
-            // Wrap highlighted text in gradient span
-            titleEl.innerHTML = title.replace(
-                highlighted,
-                `<span class="text-gradient">${escapeHtml(highlighted)}</span>`
+            // Wrap highlighted text in gradient span — escape both before injecting
+            const escapedTitle = escapeHtml(title);
+            const escapedHighlighted = escapeHtml(highlighted);
+            titleEl.innerHTML = escapedTitle.replace(
+                escapedHighlighted,
+                `<span class="text-gradient">${escapedHighlighted}</span>`
             ).replace(/\n/g, '<br>');
         } else if (title) {
             titleEl.innerHTML = escapeHtml(title).replace(/\n/g, '<br>');
@@ -118,7 +120,7 @@ function applySocial(data) {
 function applyFooter(data) {
     if (data.copyrightText) {
         const footerP = document.querySelector('.footer-brand p');
-        if (footerP) footerP.innerHTML = data.copyrightText;
+        if (footerP) footerP.textContent = data.copyrightText;
     }
 }
 

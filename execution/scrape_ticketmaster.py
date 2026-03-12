@@ -1,1 +1,226 @@
-"""\nscrape_ticketmaster.py — Fetch upcoming events from the Ticketmaster Discovery API.\n\nReplaces scrape_paynearena.py. Uses the official API instead of HTML scraping,\nso it's reliable, proxy-friendly, and trivially extensible to new venues.\n\nConfigured venues (add new venue IDs here as DTXent expands):\n  KovZpZAEdntA — Payne Arena, Hidalgo TX\n\nOutput: .tmp/ticketmaster_events.json\n\nAPI docs: https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/\nRate limits: 5,000 calls/day, 5 req/sec (free tier)\n"""\n\nimport json\nimport os\nimport re\nimport sys\nfrom datetime import datetime\nfrom pathlib import Path\n\nimport requests\n\n# ---------- Configuration ----------\nSCRIPT_DIR = Path(__file__).resolve().parent\nDTXENT_DIR = SCRIPT_DIR.parent\nOUTPUT_DIR = DTXENT_DIR / ".tmp"\nOUTPUT_FILE = OUTPUT_DIR / "ticketmaster_events.json"\n\nTM_API_KEY = os.getenv("TM_API_KEY", "")\nTM_BASE_URL = "https://app.ticketmaster.com/discovery/v2"\n\n# Venues to fetch — add new entries here as DTXent expands\nVENUES = [\n    {\n        "venueId": "KovZpZAEdntA",\n        "venueName": "Payne Arena",\n        "venueCity": "Hidalgo",\n        "venueState": "TX",\n    },\n    # Example: add more venues here\n    # {\n    #     "venueId": "KovZpZAEAbntA",\n    #     "venueName": "McAllen Convention Center",\n    #     "venueCity": "McAllen",\n    #     "venueState": "TX",\n    # },\n]\n\n\ndef load_api_key() -> str:\n    """Load TM_API_KEY from env or .env file."""\n    key = os.getenv("TM_API_KEY", "")\n    if not key:\n        env_file = DTXENT_DIR / ".env"\n        if env_file.exists():\n            for line in env_file.read_text().splitlines():\n                if line.startswith("TM_API_KEY="):\n                    key = line.split("=", 1)[1].strip()\n                    break\n    return key\n\n\ndef slugify(text: str) -> str:\n    """Convert text to a safe filename slug."""\n    return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")\n\n\ndef pick_best_image(images: list[dict]) -> str:\n    """Pick the best available event image URL (prefer 16_9 ratio, largest)."""\n    if not images:\n        return ""\n    # Prefer ratio 16_9, then largest by width\n    preferred = [i for i in images if i.get("ratio") == "16_9"]\n    pool = preferred if preferred else images\n    pool_sorted = sorted(pool, key=lambda i: i.get("width", 0), reverse=True)\n    return pool_sorted[0].get("url", "") if pool_sorted else ""\n\n\ndef fetch_venue_events(venue: dict, api_key: str) -> list[dict]:\n    """Fetch all upcoming events at a venue via the Discovery API."""\n    events = []\n    page = 0\n    page_size = 50\n\n    venue_id = venue["venueId"]\n    venue_name = venue["venueName"]\n    venue_city = venue["venueCity"]\n    venue_state = venue["venueState"]\n\n    print(f"  Fetching events for {venue_name} ({venue_id})...")\n\n    while True:\n        params = {\n            "apikey": api_key,\n            "venueId": venue_id,\n            "size": page_size,\n            "page": page,\n            "sort": "date,asc",\n            "source": "ticketmaster",\n        }\n\n        try:\n            resp = requests.get(\n                f"{TM_BASE_URL}/events.json",\n                params=params,\n                timeout=15,\n            )\n            resp.raise_for_status()\n            data = resp.json()\n        except requests.exceptions.RequestException as e:\n            print(f"    [ERROR] API request failed (page {page}): {e}")\n            break\n\n        embedded = data.get("_embedded", {})\n        page_events = embedded.get("events", [])\n\n        if not page_events:\n            break\n\n        for ev in page_events:\n            # --- Dates ---\n            dates_obj = ev.get("dates", {})\n            start = dates_obj.get("start", {})\n            date_time = start.get("dateTime")  # ISO 8601, e.g. "2026-03-12T01:00:00Z"\n            local_date = start.get("localDate")  # "2026-03-12"\n            local_time = start.get("localTime")  # "20:00:00"\n\n            # Build eventDate in local time (no Z suffix — matches existing format)\n            if local_date and local_time:\n                event_date = f"{local_date}T{local_time}"\n            elif local_date:\n                event_date = f"{local_date}T20:00:00"\n            else:\n                event_date = date_time or ""\n\n            # --- Artist/Attraction name ---\n            attractions = ev.get("_embedded", {}).get("attractions", [])\n            if attractions:\n                artist_name = attractions[0].get("name", ev.get("name", ""))\n            else:\n                artist_name = ev.get("name", "")\n\n            # --- Event name (sub-title / tour name) ---\n            event_name = ev.get("name", "")\n            # Remove artist name prefix if event name is just "Artist - Tour"\n            if event_name.startswith(artist_name):\n                event_name = event_name[len(artist_name):].lstrip(" -\u2013:").strip()\n\n            # --- Image ---\n            image_url = pick_best_image(ev.get("images", []))\n            image_name = ""\n            if image_url:\n                slug = slugify(artist_name)\n                image_name = f"payne-{slug}.jpg"\n\n            # --- Ticket URL ---\n            ticket_url = ev.get("url", "")\n\n            # --- Build event dict ---\n            event = {\n                "artistName": artist_name,\n                "eventName": event_name,\n                "eventDate": event_date,\n                "venueName": venue_name,\n                "venueCity": venue_city,\n                "venueState": venue_state,\n                "imageName": image_name,\n                "imageUrl": image_url,\n                "ticketUrl": ticket_url,\n                "isPublished": True,\n                "source": "ticketmaster",\n                "tmEventId": ev.get("id", ""),\n            }\n            events.append(event)\n            print(f"    [OK] {artist_name}: {event_name or '\u2014'} \u2014 {local_date or 'TBD'}")\n\n        # Pagination\n        page_info = data.get("page", {})\n        total_pages = page_info.get("totalPages", 1)\n        if page >= total_pages - 1:\n            break\n        page += 1\n\n    print(f"  Fetched {len(events)} events from {venue_name}")\n    return events\n\n\ndef main():\n    print("=" * 60)\n    print("Ticketmaster Event Scraper (Discovery API)")\n    print("=" * 60)\n\n    # Load API key\n    api_key = load_api_key()\n    if not api_key:\n        print("  [ERROR] TM_API_KEY not set. Add it to .env or set as environment variable.")\n        print("  Get a free key at: https://developer.ticketmaster.com/")\n        sys.exit(1)\n    print(f"  Using API key: {api_key[:8]}...")\n\n    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)\n\n    # Fetch events from all configured venues\n    all_events = []\n    for venue in VENUES:\n        venue_events = fetch_venue_events(venue, api_key)\n        all_events.extend(venue_events)\n\n    # Sort by date\n    all_events.sort(key=lambda e: e.get("eventDate") or "9999")\n\n    # Save output\n    with open(OUTPUT_FILE, "w", encoding="utf-8") as f:\n        json.dump(all_events, f, indent=2, ensure_ascii=False)\n\n    print(f"\n{'=' * 60}")\n    print(f"[OK] Saved {len(all_events)} events to {OUTPUT_FILE}")\n    print("=" * 60)\n\n    return all_events\n\n\nif __name__ == "__main__":\n    main()\n
+"""
+scrape_ticketmaster.py — Fetch upcoming events from the Ticketmaster Discovery API.
+
+Replaces scrape_paynearena.py. Uses the official API instead of HTML scraping,
+so it's reliable, proxy-friendly, and trivially extensible to new venues.
+
+Configured venues (add new venue IDs here as DTXent expands):
+  KovZpZAEdntA — Payne Arena, Hidalgo TX
+
+Output: .tmp/ticketmaster_events.json
+
+API docs: https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/
+Rate limits: 5,000 calls/day, 5 req/sec (free tier)
+"""
+
+import json
+import os
+import re
+import sys
+from datetime import datetime
+from pathlib import Path
+
+import requests
+
+# ---------- Configuration ----------
+SCRIPT_DIR = Path(__file__).resolve().parent
+DTXENT_DIR = SCRIPT_DIR.parent
+OUTPUT_DIR = DTXENT_DIR / ".tmp"
+OUTPUT_FILE = OUTPUT_DIR / "ticketmaster_events.json"
+
+TM_API_KEY = os.getenv("TM_API_KEY", "")
+TM_BASE_URL = "https://app.ticketmaster.com/discovery/v2"
+
+# Venues to fetch — add new entries here as DTXent expands
+VENUES = [
+    {
+        "venueId": "KovZpZAEdntA",
+        "venueName": "Payne Arena",
+        "venueCity": "Hidalgo",
+        "venueState": "TX",
+    },
+    # Example: add more venues here
+    # {
+    #     "venueId": "KovZpZAEAbntA",
+    #     "venueName": "McAllen Convention Center",
+    #     "venueCity": "McAllen",
+    #     "venueState": "TX",
+    # },
+]
+
+
+def load_api_key() -> str:
+    """Load TM_API_KEY from env or .env file."""
+    key = os.getenv("TM_API_KEY", "")
+    if not key:
+        env_file = DTXENT_DIR / ".env"
+        if env_file.exists():
+            for line in env_file.read_text().splitlines():
+                if line.startswith("TM_API_KEY="):
+                    key = line.split("=", 1)[1].strip()
+                    break
+    return key
+
+
+def slugify(text: str) -> str:
+    """Convert text to a safe filename slug."""
+    return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")
+
+
+def pick_best_image(images: list[dict]) -> str:
+    """Pick the best available event image URL (prefer 16_9 ratio, largest)."""
+    if not images:
+        return ""
+    # Prefer ratio 16_9, then largest by width
+    preferred = [i for i in images if i.get("ratio") == "16_9"]
+    pool = preferred if preferred else images
+    pool_sorted = sorted(pool, key=lambda i: i.get("width", 0), reverse=True)
+    return pool_sorted[0].get("url", "") if pool_sorted else ""
+
+
+def fetch_venue_events(venue: dict, api_key: str) -> list[dict]:
+    """Fetch all upcoming events at a venue via the Discovery API."""
+    events = []
+    page = 0
+    page_size = 50
+
+    venue_id = venue["venueId"]
+    venue_name = venue["venueName"]
+    venue_city = venue["venueCity"]
+    venue_state = venue["venueState"]
+
+    print(f"  Fetching events for {venue_name} ({venue_id})...")
+
+    while True:
+        params = {
+            "apikey": api_key,
+            "venueId": venue_id,
+            "size": page_size,
+            "page": page,
+            "sort": "date,asc",
+            "source": "ticketmaster",
+        }
+
+        try:
+            resp = requests.get(
+                f"{TM_BASE_URL}/events.json",
+                params=params,
+                timeout=15,
+            )
+            resp.raise_for_status()
+            data = resp.json()
+        except requests.exceptions.RequestException as e:
+            print(f"    [ERROR] API request failed (page {page}): {e}")
+            break
+
+        embedded = data.get("_embedded", {})
+        page_events = embedded.get("events", [])
+
+        if not page_events:
+            break
+
+        for ev in page_events:
+            # --- Dates ---
+            dates_obj = ev.get("dates", {})
+            start = dates_obj.get("start", {})
+            date_time = start.get("dateTime")  # ISO 8601, e.g. "2026-03-12T01:00:00Z"
+            local_date = start.get("localDate")  # "2026-03-12"
+            local_time = start.get("localTime")  # "20:00:00"
+
+            # Build eventDate in local time (no Z suffix — matches existing format)
+            if local_date and local_time:
+                event_date = f"{local_date}T{local_time}"
+            elif local_date:
+                event_date = f"{local_date}T20:00:00"
+            else:
+                event_date = date_time or ""
+
+            # --- Artist/Attraction name ---
+            attractions = ev.get("_embedded", {}).get("attractions", [])
+            if attractions:
+                artist_name = attractions[0].get("name", ev.get("name", ""))
+            else:
+                artist_name = ev.get("name", "")
+
+            # --- Event name (sub-title / tour name) ---
+            event_name = ev.get("name", "")
+            # Remove artist name prefix if event name is just "Artist - Tour"
+            if event_name.startswith(artist_name):
+                event_name = event_name[len(artist_name):].lstrip(" -–:").strip()
+
+            # --- Image ---
+            image_url = pick_best_image(ev.get("images", []))
+            image_name = ""
+            if image_url:
+                slug = slugify(artist_name)
+                image_name = f"payne-{slug}.jpg"
+
+            # --- Ticket URL ---
+            ticket_url = ev.get("url", "")
+
+            # --- Build event dict ---
+            event = {
+                "artistName": artist_name,
+                "eventName": event_name,
+                "eventDate": event_date,
+                "venueName": venue_name,
+                "venueCity": venue_city,
+                "venueState": venue_state,
+                "imageName": image_name,
+                "imageUrl": image_url,
+                "ticketUrl": ticket_url,
+                "isPublished": True,
+                "source": "ticketmaster",
+                "tmEventId": ev.get("id", ""),
+            }
+            events.append(event)
+            print(f"    [OK] {artist_name}: {event_name or '—'} — {local_date or 'TBD'}")
+
+        # Pagination
+        page_info = data.get("page", {})
+        total_pages = page_info.get("totalPages", 1)
+        if page >= total_pages - 1:
+            break
+        page += 1
+
+    print(f"  Fetched {len(events)} events from {venue_name}")
+    return events
+
+
+def main():
+    print("=" * 60)
+    print("Ticketmaster Event Scraper (Discovery API)")
+    print("=" * 60)
+
+    # Load API key
+    api_key = load_api_key()
+    if not api_key:
+        print("  [ERROR] TM_API_KEY not set. Add it to .env or set as environment variable.")
+        print("  Get a free key at: https://developer.ticketmaster.com/")
+        sys.exit(1)
+    print(f"  Using API key: {api_key[:8]}...")
+
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+    # Fetch events from all configured venues
+    all_events = []
+    for venue in VENUES:
+        venue_events = fetch_venue_events(venue, api_key)
+        all_events.extend(venue_events)
+
+    # Sort by date
+    all_events.sort(key=lambda e: e.get("eventDate") or "9999")
+
+    # Save output
+    with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
+        json.dump(all_events, f, indent=2, ensure_ascii=False)
+
+    print(f"\n{'=' * 60}")
+    print(f"[OK] Saved {len(all_events)} events to {OUTPUT_FILE}")
+    print("=" * 60)
+
+    return all_events
+
+
+if __name__ == "__main__":
+    main()

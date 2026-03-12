@@ -1,8 +1,7 @@
 import { db } from './firebase-config.js';
 import { collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
-// TODO: Replace with your actual Go High Level Inbound Webhook URL
-const GHL_WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/Kuo7nUJmD2RL3ZGpdRA4/webhook-trigger/f879a658-d303-435b-a53c-ddab4c52bc6f';
+const VIP_WEBHOOK_PROXY = '/api/vip-webhook';
 
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('vip-lead-form');
@@ -74,29 +73,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const quotesCollection = collection(db, 'vip_requests');
             await addDoc(quotesCollection, requestData);
 
-            // 6. Send to Go High Level Webhook (if URL is configured)
-            if (GHL_WEBHOOK_URL) {
-                try {
-                    // Create a plain object for the webhook payload
-                    // (Ensure submittedAt is something JSON serializable if needed, here we use string)
-                    const webhookPayload = {
-                        ...requestData,
-                        submittedAt: new Date().toISOString()
-                    };
-
-                    await fetch(GHL_WEBHOOK_URL, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(webhookPayload)
-                    });
-                } catch (webhookError) {
-                    // Log but don't fail the user request if Firestore succeeded
-                    console.error('Error forwarding to CRM Webhook:', webhookError);
-                }
-            } else {
-                console.warn('GHL Webhook URL is not configured. Skipping CRM sync.');
+            // 6. Forward to CRM via server-side proxy (keeps webhook URL secret)
+            try {
+                await fetch(VIP_WEBHOOK_PROXY, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ...requestData, submittedAt: new Date().toISOString() })
+                });
+            } catch (webhookError) {
+                console.error('Error forwarding to CRM:', webhookError);
             }
 
             // 7. Success State

@@ -270,6 +270,62 @@ def get_all_events() -> list[dict]:
     return events
 
 
+def write_scrape_log(
+    sources_status: list[dict],
+    events: list[dict],
+    sync_stats: dict
+) -> str:
+    """
+    Write a scrape log entry to Firestore.
+
+    Args:
+        sources_status: List of dicts with keys: name, url, eventsFound, status, errorMessage
+        events: The final merged event list
+        sync_stats: Dict from sync_events_to_firestore (created, updated, errors)
+
+    Returns:
+        The Firestore document ID of the log entry
+    """
+    from firebase_admin import firestore
+
+    db = init_firebase()
+    logs_ref = db.collection("scrape_logs")
+
+    event_entries = []
+    for event in events:
+        doc_id = generate_event_id(event)
+        event_entries.append({
+            "artistName": event.get("artistName", ""),
+            "eventName": event.get("eventName", ""),
+            "eventDate": event.get("eventDate", ""),
+            "venueName": event.get("venueName", ""),
+            "venueCity": event.get("venueCity", ""),
+            "source": event.get("source", "unknown"),
+            "postedToSite": True,
+            "firestoreDocId": doc_id
+        })
+
+    total_scraped = sum(s.get("eventsFound", 0) for s in sources_status)
+    total_posted = sync_stats.get("created", 0) + sync_stats.get("updated", 0)
+
+    log_entry = {
+        "runId": f"run_{datetime.now().strftime('%Y-%m-%dT%H:%M:%S')}",
+        "scrapedAt": firestore.SERVER_TIMESTAMP,
+        "sources": sources_status,
+        "events": event_entries,
+        "summary": {
+            "totalEventsScraped": total_scraped,
+            "totalEventsPosted": total_posted,
+            "totalDuplicatesRemoved": total_scraped - len(events),
+            "totalErrors": sync_stats.get("errors", 0)
+        }
+    }
+
+    _, doc_ref = logs_ref.add(log_entry)
+    print(f"    [OK] Scrape log written: {doc_ref.id}")
+    return doc_ref.id
+
+
 def delete_event(event_id: str) -> bool:
     """Delete a specific event from Firestore."""
     db = init_firebase()

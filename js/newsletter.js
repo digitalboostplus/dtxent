@@ -9,7 +9,7 @@ import {
     serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
-const GHL_NEWSLETTER_WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/Kuo7nUJmD2RL3ZGpdRA4/webhook-trigger/4815405c-0190-4bfd-a17c-1dee361d7a19';
+const NEWSLETTER_WEBHOOK_PROXY = '/api/newsletter-webhook';
 
 /**
  * Subscribe email to newsletter
@@ -39,22 +39,19 @@ async function subscribeToNewsletter(name, email) {
             status: 'active'
         });
 
-        // Send to Go High Level Webhook
+        // Forward to CRM via server-side proxy (keeps webhook URL secret)
         try {
-            await fetch(GHL_NEWSLETTER_WEBHOOK_URL, {
+            await fetch(NEWSLETTER_WEBHOOK_PROXY, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     name: name,
                     email: email.toLowerCase(),
-                    source: 'landing_page',
-                    subscribedAt: new Date().toISOString()
+                    source: 'landing_page'
                 })
             });
         } catch (webhookError) {
-            console.error('Error forwarding to CRM Webhook:', webhookError);
+            console.error('Error forwarding to CRM:', webhookError);
         }
 
         return {
@@ -122,6 +119,13 @@ function initNewsletterForm() {
         const name = nameInput ? nameInput.value.trim() : 'Unknown';
         const email = emailInput.value.trim();
 
+        // Rate limit: max 1 submission per 60 seconds per browser
+        const lastSubmit = localStorage.getItem('nl_last_submit');
+        if (lastSubmit && Date.now() - parseInt(lastSubmit, 10) < 60000) {
+            showFormMessage(form, 'Please wait a moment before subscribing again.', 'error');
+            return;
+        }
+
         // Validate
         if (nameInput && !name) {
             showFormMessage(form, 'Please enter your name', 'error');
@@ -148,6 +152,7 @@ function initNewsletterForm() {
         // Reset form on success
         if (result.success) {
             form.reset();
+            localStorage.setItem('nl_last_submit', Date.now().toString());
         }
 
         // Remove loading state

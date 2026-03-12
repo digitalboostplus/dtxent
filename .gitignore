@@ -1,5 +1,6 @@
 .tmp/
 .env
+*.env.*
 *credentials*.json
 token.json
 firebase-service-account.json
@@ -7,5 +8,6 @@ __pycache__/
 *.pyc
 .DS_Store
 node_modules/
+functions/node_modules/
 .firebase/
 firebase-debug.log
