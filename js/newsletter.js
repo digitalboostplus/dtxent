@@ -120,7 +120,8 @@ function initNewsletterForm() {
         const email = emailInput.value.trim();
 
         // Rate limit: max 1 submission per 60 seconds per browser
-        const lastSubmit = localStorage.getItem('nl_last_submit');
+        let lastSubmit = null;
+        try { lastSubmit = localStorage.getItem('nl_last_submit'); } catch (e) { /* private browsing */ }
         if (lastSubmit && Date.now() - parseInt(lastSubmit, 10) < 60000) {
             showFormMessage(form, 'Please wait a moment before subscribing again.', 'error');
             return;
@@ -152,7 +153,7 @@ function initNewsletterForm() {
         // Reset form on success
         if (result.success) {
             form.reset();
-            localStorage.setItem('nl_last_submit', Date.now().toString());
+            try { localStorage.setItem('nl_last_submit', Date.now().toString()); } catch (e) { /* private browsing */ }
         }
 
         // Remove loading state

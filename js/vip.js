@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function showStatus(message, type) {
         statusDiv.textContent = message;
-        statusDiv.className = ''; // Remove hidden classes first
+        statusDiv.classList.remove('visually-hidden'); // Remove hidden class
 
         if (type === 'error') {
             statusDiv.style.color = 'var(--error, #ef4444)';

@@ -48,6 +48,13 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        if (eventDate && new Date(eventDate) < today) {
+            showStatus('Event date cannot be in the past.', 'error');
+            return;
+        }
+
         // 3. UI Loading State
         const originalBtnText = submitBtn.textContent;
         submitBtn.disabled = true;
@@ -97,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function showStatus(message, type) {
         statusDiv.textContent = message;
-        statusDiv.className = ''; // Remove hidden classes first
+        statusDiv.classList.remove('visually-hidden'); // Remove hidden class
 
         if (type === 'error') {
             statusDiv.style.color = 'var(--error, #ef4444)';

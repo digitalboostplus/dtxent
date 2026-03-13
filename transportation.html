@@ -8,6 +8,9 @@
     <meta name="description"
         content="Luxury transportation services for DTXENT events. Party buses, limo service, and shuttle packages in the Rio Grande Valley. Arrive in style.">
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
     <!-- Canonical -->
     <link rel="canonical" href="https://dtxent.com/transportation">
 
@@ -33,13 +36,7 @@
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-RZY6W9D8H0"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-
-        gtag('config', 'G-RZY6W9D8H0');
-    </script>
+    <script src="js/gtag.js"></script>
 </head>
 
 <body>
@@ -51,13 +48,13 @@
     <header class="header" role="banner">
         <nav class="nav container" role="navigation" aria-label="Main navigation">
             <a href="/" class="logo">
-                <img src="assets/dtxent-logo.png" alt="DTXENT Logo" class="logo-img">
+                <img src="assets/dtxent-logo.png" alt="DTXENT Logo" class="logo-img" width="200" height="75">
             </a>
             <ul class="nav-links">
                 <li><a href="/#upcoming">Shows</a></li>
                 <li><a href="/#nightlife">Nightlife</a></li>
                 <li><a href="/vip.html">VIP Services</a></li>
-                <li><a href="/transportation">Transportation</a></li>
+                <li><a href="/transportation.html">Transportation</a></li>
                 <li><a href="/dining">Dining</a></li>
                 <li><a href="/#stay">Stay</a></li>
                 <li><a href="/contact.html">Contact</a></li>
@@ -401,7 +398,7 @@
         <div class="container footer-content">
             <div class="footer-brand">
                 <a href="/" class="logo">
-                    <img src="assets/dtxent-logo.png" alt="DTXENT Logo" class="logo-img">
+                    <img src="assets/dtxent-logo.png" alt="DTXENT Logo" class="logo-img" width="200" height="75">
                 </a>
                 <p>&copy; 2026 Dynamic TX Entertainment. All rights reserved.</p>
             </div>
@@ -432,17 +429,17 @@
     </footer>
 
     <!-- Core Scripts -->
-    <script src="script.js?v=2"></script>
+    <script src="script.js"></script>
 
     <!-- GSAP Animation Library -->
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
     <!-- GSAP Animations -->
-    <script type="module" src="js/animations.js?v=2"></script>
+    <script type="module" src="js/animations.js"></script>
 
     <!-- Transportation Webhook / Form Firebase Integration -->
-    <script type="module" src="js/transportation.js?v=2"></script>
+    <script type="module" src="js/transportation.js"></script>
 </body>
 
 </html>

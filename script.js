@@ -159,8 +159,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Register Service Worker
+    // Register Service Worker with auto-reload on update
     if ('serviceWorker' in navigator) {
+        let refreshing = false;
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+            if (!refreshing) {
+                refreshing = true;
+                window.location.reload();
+            }
+        });
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('/sw.js')
                 .then(reg => console.log('[App] Service Worker registered:', reg.scope))

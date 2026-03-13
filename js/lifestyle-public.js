@@ -1,4 +1,15 @@
 import { LOCAL_CLUBS, LOCAL_RESTAURANTS, LOCAL_HOTELS, DINING_RESTAURANTS } from './events-data.js';
+
+function escapeHtml(str) {
+    if (str == null) return '';
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+function safeUrl(url) {
+    if (!url) return '#';
+    const trimmed = url.trim().toLowerCase();
+    return trimmed.startsWith('javascript:') ? '#' : url;
+}
 import { db } from './firebase-config.js';
 import {
     collection,
@@ -102,20 +113,20 @@ function createFeaturedDiningCard(r) {
         : `background: linear-gradient(135deg, #1a1205 0%, #161616 40%, #1a1a1a 100%);`;
 
     return `
-        <article class="lifestyle-card featured-dining-card" style="${bgStyle}">
+        <article class="lifestyle-card featured-dining-card" style="${escapeHtml(bgStyle)}">
             <div class="card-content">
                 <div class="card-top-row">
-                    <div class="card-tag">${r.category}</div>
-                    <div class="dining-followers">${r.followers} followers</div>
+                    <div class="card-tag">${escapeHtml(r.category)}</div>
+                    <div class="dining-followers">${escapeHtml(r.followers)} followers</div>
                 </div>
                 ${bgImgSrc ? '' : `
                 <div class="featured-logo-holder">
-                    <img src="${logoSrc}" alt="${r.name} logo" loading="lazy" width="140" height="70">
+                    <img src="${escapeHtml(logoSrc)}" alt="${escapeHtml(r.name)} logo" loading="lazy" width="140" height="70">
                 </div>
                 `}
-                <h3 class="card-title">${r.name}</h3>
-                <p class="card-desc">${r.bio}</p>
-                <a href="${ctaHref}" target="_blank" rel="noopener noreferrer" class="card-link">Visit <span class="arrow">&rarr;</span></a>
+                <h3 class="card-title">${escapeHtml(r.name)}</h3>
+                <p class="card-desc">${escapeHtml(r.bio)}</p>
+                <a href="${escapeHtml(safeUrl(ctaHref))}" target="_blank" rel="noopener noreferrer" class="card-link">Visit <span class="arrow">&rarr;</span></a>
             </div>
         </article>
     `;
@@ -132,16 +143,16 @@ function createClubCard(item) {
         <article class="lifestyle-card featured-nightlife-card" style="background: linear-gradient(135deg, #0d0d1a 0%, #161616 40%, #1a1a1a 100%);">
             <div class="card-content">
                 <div class="card-top-row">
-                    <div class="card-tag">${item.type}</div>
-                    <div class="dining-followers">${item.city}</div>
+                    <div class="card-tag">${escapeHtml(item.type)}</div>
+                    <div class="dining-followers">${escapeHtml(item.city)}</div>
                 </div>
-                ${logoSrc ? `<div class="featured-logo-holder"><img src="${logoSrc}" alt="${item.name} logo" loading="lazy" width="140" height="70"></div>` : ''}
-                <h3 class="card-title">${item.name}</h3>
-                <p class="card-desc">${item.description}</p>
+                ${logoSrc ? `<div class="featured-logo-holder"><img src="${escapeHtml(logoSrc)}" alt="${escapeHtml(item.name)} logo" loading="lazy" width="140" height="70"></div>` : ''}
+                <h3 class="card-title">${escapeHtml(item.name)}</h3>
+                <p class="card-desc">${escapeHtml(item.description)}</p>
                 <div class="card-meta">
-                    <span class="location"><i class="location-icon"></i> ${item.city}</span>
+                    <span class="location"><i class="location-icon"></i> ${escapeHtml(item.city)}</span>
                 </div>
-                <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="card-link">Explore <span class="arrow">&rarr;</span></a>
+                <a href="${escapeHtml(safeUrl(item.link))}" target="_blank" rel="noopener noreferrer" class="card-link">Explore <span class="arrow">&rarr;</span></a>
             </div>
         </article>
     `;
@@ -151,18 +162,18 @@ function createDiningCard(item) {
     return `
         <article class="lifestyle-card">
             <div class="card-image">
-                <img src="${item.image}" alt="${item.name}" loading="lazy">
-                <div class="card-tag">${item.type}</div>
+                <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.name)}" loading="lazy">
+                <div class="card-tag">${escapeHtml(item.type)}</div>
             </div>
             <div class="card-body">
                 <div class="card-header">
-                    <h3 class="card-title">${item.name}</h3>
-                    <span class="card-price">${item.price}</span>
+                    <h3 class="card-title">${escapeHtml(item.name)}</h3>
+                    <span class="card-price">${escapeHtml(item.price)}</span>
                 </div>
-                <p class="card-desc">${item.description}</p>
+                <p class="card-desc">${escapeHtml(item.description)}</p>
                 <div class="card-footer">
-                    <span class="location">${item.city}</span>
-                    <a href="${item.link}" class="btn btn-sm btn-outline" target="_blank">Menu</a>
+                    <span class="location">${escapeHtml(item.city)}</span>
+                    <a href="${escapeHtml(safeUrl(item.link))}" class="btn btn-sm btn-outline" target="_blank">Menu</a>
                 </div>
             </div>
         </article>
@@ -173,18 +184,18 @@ function createHotelCard(item) {
     return `
         <article class="lifestyle-card">
             <div class="card-image">
-                <img src="${item.image}" alt="${item.name}" loading="lazy">
-                <div class="card-tag">${item.stars} Stars</div>
+                <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.name)}" loading="lazy">
+                <div class="card-tag">${escapeHtml(item.stars)} Stars</div>
             </div>
             <div class="card-body">
-                <h3 class="card-title">${item.name}</h3>
-                <p class="card-desc">${item.description}</p>
+                <h3 class="card-title">${escapeHtml(item.name)}</h3>
+                <p class="card-desc">${escapeHtml(item.description)}</p>
                 <div class="card-features">
-                    ${item.features.map(f => `<span class="feature-tag">${f}</span>`).join('')}
+                    ${item.features.map(f => `<span class="feature-tag">${escapeHtml(f)}</span>`).join('')}
                 </div>
                 <div class="card-footer">
-                    <span class="location">${item.city}</span>
-                    <a href="${item.link}" class="btn btn-sm btn-primary" target="_blank">Book Now</a>
+                    <span class="location">${escapeHtml(item.city)}</span>
+                    <a href="${escapeHtml(safeUrl(item.link))}" class="btn btn-sm btn-primary" target="_blank">Book Now</a>
                 </div>
             </div>
         </article>

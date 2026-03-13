@@ -4,6 +4,9 @@ import { collection, query, where, orderBy, Timestamp, onSnapshot } from 'https:
 
 // Store unsubscribe function for cleanup
 let unsubscribeEvents = null;
+
+const SIX_HOURS_MS = 6 * 60 * 60 * 1000;
+const ONE_MINUTE_MS = 60 * 1000;
 import { LOCAL_EVENTS } from './events-data.js';
 import { eventModal } from './event-detail-modal.js';
 import { getEventDetails } from './ticketmaster-api.js';
@@ -23,7 +26,7 @@ export function loadPublicEvents() {
     // Step 1: Initial load from LOCAL_EVENTS for zero-latency
     console.log('Performing initial load from local data...');
     const now = new Date();
-    const pastCutoff = new Date(now.getTime() - (6 * 60 * 60 * 1000));
+    const pastCutoff = new Date(now.getTime() - SIX_HOURS_MS);
 
     const initialLocalEvents = LOCAL_EVENTS.filter(event => {
         if (event.isPublished === false) return false;
@@ -520,7 +523,7 @@ function initCountdownTimers() {
     updateAllCountdowns();
 
     // Update every minute
-    countdownInterval = setInterval(updateAllCountdowns, 60000);
+    countdownInterval = setInterval(updateAllCountdowns, ONE_MINUTE_MS);
 }
 
 /**
