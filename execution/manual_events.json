@@ -139,5 +139,20 @@
     "schedule": [
       { "time": "3:00 PM", "description": "Doors Open" }
     ]
+  },
+  {
+    "artistName": "Pop Punk Party Night",
+    "eventName": "Anthem 182 (A Tribute to Blink-182)",
+    "eventDate": "2026-04-25T20:00:00",
+    "venueName": "Citrus Live",
+    "venueCity": "Edinburg",
+    "venueState": "TX",
+    "imageName": "pop-punk-party-night-anthem-182-a-tribute-to-blink-182.jpg",
+    "imageUrl": "",
+    "ticketUrl": "https://tixplug.com/shop/pop-punk-party-night-anthem-182-a-tribute-to-blink-182/",
+    "isPublished": true,
+    "schedule": [
+      { "time": "7:30 PM", "description": "Doors Open" }
+    ]
   }
 ]

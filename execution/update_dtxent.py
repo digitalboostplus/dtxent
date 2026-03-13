@@ -280,17 +280,16 @@ def generate_events_data_js(events: list[dict]):
 
     # Create the JS array content
     events_json = json.dumps(events, indent=4, ensure_ascii=False)
-    # Remove the surrounding brackets for the variable string injection
-    # Actually, we keep them because it's a full array
     
-    pattern = r"const LOCAL_EVENTS = \[.*?\];"
-    replacement = f"const LOCAL_EVENTS = {events_json};"
+    # regex should match 'export const LOCAL_EVENTS = [...];'
+    pattern = r"export const LOCAL_EVENTS = \[.*?\];"
+    replacement = f"export const LOCAL_EVENTS = {events_json};"
     
     new_content = re.sub(pattern, replacement, content, flags=re.DOTALL)
     
-    # Update timestamp
-    timestamp_pattern = r"// Last updated: .*"
-    timestamp_replacement = f"// Last updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+    # Update timestamp (Matches ' * Last updated: ...')
+    timestamp_pattern = r" \* Last updated: .*"
+    timestamp_replacement = f" * Last updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
     new_content = re.sub(timestamp_pattern, timestamp_replacement, new_content)
 
     # Update sources
