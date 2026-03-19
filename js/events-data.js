@@ -31,6 +31,7 @@ export const LOCAL_EVENTS = [
         "venueCity": "San Antonio",
         "venueState": "TX",
         "imageName": "destroy-lonely-1902.jpg",
+        "imagePosition": "80% center",
         "imageUrl": "",
         "ticketUrl": "https://www.sevenrooms.com/experiences/1902nightclub/destroy-lonely-1902-4702434043150336",
         "isPublished": true,

@@ -290,6 +290,7 @@ function createEventCardHTML(event) {
                 <div class="event-status-tag" id="status-${eventId}"></div>
                 <img src="${escapeHtml(imageUrl)}"
                      alt="${escapeHtml(imageAlt)}"
+                     style="${event.imagePosition ? `object-position: ${escapeHtml(event.imagePosition)};` : ''}"
                      loading="lazy">
                 <div class="event-price-range" id="price-${eventId}" style="display: none;"></div>
             </div>
