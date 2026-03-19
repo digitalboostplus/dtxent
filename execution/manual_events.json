@@ -1,5 +1,38 @@
 [
   {
+    "artistName": "High Tide Pool Party",
+    "eventName": "Spring Break Edition",
+    "eventDate": "2026-03-20T20:00:00",
+    "venueName": "Peninsula Island Resort & Spa",
+    "venueCity": "South Padre Island",
+    "venueState": "TX",
+    "imageName": "high-tide-pool-party.jpg",
+    "imageUrl": "https://cdn.saffire.com/images.ashx?t=ig&rid=ZAEE&i=WhatsApp_Image_2026-01-27_at_5.58.29_PM.jpeg&cb=10bbbd35&w=600",
+    "ticketUrl": "https://zaeee.saffire.com/p/tickets",
+    "isPublished": true,
+    "schedule": [
+      { "time": "8:00 PM", "description": "Doors Open" }
+    ],
+    "source": "manual"
+  },
+  {
+    "artistName": "Destroy Lonely",
+    "eventName": "@ 1902",
+    "eventDate": "2026-03-22T22:00:00",
+    "venueName": "1902 Nightclub",
+    "venueCity": "San Antonio",
+    "venueState": "TX",
+    "imageName": "destroy-lonely-1902.jpg",
+    "imagePosition": "80% center",
+    "imageUrl": "https://www.sevenrooms.com/experiences/1902nightclub/destroy-lonely-1902-4702434043150336",
+    "ticketUrl": "https://www.sevenrooms.com/experiences/1902nightclub/destroy-lonely-1902-4702434043150336",
+    "isPublished": true,
+    "schedule": [
+      { "time": "10:00 PM", "description": "Doors Open" }
+    ],
+    "source": "manual"
+  },
+  {
     "artistName": "Citrus Break Comedy Show w/ MIKE Winfield (Citrus LIVE)",
     "eventName": "March 21st, 2026",
     "eventDate": "2026-03-21T20:00:00",
