@@ -142,6 +142,11 @@ def load_scraped_events() -> tuple[list[dict], list[dict]]:
     events = []
     sources_status = []
 
+    # Source 0: Manual events file (if any) (Added first so they take precedence in deduplication)
+    manual_events, manual_status = load_manual_events()
+    events.extend(manual_events)
+    sources_status.append(manual_status)
+
     # Source 1: Payne Arena (HTML Scraping)
     payne_events, payne_status = run_paynearena_scraper()
     events.extend(payne_events)
@@ -156,11 +161,6 @@ def load_scraped_events() -> tuple[list[dict], list[dict]]:
     zaeee_events, zaeee_status = run_zaeee_scraper()
     events.extend(zaeee_events)
     sources_status.append(zaeee_status)
-
-    # Source 4: Manual events file (if any)
-    manual_events, manual_status = load_manual_events()
-    events.extend(manual_events)
-    sources_status.append(manual_status)
 
     return events, sources_status
 
@@ -383,6 +383,31 @@ def main():
     
     # Sort by date
     processed_events.sort(key=lambda e: e.get("eventDate") or "9999")
+
+    # Explicit override: Citrus Break Comedy Show FIRST, High Tide Pool Party SECOND
+    high_tide_evt = None
+    citrus_evt = None
+    
+    # Extract them
+    remaining_events = []
+    for evt in processed_events:
+        name = evt.get("artistName", "").lower()
+        if "high tide pool party" in name and not high_tide_evt:
+            high_tide_evt = evt
+        elif "citrus break comedy" in name and not citrus_evt:
+            citrus_evt = evt
+        else:
+            remaining_events.append(evt)
+            
+    # Prepend them in desired order
+    ordered_events = []
+    if citrus_evt:
+        ordered_events.append(citrus_evt)
+    if high_tide_evt:
+        ordered_events.append(high_tide_evt)
+    
+    ordered_events.extend(remaining_events)
+    processed_events = ordered_events
 
     # Image Downloads
     print("\n3. Downloading event images...")
