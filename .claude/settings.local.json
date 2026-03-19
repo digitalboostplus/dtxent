@@ -13,7 +13,9 @@
       "Bash(git commit:*)",
       "WebSearch",
       "WebFetch(domain:developer.ticketmaster.com)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(python execution/update_dtxent.py 2>&1)",
+      "Bash(ls -1 /c/Users/Brian/dtxent/assets/*.jpg /c/Users/Brian/dtxent/assets/*.png /c/Users/Brian/dtxent/assets/*.webp 2>/dev/null | xargs -I {} basename {})"
     ]
   }
 }
