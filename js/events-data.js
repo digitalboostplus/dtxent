@@ -24,6 +24,25 @@ export const LOCAL_EVENTS = [
         "source": "manual"
     },
     {
+        "artistName": "Destroy Lonely",
+        "eventName": "@ 1902",
+        "eventDate": "2026-03-22T22:00:00",
+        "venueName": "1902 Nightclub",
+        "venueCity": "San Antonio",
+        "venueState": "TX",
+        "imageName": "destroy-lonely-1902.jpg",
+        "imageUrl": "",
+        "ticketUrl": "https://www.sevenrooms.com/experiences/1902nightclub/destroy-lonely-1902-4702434043150336",
+        "isPublished": true,
+        "schedule": [
+            {
+                "time": "10:00 PM",
+                "description": "Doors Open"
+            }
+        ],
+        "source": "manual"
+    },
+    {
         "artistName": "SOL PADRE (South Padre Island)- April 3rd, 2026",
         "eventName": "",
         "eventDate": "2026-04-03T20:00:00",
