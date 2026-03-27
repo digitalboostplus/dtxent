@@ -96,15 +96,6 @@ def run_tixplug_scraper() -> tuple[list[dict], dict]:
     )
 
 
-def run_zaeee_scraper() -> tuple[list[dict], dict]:
-    """Run scrape_zaeee.py and return events + status."""
-    return run_scraper(
-        "scrape_zaeee.py", 
-        "zaeee_events.json", 
-        "https://zaeee.saffire.com/p/tickets"
-    )
-
-
 def load_manual_events() -> tuple[list[dict], dict]:
     """Load manually curated events (TixPlug / custom venues)."""
     manual_path = Path(__file__).resolve().parent / "manual_events.json"
@@ -156,11 +147,6 @@ def load_scraped_events() -> tuple[list[dict], list[dict]]:
     tixplug_events, tixplug_status = run_tixplug_scraper()
     events.extend(tixplug_events)
     sources_status.append(tixplug_status)
-
-    # Source 3: Z-94.5 (Saffire)
-    zaeee_events, zaeee_status = run_zaeee_scraper()
-    events.extend(zaeee_events)
-    sources_status.append(zaeee_status)
 
     return events, sources_status
 
