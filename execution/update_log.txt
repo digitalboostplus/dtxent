@@ -1,0 +1,376 @@
+ 
+======================================== 
+Run started: Thu 04/02/2026 10:34:33.47 
+======================================== 
+fatal: Unable to create 'C:/Users/Brian/dtxent/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, e.g.
+an editor opened by 'git commit'. Please make sure all processes
+are terminated then try again. If it still fails, a git process
+may have crashed in this repository earlier:
+remove the file manually to continue.
+============================================================
+DTXent Website Updater
+============================================================
+
+1. Loading scraped events...
+  Loaded 11 manual events
+============================================================
+Payne Arena Event Scraper (HTML)
+============================================================
+  Fetching https://paynearena.com...
+  Received 122665 bytes
+
+  Found 16 event cards
+  [OK] Reik: Tour 2026 - 2026-03-28T20:00:00
+  [OK] Kpop Demon Hunters Experience: Live at Payne Arena - 2026-04-04T20:00:00
+  [OK] Kpop Demon Hunters Experience: Live at Payne Arena - 2026-04-04T20:00:00
+  [OK] Emerson, Lake & Palmer: The United Tour - 2026-05-01T20:00:00
+  [OK] Alejandro Sanz: Y Ahora Que Gira - 2026-05-09T20:00:00
+  [OK] Carin León: De Sonora Para El Mundo Tour - 2026-05-20T20:00:00
+  [OK] Carin León: De Sonora Para El Mundo Tour - 2026-05-21T20:00:00
+  [OK] Puppy Pals Live: Live Show - 2026-05-28T20:00:00
+  [OK] Grupo Bryndis, Industria Del Amor & Guardianes: Romanticos Tour - 2026-05-29T20:00:00
+  [OK] Braxton Keith: Live at Payne Arena - 2026-06-12T20:00:00
+  [OK] Marisela Eterna Tour 2026: Live at Payne Arena - 2026-10-02T20:00:00
+  [OK] Mon Laferte Femme Fatale Tour: Live at Payne Arena - 2026-10-17T20:00:00
+  [OK] Blue October Foiled 20Th Anniversary World: Live at Payne Arena - 2026-12-13T20:00:00
+  [OK] Cristian Castro Nada Solo Exitos Tour: Live at Payne Arena - 2027-02-27T20:00:00
+
+============================================================
+[OK] Saved 14 events to C:\Users\Brian\dtxent\.tmp\paynearena_events.json
+============================================================
+============================================================
+TixPlug Event Scraper (WP REST API)
+============================================================
+  Fetching page 1...
+  Fetched 51 total products
+  [SKIP] Skipping (no image): Pop Punk Party Night – Suites
+  [SKIP] Skipping (no image): Pop Punk Party Night – Deck Tables (1-14)
+  [SKIP] Skipping (no image): Pop Punk Party Night – GA PIT
+  [OK] Processing: Pop Punk Party Night – Anthem 182 (A Tribute to Blink-182)
+  [SKIP] Skipping (no image): NB Ridaz – Runaway Throwback Night – Suites
+  [SKIP] Skipping (no image): The Ultimate Selena Experience – Suites
+  [SKIP] Skipping (no image): NB Ridaz – Runaway Throwback Night – 4 Top Table
+  [SKIP] Skipping (no image): NB Ridaz – Runaway Throwback Night – 6 Top Table
+  [SKIP] Skipping (no image): NB Ridaz – Runaway Throwback Night – Mezz
+  [SKIP] Skipping (no image): NB Ridaz – Runaway Throwback Night – Table 1 – 14
+  [SKIP] Skipping (no image): NB Ridaz – Runaway Throwback Night – GA PIT
+  [OK] Processing: NB Ridaz – Runaway Throwback Night (Citrus Live) May 29th, 2026
+  [SKIP] Skipping (no image): The Ultimate Selena Experience – Mezz
+  [SKIP] Skipping (no image): The Ultimate Selena Experience – Tables 1 – 14
+  [SKIP] Skipping (no image): The Ultimate Selena Experience – 4 Table Top
+  [SKIP] Skipping (no image): The Ultimate Selena Experience – 6 Table Top
+  [SKIP] Skipping (no image): The Ultimate Selena Experience – GA PIT
+  [OK] Processing: The Ultimate Selena Experience – (Citrus Live) April 11th, 2026
+  [SKIP] Skipping (no image): Lost in Hollywood & Testify – Suites
+  [SKIP] Skipping (no image): Lost in Hollywood & Testify – Mezz
+  [SKIP] Skipping (no image): Lost in Hollywood & Testify – Table Seating
+  [SKIP] Skipping (no image): Lost in Hollywood & Testify – PIT GA
+  [OK] Processing: Lost in Hollywood (SOD Tribute) & Testify (RAM Tribute) – Citrus Live
+  [OK] Processing: SOL PADRE FEST (South Padre Island)- April 3rd, 2026
+  [SKIP] Skipping (no image): Watermelon Fest ’26 – General Admission
+  [SKIP] Skipping (no image): Watermelon Fest ’26 – Yellow Tables
+  [SKIP] Skipping (no image): Watermelon Fest ’26 – Brown Tables
+  [OK] Processing: City of Alamo Watermelon Fest ’26
+  [SKIP] Skipping (no image): Highly Motavated – Mezzanine – E – H
+  [SKIP] Skipping (no image): Highly Motavated 420 – Suites
+  [SKIP] Skipping (no image): Highly Motavated 420 – Super VIP
+  [SKIP] Skipping (no image): Highly Motavated 420 – Tables 12 – 23
+  [SKIP] Skipping (no image): Highly Motavated 420 – Tables 1 – 11
+  [SKIP] Skipping (no image): Highly Motavated – Mezzanine
+  [OK] Processing: Highly Motavated 420 Comedy Special
+  [OK] Processing: Gulf Coast Comedy ft. CHINGO BLING (CORPUS CHRISTI)
+  [SKIP] Skipping (no image): Mötley KÜe – VIP Table Seat
+  [SKIP] Skipping (no image): Mötley KÜe – General Admission
+  [OK] Processing: Seltzer Island Fest ( South Padre Island)
+  [SKIP] Skipping (no image): Tacos, Tequilas & Chelas – Early Bird GA
+  [SKIP] Skipping (no image): Tacos, Tequilas & Chelas – Early Bird VIP PIT
+  [SKIP] Skipping (no image): Tacos, Tequilas & Chelas – Tables 34-48
+  [SKIP] Skipping (no image): Tacos, Tequilas & Chelas – Tables 25-33
+  [OK] Processing: Tacos, Tequilas & Chelas Festival ( Tri-Cities, WA)
+  [SKIP] Skipping (no image): Citrus Break Comedy Show – Suites
+  [SKIP] Skipping (no image): Citrus Break Comedy Show – Super VIP
+  [SKIP] Skipping (no image): Citrus Break Comedy Show – Tables 12 – 23
+  [SKIP] Skipping (no image): Citrus Break Comedy Show – Tables 1 – 11
+  [SKIP] Skipping (no image): Citrus Break Comedy Show – Mezzanine
+  [OK] Processing: Citrus Break Comedy Show w/ MIKE Winfield (Citrus LIVE) – March 21st, 2026
+  [OK] Processing: Snow Tha Product – BEFORE I CRASHOUT
+
+============================================================
+[OK] Saved 12 events to C:\Users\Brian\dtxent\.tmp\tixplug_events.json
+============================================================
+  - Gulf Coast Comedy ft. CHINGO BLING (CORPUS CHRISTI):  - 2026-03-07T20:00:00
+  - Citrus Break Comedy Show w/ MIKE Winfield (Citrus LIVE): March 21st, 2026 - 2026-03-21T20:00:00
+  - SOL PADRE FEST (South Padre Island)- April 3rd, 2026:  - 2026-04-03T20:00:00
+  - The Ultimate Selena Experience: (Citrus Live) April 11th, 2026 - 2026-04-11T20:00:00
+  - Highly Motavated 420 Comedy Special:  - 2026-04-20T20:00:00
+  - Pop Punk Party Night: Anthem 182 (A Tribute to Blink-182) - 2026-04-25T20:00:00
+  - Snow Tha Product: BEFORE I CRASHOUT - 2026-05-01T20:00:00
+  - City of Alamo Watermelon Fest ’26:  - 2026-05-09T20:00:00
+  - Lost in Hollywood (SOD Tribute) & Testify (RAM Tribute): Citrus Live - 2026-05-15T20:00:00
+  - Tacos, Tequilas & Chelas Festival ( Tri-Cities, WA):  - 2026-05-16T20:00:00
+  - NB Ridaz: Runaway Throwback Night (Citrus Live) May 29th, 2026 - 2026-05-29T20:00:00
+  - Seltzer Island Fest ( South Padre Island):  - 2026-06-20T20:00:00
+
+2. Processing 37 events...
+  Excluded 2 events based on EXCLUDE_ARTISTS list
+  Removed 6 past events
+  [INFO] Merged empty-venue duplicate: The Ultimate Selena Experience
+  [INFO] Merged empty-venue duplicate: NB Ridaz
+  [INFO] Merged empty-venue duplicate: Pop Punk Party Night
+  [INFO] Grouped 2 dates for: Carin León
+  Consolidated 6 events total
+
+3. Downloading event images...
+  Downloaded 0 new images
+
+4. Updating website data file...
+  [OK] Updated C:\Users\Brian\dtxent\js\events-data.js
+
+4. Syncing to Firestore...
+  [WARN] Firestore sync failed: FIREBASE_SERVICE_ACCOUNT_PATH not set in .env and firebase-service-account.json not found in project root.
+Please download your service account key from Firebase Console:
+  Project Settings > Service Accounts > Generate New Private Key
+
+3. Running git operations...
+  [WARN] Git operations failed: Command '['git', 'add', 'js/events-data.js', 'assets/']' returned non-zero exit status 128.
+
+============================================================
+[OK] Done! Updated 20 events on dtxent.com
+============================================================
+
+  [PAYNEARENA] 14 events:
+    • Reik: Tour 2026 — 2026-03-28
+    • Kpop Demon Hunters Experience: Live at Payne Arena — 2026-04-04
+    • Kpop Demon Hunters Experience: Live at Payne Arena — 2026-04-04
+    • Emerson, Lake & Palmer: The United Tour — 2026-05-01
+    • Alejandro Sanz: Y Ahora Que Gira — 2026-05-09
+    • Carin León: De Sonora Para El Mundo Tour — 2026-05-20
+    • Carin León: De Sonora Para El Mundo Tour — 2026-05-21
+    • Puppy Pals Live: Live Show — 2026-05-28
+    • Grupo Bryndis, Industria Del Amor & Guardianes: Romanticos Tour — 2026-05-29
+    • Braxton Keith: Live at Payne Arena — 2026-06-12
+    • Marisela Eterna Tour 2026: Live at Payne Arena — 2026-10-02
+    • Mon Laferte Femme Fatale Tour: Live at Payne Arena — 2026-10-17
+    • Blue October Foiled 20Th Anniversary World: Live at Payne Arena — 2026-12-13
+    • Cristian Castro Nada Solo Exitos Tour: Live at Payne Arena — 2027-02-27
+
+  [TIXPLUG] 12 events:
+    • Gulf Coast Comedy ft. CHINGO BLING (CORPUS CHRISTI): — — 2026-03-07
+    • Citrus Break Comedy Show w/ MIKE Winfield (Citrus LIVE): March 21st, 2026 — 2026-03-21
+    • SOL PADRE FEST (South Padre Island)- April 3rd, 2026: — — 2026-04-03
+    • The Ultimate Selena Experience: (Citrus Live) April 11th, 2026 — 2026-04-11
+    • Highly Motavated 420 Comedy Special: — — 2026-04-20
+    • Pop Punk Party Night: Anthem 182 (A Tribute to Blink-182) — 2026-04-25
+    • Snow Tha Product: BEFORE I CRASHOUT — 2026-05-01
+    • City of Alamo Watermelon Fest ’26: — — 2026-05-09
+    • Lost in Hollywood (SOD Tribute) & Testify (RAM Tribute): Citrus Live — 2026-05-15
+    • Tacos, Tequilas & Chelas Festival ( Tri-Cities, WA): — — 2026-05-16
+    • NB Ridaz: Runaway Throwback Night (Citrus Live) May 29th, 2026 — 2026-05-29
+    • Seltzer Island Fest ( South Padre Island): — — 2026-06-20
+
+  [MANUAL] 11 events:
+    • High Tide Pool Party: Spring Break Edition — 2026-03-20
+    • Destroy Lonely: @ 1902 — 2026-03-22
+    • Citrus Break Comedy Show w/ MIKE Winfield (Citrus LIVE): March 21st, 2026 — 2026-03-21
+    • SOL PADRE FEST (South Padre Island)- April 3rd, 2026: — — 2026-04-03
+    • The Ultimate Selena Experience: (Citrus Live) April 11th, 2026 — 2026-04-11
+    • Highly Motavated 420 Comedy Special: — — 2026-04-20
+    • City of Alamo Watermelon Fest '26: — — 2026-05-09
+    • Lost in Hollywood (SOD Tribute) & Testify (RAM Tribute): Citrus Live — 2026-05-15
+    • NB Ridaz: Runaway Throwback Night (Citrus Live) May 29th, 2026 — 2026-05-29
+    • Seltzer Island: — — 2026-06-20
+    • Pop Punk Party Night: Anthem 182 (A Tribute to Blink-182) — 2026-04-25
+ 
+Run finished: Thu 04/02/2026 10:34:50.72 
+ 
+======================================== 
+Run started: Mon 04/06/2026  9:32:27.24 
+======================================== 
+fatal: Unable to create 'C:/Users/Brian/dtxent/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, e.g.
+an editor opened by 'git commit'. Please make sure all processes
+are terminated then try again. If it still fails, a git process
+may have crashed in this repository earlier:
+remove the file manually to continue.
+============================================================
+DTXent Website Updater
+============================================================
+
+1. Loading scraped events...
+  Loaded 11 manual events
+============================================================
+Payne Arena Event Scraper (HTML)
+============================================================
+  Fetching https://paynearena.com...
+  Received 122800 bytes
+
+  Found 16 event cards
+  [OK] Reik: Tour 2026 - 2026-03-28T20:00:00
+  [OK] Kpop Demon Hunters Experience: Live at Payne Arena - 2026-04-04T20:00:00
+  [OK] Kpop Demon Hunters Experience: Live at Payne Arena - 2026-04-04T20:00:00
+  [OK] Emerson, Lake & Palmer: The United Tour - 2026-05-01T20:00:00
+  [OK] Alejandro Sanz: Y Ahora Que Gira - 2026-05-09T20:00:00
+  [OK] Carin León: De Sonora Para El Mundo Tour - 2026-05-20T20:00:00
+  [OK] Carin León: De Sonora Para El Mundo Tour - 2026-05-21T20:00:00
+  [OK] Puppy Pals Live: Live Show - 2026-05-28T20:00:00
+  [OK] Grupo Bryndis, Industria Del Amor & Guardianes: Romanticos Tour - 2026-05-29T20:00:00
+  [OK] Braxton Keith: Live at Payne Arena - 2026-06-12T20:00:00
+  [OK] Marisela Eterna Tour 2026: Live at Payne Arena - 2026-10-02T20:00:00
+  [OK] Mon Laferte Femme Fatale Tour: Live at Payne Arena - 2026-10-17T20:00:00
+  [OK] Blue October Foiled 20Th Anniversary World: Live at Payne Arena - 2026-12-13T20:00:00
+  [OK] Cristian Castro Nada Solo Exitos Tour: Live at Payne Arena - 2027-02-27T20:00:00
+
+============================================================
+[OK] Saved 14 events to C:\Users\Brian\dtxent\.tmp\paynearena_events.json
+============================================================
+============================================================
+TixPlug Event Scraper (WP REST API)
+============================================================
+  Fetching page 1...
+  Fetched 51 total products
+  [SKIP] Skipping (no image): Pop Punk Party Night – Suites
+  [SKIP] Skipping (no image): Pop Punk Party Night – Deck Tables (1-14)
+  [SKIP] Skipping (no image): Pop Punk Party Night – GA PIT
+  [OK] Processing: Pop Punk Party Night – Anthem 182 (A Tribute to Blink-182)
+  [SKIP] Skipping (no image): NB Ridaz – Runaway Throwback Night – Suites
+  [SKIP] Skipping (no image): The Ultimate Selena Experience – Suites
+  [SKIP] Skipping (no image): NB Ridaz – Runaway Throwback Night – 4 Top Table
+  [SKIP] Skipping (no image): NB Ridaz – Runaway Throwback Night – 6 Top Table
+  [SKIP] Skipping (no image): NB Ridaz – Runaway Throwback Night – Mezz
+  [SKIP] Skipping (no image): NB Ridaz – Runaway Throwback Night – Table 1 – 14
+  [SKIP] Skipping (no image): NB Ridaz – Runaway Throwback Night – GA PIT
+  [OK] Processing: NB Ridaz – Runaway Throwback Night (Citrus Live) May 29th, 2026
+  [SKIP] Skipping (no image): The Ultimate Selena Experience – Mezz
+  [SKIP] Skipping (no image): The Ultimate Selena Experience – Tables 1 – 14
+  [SKIP] Skipping (no image): The Ultimate Selena Experience – 4 Table Top
+  [SKIP] Skipping (no image): The Ultimate Selena Experience – 6 Table Top
+  [SKIP] Skipping (no image): The Ultimate Selena Experience – GA PIT
+  [OK] Processing: The Ultimate Selena Experience – (Citrus Live) April 11th, 2026
+  [SKIP] Skipping (no image): Lost in Hollywood & Testify – Suites
+  [SKIP] Skipping (no image): Lost in Hollywood & Testify – Mezz
+  [SKIP] Skipping (no image): Lost in Hollywood & Testify – Table Seating
+  [SKIP] Skipping (no image): Lost in Hollywood & Testify – PIT GA
+  [OK] Processing: Lost in Hollywood (SOD Tribute) & Testify (RAM Tribute) – Citrus Live
+  [OK] Processing: SOL PADRE FEST (South Padre Island)- April 3rd, 2026
+  [SKIP] Skipping (no image): Watermelon Fest ’26 – General Admission
+  [SKIP] Skipping (no image): Watermelon Fest ’26 – Yellow Tables
+  [SKIP] Skipping (no image): Watermelon Fest ’26 – Brown Tables
+  [OK] Processing: City of Alamo Watermelon Fest ’26
+  [SKIP] Skipping (no image): Highly Motavated – Mezzanine – E – H
+  [SKIP] Skipping (no image): Highly Motavated 420 – Suites
+  [SKIP] Skipping (no image): Highly Motavated 420 – Super VIP
+  [SKIP] Skipping (no image): Highly Motavated 420 – Tables 12 – 23
+  [SKIP] Skipping (no image): Highly Motavated 420 – Tables 1 – 11
+  [SKIP] Skipping (no image): Highly Motavated – Mezzanine
+  [OK] Processing: Highly Motavated 420 Comedy Special
+  [OK] Processing: Gulf Coast Comedy ft. CHINGO BLING (CORPUS CHRISTI)
+  [SKIP] Skipping (no image): Mötley KÜe – VIP Table Seat
+  [SKIP] Skipping (no image): Mötley KÜe – General Admission
+  [OK] Processing: Seltzer Island Fest ( South Padre Island)
+  [SKIP] Skipping (no image): Tacos, Tequilas & Chelas – Early Bird GA
+  [SKIP] Skipping (no image): Tacos, Tequilas & Chelas – Early Bird VIP PIT
+  [SKIP] Skipping (no image): Tacos, Tequilas & Chelas – Tables 34-48
+  [SKIP] Skipping (no image): Tacos, Tequilas & Chelas – Tables 25-33
+  [OK] Processing: Tacos, Tequilas & Chelas Festival ( Tri-Cities, WA)
+  [SKIP] Skipping (no image): Citrus Break Comedy Show – Suites
+  [SKIP] Skipping (no image): Citrus Break Comedy Show – Super VIP
+  [SKIP] Skipping (no image): Citrus Break Comedy Show – Tables 12 – 23
+  [SKIP] Skipping (no image): Citrus Break Comedy Show – Tables 1 – 11
+  [SKIP] Skipping (no image): Citrus Break Comedy Show – Mezzanine
+  [OK] Processing: Citrus Break Comedy Show w/ MIKE Winfield (Citrus LIVE) – March 21st, 2026
+  [OK] Processing: Snow Tha Product – BEFORE I CRASHOUT
+
+============================================================
+[OK] Saved 12 events to C:\Users\Brian\dtxent\.tmp\tixplug_events.json
+============================================================
+  - Gulf Coast Comedy ft. CHINGO BLING (CORPUS CHRISTI):  - 2026-03-07T20:00:00
+  - Citrus Break Comedy Show w/ MIKE Winfield (Citrus LIVE): March 21st, 2026 - 2026-03-21T20:00:00
+  - SOL PADRE FEST (South Padre Island)- April 3rd, 2026:  - 2026-04-03T20:00:00
+  - The Ultimate Selena Experience: (Citrus Live) April 11th, 2026 - 2026-04-11T20:00:00
+  - Highly Motavated 420 Comedy Special:  - 2026-04-20T20:00:00
+  - Pop Punk Party Night: Anthem 182 (A Tribute to Blink-182) - 2026-04-25T20:00:00
+  - Snow Tha Product: BEFORE I CRASHOUT - 2026-05-01T20:00:00
+  - City of Alamo Watermelon Fest ’26:  - 2026-05-09T20:00:00
+  - Lost in Hollywood (SOD Tribute) & Testify (RAM Tribute): Citrus Live - 2026-05-15T20:00:00
+  - Tacos, Tequilas & Chelas Festival ( Tri-Cities, WA):  - 2026-05-16T20:00:00
+  - NB Ridaz: Runaway Throwback Night (Citrus Live) May 29th, 2026 - 2026-05-29T20:00:00
+  - Seltzer Island Fest ( South Padre Island):  - 2026-06-20T20:00:00
+
+2. Processing 37 events...
+  Excluded 2 events based on EXCLUDE_ARTISTS list
+  Removed 10 past events
+  [INFO] Merged empty-venue duplicate: The Ultimate Selena Experience
+  [INFO] Merged empty-venue duplicate: NB Ridaz
+  [INFO] Merged empty-venue duplicate: Pop Punk Party Night
+  [INFO] Grouped 2 dates for: Carin León
+  Consolidated 4 events total
+
+3. Downloading event images...
+  Downloaded 0 new images
+
+4. Updating website data file...
+  [OK] Updated C:\Users\Brian\dtxent\js\events-data.js
+
+4. Syncing to Firestore...
+  [WARN] Firestore sync failed: FIREBASE_SERVICE_ACCOUNT_PATH not set in .env and firebase-service-account.json not found in project root.
+Please download your service account key from Firebase Console:
+  Project Settings > Service Accounts > Generate New Private Key
+
+3. Running git operations...
+  [WARN] Git operations failed: Command '['git', 'add', 'js/events-data.js', 'assets/']' returned non-zero exit status 128.
+
+============================================================
+[OK] Done! Updated 18 events on dtxent.com
+============================================================
+
+  [PAYNEARENA] 14 events:
+    • Reik: Tour 2026 — 2026-03-28
+    • Kpop Demon Hunters Experience: Live at Payne Arena — 2026-04-04
+    • Kpop Demon Hunters Experience: Live at Payne Arena — 2026-04-04
+    • Emerson, Lake & Palmer: The United Tour — 2026-05-01
+    • Alejandro Sanz: Y Ahora Que Gira — 2026-05-09
+    • Carin León: De Sonora Para El Mundo Tour — 2026-05-20
+    • Carin León: De Sonora Para El Mundo Tour — 2026-05-21
+    • Puppy Pals Live: Live Show — 2026-05-28
+    • Grupo Bryndis, Industria Del Amor & Guardianes: Romanticos Tour — 2026-05-29
+    • Braxton Keith: Live at Payne Arena — 2026-06-12
+    • Marisela Eterna Tour 2026: Live at Payne Arena — 2026-10-02
+    • Mon Laferte Femme Fatale Tour: Live at Payne Arena — 2026-10-17
+    • Blue October Foiled 20Th Anniversary World: Live at Payne Arena — 2026-12-13
+    • Cristian Castro Nada Solo Exitos Tour: Live at Payne Arena — 2027-02-27
+
+  [TIXPLUG] 12 events:
+    • Gulf Coast Comedy ft. CHINGO BLING (CORPUS CHRISTI): — — 2026-03-07
+    • Citrus Break Comedy Show w/ MIKE Winfield (Citrus LIVE): March 21st, 2026 — 2026-03-21
+    • SOL PADRE FEST (South Padre Island)- April 3rd, 2026: — — 2026-04-03
+    • The Ultimate Selena Experience: (Citrus Live) April 11th, 2026 — 2026-04-11
+    • Highly Motavated 420 Comedy Special: — — 2026-04-20
+    • Pop Punk Party Night: Anthem 182 (A Tribute to Blink-182) — 2026-04-25
+    • Snow Tha Product: BEFORE I CRASHOUT — 2026-05-01
+    • City of Alamo Watermelon Fest ’26: — — 2026-05-09
+    • Lost in Hollywood (SOD Tribute) & Testify (RAM Tribute): Citrus Live — 2026-05-15
+    • Tacos, Tequilas & Chelas Festival ( Tri-Cities, WA): — — 2026-05-16
+    • NB Ridaz: Runaway Throwback Night (Citrus Live) May 29th, 2026 — 2026-05-29
+    • Seltzer Island Fest ( South Padre Island): — — 2026-06-20
+
+  [MANUAL] 11 events:
+    • High Tide Pool Party: Spring Break Edition — 2026-03-20
+    • Destroy Lonely: @ 1902 — 2026-03-22
+    • Citrus Break Comedy Show w/ MIKE Winfield (Citrus LIVE): March 21st, 2026 — 2026-03-21
+    • SOL PADRE FEST (South Padre Island)- April 3rd, 2026: — — 2026-04-03
+    • The Ultimate Selena Experience: (Citrus Live) April 11th, 2026 — 2026-04-11
+    • Highly Motavated 420 Comedy Special: — — 2026-04-20
+    • City of Alamo Watermelon Fest '26: — — 2026-05-09
+    • Lost in Hollywood (SOD Tribute) & Testify (RAM Tribute): Citrus Live — 2026-05-15
+    • NB Ridaz: Runaway Throwback Night (Citrus Live) May 29th, 2026 — 2026-05-29
+    • Seltzer Island: — — 2026-06-20
+    • Pop Punk Party Night: Anthem 182 (A Tribute to Blink-182) — 2026-04-25
+ 
+Run finished: Mon 04/06/2026  9:32:58.41 
+ 
+======================================== 
+Run started: Tue 04/07/2026 17:00:34.77 
+======================================== 
