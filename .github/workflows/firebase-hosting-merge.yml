@@ -19,6 +19,20 @@ jobs:
       - name: Validate Event Data
         run: node tests/validate_events.mjs
 
+      # Sync events to Firestore
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Sync Events to Firestore
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: /tmp/sa.json
+        run: |
+          echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_DTXENT_WEB }}' > /tmp/sa.json
+          pip install firebase-admin --quiet
+          python execution/sync_firestore_ci.py
+
       # Deploy to Firebase Hosting
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
