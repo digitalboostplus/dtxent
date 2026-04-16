@@ -6,26 +6,7 @@
 export const LOCAL_EVENTS = [
     {
         "artistName": "Highly Motavated 420 Comedy Special",
-        "eventName": "",
-        "eventDate": "2026-04-20T20:00:00",
-        "venueName": "Citrus Live",
-        "venueCity": "Edinburg",
-        "venueState": "TX",
-        "imageName": "highly-motivated-420-comedy-special.jpg",
-        "imageUrl": "",
-        "ticketUrl": "https://tixplug.com/shop/highly-motivated-420-comedy-special/",
-        "isPublished": true,
-        "schedule": [
-            {
-                "time": "7:00 PM",
-                "description": "Doors Open"
-            }
-        ],
-        "source": "manual"
-    },
-    {
-        "artistName": "Highly Motavated 420 Comedy Special ft Raymond Orta and Friends",
-        "eventName": "",
+        "eventName": "ft Raymond Orta and Friends",
         "eventDate": "2026-04-20T20:00:00",
         "venueName": "Citrus Live",
         "venueCity": "Edinburg",
@@ -78,8 +59,8 @@ export const LOCAL_EVENTS = [
         "artistName": "South Side Texas Tour",
         "eventName": "Uno G Live",
         "eventDate": "2026-05-08T20:00:00",
-        "venueName": "",
-        "venueCity": "",
+        "venueName": "The Moon Rock",
+        "venueCity": "Harlingen",
         "venueState": "TX",
         "imageName": "south-side-texas-tour-uno-g-live.jpg",
         "imageUrl": "https://tixplug.com/wp-content/uploads/2026/04/1000313583-768x1187.jpg",
