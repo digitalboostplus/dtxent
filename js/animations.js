@@ -157,17 +157,19 @@ function initParallax() {
         ease: 'none'
     });
 
-    // Hero background zoom
-    gsap.to('.video-bg', {
-        scrollTrigger: {
-            trigger: '.hero',
-            start: 'top top',
-            end: 'bottom top',
-            scrub: 1
-        },
-        scale: 1.15,
-        ease: 'none'
-    });
+    // Hero background zoom (only if .video-bg exists in DOM)
+    if (document.querySelector('.video-bg')) {
+        gsap.to('.video-bg', {
+            scrollTrigger: {
+                trigger: '.hero',
+                start: 'top top',
+                end: 'bottom top',
+                scrub: 1
+            },
+            scale: 1.15,
+            ease: 'none'
+        });
+    }
 }
 
 /**

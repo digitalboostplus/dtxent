@@ -135,7 +135,7 @@ service cloud.firestore {
     }
 
     // VIP Requests collection
-    match /vip_requests/{request} {
+    match /vip_requests/{vipRequestId} {
       // Anyone can submit a VIP request
       allow create: if isValidVipRequest();
       // Only Admins can view and manage requests
@@ -143,11 +143,30 @@ service cloud.firestore {
     }
 
     // Contact Requests collection
-    match /contact_requests/{request} {
+    match /contact_requests/{contactRequestId} {
       // Anyone can submit a contact request
       allow create: if isValidContactRequest();
       // Only Admins can view and manage requests
       allow read, update, delete: if request.auth != null && isAdmin(request.auth.token.email);
+    }
+
+    // Lifestyle collections — public read, admin-only write
+    match /clubs/{club} {
+      allow read: if true;
+      allow create, update: if request.auth != null && isEditor(request.auth.token.email);
+      allow delete: if request.auth != null && isAdmin(request.auth.token.email);
+    }
+
+    match /restaurants/{restaurant} {
+      allow read: if true;
+      allow create, update: if request.auth != null && isEditor(request.auth.token.email);
+      allow delete: if request.auth != null && isAdmin(request.auth.token.email);
+    }
+
+    match /hotels/{hotel} {
+      allow read: if true;
+      allow create, update: if request.auth != null && isEditor(request.auth.token.email);
+      allow delete: if request.auth != null && isAdmin(request.auth.token.email);
     }
 
     // Scrape logs collection
