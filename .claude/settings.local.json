@@ -15,7 +15,14 @@
       "WebFetch(domain:developer.ticketmaster.com)",
       "Bash(ls:*)",
       "Bash(python execution/update_dtxent.py 2>&1)",
-      "Bash(ls -1 /c/Users/Brian/dtxent/assets/*.jpg /c/Users/Brian/dtxent/assets/*.png /c/Users/Brian/dtxent/assets/*.webp 2>/dev/null | xargs -I {} basename {})"
+      "Bash(ls -1 /c/Users/Brian/dtxent/assets/*.jpg /c/Users/Brian/dtxent/assets/*.png /c/Users/Brian/dtxent/assets/*.webp 2>/dev/null | xargs -I {} basename {})",
+      "Bash(grep -E \"\\\\.js$\")",
+      "Bash(firebase functions:list)",
+      "Bash(python:*)",
+      "Bash(grep -rn \"slice\\\\|splice\\\\|limit\\\\|MAX_EVENTS\\\\|take\\\\\\(\" /c/Users/Brian/dtxent/js/*.js)",
+      "Bash(grep:*)",
+      "Bash(git check-ignore:*)",
+      "Bash(git ls-tree:*)"
     ]
   }
 }

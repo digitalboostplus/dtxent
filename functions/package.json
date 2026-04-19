@@ -4,7 +4,7 @@
   "description": "Firebase Cloud Functions for DTXENT — API proxy layer",
   "main": "index.js",
   "engines": {
-    "node": "18"
+    "node": "22"
   },
   "dependencies": {
     "firebase-functions": "^4.9.0",

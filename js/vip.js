@@ -3,15 +3,14 @@ import { collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/fir
 
 const VIP_WEBHOOK_PROXY = '/api/vip-webhook';
 
-document.addEventListener('DOMContentLoaded', () => {
+function initVipForm() {
     const form = document.getElementById('vip-lead-form');
     if (!form) return;
 
-    const statusDiv = document.getElementById('form-status') || createStatusDiv();
+    const statusDiv = document.getElementById('form-status') || createStatusDiv(form);
     const submitBtn = form.querySelector('button[type="submit"]');
 
-    // Helper: Create status div if not present in HTML layout
-    function createStatusDiv() {
+    function createStatusDiv(parentForm) {
         const div = document.createElement('div');
         div.id = 'form-status';
         div.className = 'visually-hidden';
@@ -20,8 +19,21 @@ document.addEventListener('DOMContentLoaded', () => {
         div.style.marginTop = '1rem';
         div.style.textAlign = 'center';
         div.style.fontWeight = '600';
-        form.appendChild(div);
+        parentForm.appendChild(div);
         return div;
+    }
+
+    function showStatus(message, type) {
+        statusDiv.textContent = message;
+        statusDiv.classList.remove('visually-hidden');
+
+        if (type === 'error') {
+            statusDiv.style.color = 'var(--error, #ef4444)';
+        } else if (type === 'success') {
+            statusDiv.style.color = 'var(--success, #22c55e)';
+        } else {
+            statusDiv.style.color = 'var(--text-muted, #b8b8b8)';
+        }
     }
 
     form.addEventListener('submit', async (e) => {
@@ -35,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const eventDetails = formData.get('eventDetails').trim();
         const groupSize = parseInt(formData.get('groupSize'), 10);
         const requestedServices = formData.get('requestedServices');
-        const specialRequests = formData.get('specialRequests').trim();
+        const specialRequests = (formData.get('specialRequests') || '').trim();
 
         // 2. Client-side Validation
         if (!fullName || !phone || !email || !eventDetails || isNaN(groupSize) || !requestedServices) {
@@ -74,21 +86,35 @@ document.addEventListener('DOMContentLoaded', () => {
             await addDoc(quotesCollection, requestData);
 
             // 6. Forward to CRM via server-side proxy (keeps webhook URL secret)
+            const webhookPayload = {
+                fullName,
+                phone,
+                email,
+                eventDetails,
+                groupSize,
+                requestedServices,
+                status: 'new',
+                submittedAt: new Date().toISOString()
+            };
+            if (specialRequests) webhookPayload.specialRequests = specialRequests;
+
             try {
-                await fetch(VIP_WEBHOOK_PROXY, {
+                const webhookRes = await fetch(VIP_WEBHOOK_PROXY, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ ...requestData, submittedAt: new Date().toISOString() })
+                    body: JSON.stringify(webhookPayload)
                 });
+                if (!webhookRes.ok) {
+                    console.error('VIP webhook proxy returned', webhookRes.status);
+                }
             } catch (webhookError) {
-                console.error('Error forwarding to CRM:', webhookError);
+                console.error('Error forwarding to CRM webhook:', webhookError);
             }
 
             // 7. Success State
             form.reset();
             showStatus('Success! Your VIP request has been sent. Our concierge will contact you soon.', 'success');
 
-            // Optional: reset button after a delay
             setTimeout(() => {
                 submitBtn.disabled = false;
                 submitBtn.textContent = originalBtnText;
@@ -102,17 +128,11 @@ document.addEventListener('DOMContentLoaded', () => {
             submitBtn.textContent = originalBtnText;
         }
     });
+}
 
-    function showStatus(message, type) {
-        statusDiv.textContent = message;
-        statusDiv.classList.remove('visually-hidden'); // Remove hidden class
-
-        if (type === 'error') {
-            statusDiv.style.color = 'var(--error, #ef4444)';
-        } else if (type === 'success') {
-            statusDiv.style.color = 'var(--success, #22c55e)';
-        } else {
-            statusDiv.style.color = 'var(--text-muted, #b8b8b8)';
-        }
-    }
-});
+// Initialize when DOM is ready — safe for both deferred/module and inline use
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initVipForm);
+} else {
+    initVipForm();
+}

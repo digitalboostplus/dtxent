@@ -16,18 +16,23 @@ const NEWSLETTER_WEBHOOK_PROXY = '/api/newsletter-webhook';
  */
 async function subscribeToNewsletter(name, email) {
     try {
-        // Check if already subscribed
-        const q = query(
-            collection(db, 'newsletter'),
-            where('email', '==', email.toLowerCase())
-        );
-        const querySnapshot = await getDocs(q);
+        // Check if already subscribed (best-effort — read requires admin auth)
+        try {
+            const q = query(
+                collection(db, 'newsletter'),
+                where('email', '==', email.toLowerCase())
+            );
+            const querySnapshot = await getDocs(q);
 
-        if (!querySnapshot.empty) {
-            return {
-                success: false,
-                message: "You're already subscribed!"
-            };
+            if (!querySnapshot.empty) {
+                return {
+                    success: false,
+                    message: "You're already subscribed!"
+                };
+            }
+        } catch (dupCheckError) {
+            // Unauthenticated users cannot read the collection — skip duplicate check
+            console.warn('Duplicate check skipped:', dupCheckError.code);
         }
 
         // Add new subscriber
