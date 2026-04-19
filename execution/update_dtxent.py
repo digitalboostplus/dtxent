@@ -308,10 +308,16 @@ def git_operations():
         msg = f"chore: update events data ({datetime.now().strftime('%Y-%m-%d')})"
         subprocess.run(["git", "commit", "-m", msg], check=True)
         
+        # Stash any unstaged changes so rebase can proceed cleanly
+        subprocess.run(["git", "stash", "push", "--include-untracked", "-m", "auto-stash-before-deploy"], check=False)
+
         # Push with rebase to handle remote changes
         subprocess.run(["git", "pull", "--rebase", "origin", "main"], check=True)
         subprocess.run(["git", "push", "origin", "main"], check=True)
         print("  [OK] Changes pushed successfully")
+
+        # Restore any stashed changes
+        subprocess.run(["git", "stash", "pop"], check=False)
 
     except subprocess.CalledProcessError as e:
         print(f"  [WARN] Git operations failed: {e}")
