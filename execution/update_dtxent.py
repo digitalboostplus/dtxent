@@ -6,7 +6,7 @@
 5. Downloads event poster images to assets/
 6. Regenerates js/events-data.js with the LOCAL_EVENTS array
 7. Syncs events to Firestore (for admin dashboard functionality)
-8. Commits and推送 changes to GitHub
+8. Commits and pushes changes to GitHub
 """
 
 import json
@@ -81,8 +81,8 @@ def run_scraper(scraper_name: str, output_filename: str, source_url: str) -> tup
 def run_paynearena_scraper() -> tuple[list[dict], dict]:
     """Run scrape_paynearena.py and return events + status."""
     return run_scraper(
-        "scrape_paynearena.py", 
-        "paynearena_events.json", 
+        "scrape_paynearena.py",
+        "paynearena_events.json",
         "https://paynearena.com"
     )
 
@@ -90,8 +90,8 @@ def run_paynearena_scraper() -> tuple[list[dict], dict]:
 def run_tixplug_scraper() -> tuple[list[dict], dict]:
     """Run scrape_tixplug.py and return events + status."""
     return run_scraper(
-        "scrape_tixplug.py", 
-        "tixplug_events.json", 
+        "scrape_tixplug.py",
+        "tixplug_events.json",
         "https://tixplug.com"
     )
 
@@ -237,11 +237,11 @@ def download_image(image_url: str, filename: str) -> bool:
     """Download image to assets folder."""
     if not image_url:
         return False
-    
+
     target_path = ASSETS_DIR / filename
     if target_path.exists():
         return False  # Already have it
-        
+
     try:
         headers = {"User-Agent": "Mozilla/5.0"}
         resp = requests.get(image_url, headers=headers, stream=True, timeout=10)
@@ -266,13 +266,13 @@ def generate_events_data_js(events: list[dict]):
 
     # Create the JS array content
     events_json = json.dumps(events, indent=4, ensure_ascii=False)
-    
+
     # regex should match 'export const LOCAL_EVENTS = [...];'
     pattern = r"export const LOCAL_EVENTS = \[.*?\];"
     replacement = f"export const LOCAL_EVENTS = {events_json};"
-    
+
     new_content = re.sub(pattern, replacement, content, flags=re.DOTALL)
-    
+
     # Update timestamp (Matches ' * Last updated: ...')
     timestamp_pattern = r" \* Last updated: .*"
     timestamp_replacement = f" * Last updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
@@ -293,11 +293,11 @@ def git_operations():
     try:
         # Check for remote changes first
         subprocess.run(["git", "fetch", "origin"], check=True)
-        
+
         # Add changed files
         subprocess.run(["git", "add", "js/events-data.js", "assets/"], check=True)
         subprocess.run(["git", "add", "execution/"], check=True)
-        
+
         # Check if there are changes to commit
         status = subprocess.run(["git", "diff", "--cached", "--quiet"])
         if status.returncode == 0:
@@ -307,7 +307,7 @@ def git_operations():
         # Commit
         msg = f"chore: update events data ({datetime.now().strftime('%Y-%m-%d')})"
         subprocess.run(["git", "commit", "-m", msg], check=True)
-        
+
         # Stash any unstaged changes so rebase can proceed cleanly
         subprocess.run(["git", "stash", "push", "--include-untracked", "-m", "auto-stash-before-deploy"], check=False)
 
@@ -331,7 +331,7 @@ def sync_to_firestore(events: list[dict]):
         import sys
         sys.path.append(str(DTXENT_DIR / "execution"))
         from sync_firestore import sync_events_to_firestore
-        
+
         sync_events_to_firestore(events)
         print("  [OK] Firestore sync complete")
     except Exception as e:
@@ -353,7 +353,7 @@ def main():
 
     # 2. Process Events
     print(f"\n2. Processing {len(all_events)} events...")
-    
+
     # Filter out excluded artists
     filtered_events = []
     for e in all_events:
@@ -361,7 +361,7 @@ def main():
         if any(ex.lower() in artist.lower() for ex in EXCLUDE_ARTISTS):
             continue
         filtered_events.append(e)
-    
+
     if len(all_events) > len(filtered_events):
         print(f"  Excluded {len(all_events) - len(filtered_events)} events based on EXCLUDE_ARTISTS list")
 
@@ -369,17 +369,17 @@ def main():
     now_str = datetime.now().strftime("%Y-%m-%d")
     current_events = [e for e in filtered_events if (e.get("eventDate") or "0000") >= now_str]
     print(f"  Removed {len(filtered_events) - len(current_events)} past events")
-    
+
     # Deduplicate and group
     processed_events = deduplicate_events(current_events)
-    
+
     # Sort by date
     processed_events.sort(key=lambda e: e.get("eventDate") or "9999")
 
     # Explicit override: Citrus Break Comedy Show FIRST, High Tide Pool Party SECOND
     high_tide_evt = None
     citrus_evt = None
-    
+
     # Extract them
     remaining_events = []
     for evt in processed_events:
@@ -390,14 +390,14 @@ def main():
             citrus_evt = evt
         else:
             remaining_events.append(evt)
-            
+
     # Prepend them in desired order
     ordered_events = []
     if citrus_evt:
         ordered_events.append(citrus_evt)
     if high_tide_evt:
         ordered_events.append(high_tide_evt)
-    
+
     ordered_events.extend(remaining_events)
     processed_events = ordered_events
 
