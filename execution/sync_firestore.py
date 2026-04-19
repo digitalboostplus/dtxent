@@ -16,8 +16,9 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 # Load environment variables
-REPO_ROOT = Path(__file__).resolve().parent.parent  # dtxent-site/
-WORKSPACE_ROOT = REPO_ROOT.parent               # dtxent-builder/
+REPO_ROOT = Path(__file__).resolve().parent.parent  # dtxent/
+WORKSPACE_ROOT = REPO_ROOT.parent
+load_dotenv(REPO_ROOT / ".env")
 load_dotenv(WORKSPACE_ROOT / ".env")
 
 # Firebase Admin SDK (lazy initialization)
@@ -61,9 +62,9 @@ def init_firebase():
                     "  Project Settings > Service Accounts > Generate New Private Key"
                 )
 
-        # Resolve relative paths
+        # Resolve relative paths against project root
         if not os.path.isabs(service_account_path):
-            service_account_path = str(WORKSPACE_ROOT / service_account_path)
+            service_account_path = str(REPO_ROOT / service_account_path)
 
         if not os.path.exists(service_account_path):
             raise FileNotFoundError(f"Service account file not found: {service_account_path}")
