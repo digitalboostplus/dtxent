@@ -159,21 +159,6 @@
     "isPublished": false
   },
   {
-    "artistName": "Seltzer Island",
-    "eventName": "",
-    "eventDate": "2026-06-20T20:00:00",
-    "venueName": "Cameron County Amphitheater",
-    "venueCity": "South Padre Island",
-    "venueState": "TX",
-    "imageName": "seltzer-island.jpg",
-    "imageUrl": "",
-    "ticketUrl": "https://tixplug.com/shop/seltzer-island/",
-    "isPublished": true,
-    "schedule": [
-      { "time": "3:00 PM", "description": "Doors Open" }
-    ]
-  },
-  {
     "artistName": "Pop Punk Party Night",
     "eventName": "Anthem 182 (A Tribute to Blink-182)",
     "eventDate": "2026-04-25T20:00:00",
