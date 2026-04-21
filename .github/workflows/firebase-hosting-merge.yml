@@ -51,7 +51,7 @@ jobs:
         env:
           GOOGLE_APPLICATION_CREDENTIALS: /tmp/sa.json
         run: |
-          cd functions && npm ci
+          npm ci --prefix functions
           npx firebase-tools deploy --only functions --project dtxent-web --non-interactive
 
       # Deploy to Firebase Hosting
