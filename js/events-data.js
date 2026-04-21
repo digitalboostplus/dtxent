@@ -225,9 +225,9 @@ export const LOCAL_EVENTS = [
     },
     {
         "artistName": "Majo Aguilar",
-        "eventName": "Live at Payne Arena",
+        "eventName": "Live at The Box Theater at Payne",
         "eventDate": "2026-08-01T20:00:00",
-        "venueName": "Payne Arena",
+        "venueName": "The Box Theater at Payne",
         "venueCity": "Hidalgo",
         "venueState": "TX",
         "imageName": "payne-majo-aguilar.webp",
