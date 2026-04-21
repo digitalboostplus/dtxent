@@ -10,7 +10,6 @@
 """
 
 import json
-import os
 import re
 import subprocess
 import sys
@@ -233,26 +232,53 @@ def deduplicate_events(events: list[dict]) -> list[dict]:
     return final
 
 
-def download_image(image_url: str, filename: str) -> bool:
-    """Download image to assets folder."""
+def download_image(image_url: str, filename: str) -> str | None:
+    """Download image and convert to WebP. Returns webp filename, or None on failure."""
     if not image_url:
-        return False
+        return None
 
-    target_path = ASSETS_DIR / filename
+    from PIL import Image
+    import io
+
+    stem = Path(filename).stem
+    webp_name = stem + ".webp"
+    target_path = ASSETS_DIR / webp_name
+
     if target_path.exists():
-        return False  # Already have it
+        return webp_name  # Already have WebP version
 
     try:
         headers = {"User-Agent": "Mozilla/5.0"}
-        resp = requests.get(image_url, headers=headers, stream=True, timeout=10)
+        resp = requests.get(image_url, headers=headers, timeout=10)
         resp.raise_for_status()
-        with open(target_path, "wb") as f:
-            for chunk in resp.iter_content(chunk_size=8192):
-                f.write(chunk)
-        return True
+        img = Image.open(io.BytesIO(resp.content)).convert("RGB")
+        img.save(target_path, "WEBP", quality=85)
+        return webp_name
     except Exception as e:
-        print(f"  [WARN] Failed to download {image_url}: {e}")
-        return False
+        print(f"  [WARN] Failed to download/convert {image_url}: {e}")
+        return None
+
+
+def convert_existing_images() -> int:
+    """Convert existing JPG/PNG assets to WebP. Keeps originals for compatibility."""
+    try:
+        from PIL import Image
+    except ImportError:
+        print("  [WARN] Pillow not installed — skipping existing image conversion")
+        return 0
+
+    converted = 0
+    for ext in ("*.jpg", "*.jpeg", "*.png"):
+        for src_path in ASSETS_DIR.glob(ext):
+            webp_path = src_path.with_suffix(".webp")
+            if webp_path.exists():
+                continue
+            try:
+                Image.open(src_path).convert("RGB").save(webp_path, "WEBP", quality=85)
+                converted += 1
+            except Exception as e:
+                print(f"  [WARN] Could not convert {src_path.name}: {e}")
+    return converted
 
 
 def generate_events_data_js(events: list[dict]):
@@ -338,7 +364,7 @@ def sync_to_firestore(events: list[dict]):
         print(f"  [WARN] Firestore sync failed: {e}")
 
 
-def main():
+def main(skip_git: bool = False):
     print("=" * 60)
     print("DTXent Website Updater")
     print("=" * 60)
@@ -406,9 +432,17 @@ def main():
     new_images = 0
     for event in processed_events:
         if event.get("imageUrl") and event.get("imageName"):
-            if download_image(event["imageUrl"], event["imageName"]):
-                new_images += 1
+            webp_name = download_image(event["imageUrl"], event["imageName"])
+            if webp_name:
+                if event["imageName"] != webp_name:
+                    new_images += 1
+                event["imageName"] = webp_name
     print(f"  Downloaded {new_images} new images")
+
+    # Convert any existing JPG/PNG assets to WebP
+    converted = convert_existing_images()
+    if converted:
+        print(f"  Converted {converted} existing images to WebP")
 
     # Update JS Data File
     print("\n4. Updating website data file...")
@@ -419,7 +453,8 @@ def main():
     sync_to_firestore(processed_events)
 
     # Git Operations
-    git_operations()
+    if not skip_git:
+        git_operations()
 
     print("\n" + "=" * 60)
     print(f"[OK] Done! Updated {len(processed_events)} events on dtxent.com")
@@ -435,4 +470,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main(skip_git="--ci" in sys.argv)
