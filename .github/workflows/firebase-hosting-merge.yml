@@ -33,6 +33,27 @@ jobs:
           pip install firebase-admin --quiet
           python execution/sync_firestore_ci.py
 
+      # Deploy Cloud Functions if source changed
+      - name: Check for functions changes
+        id: functions-diff
+        run: |
+          BEFORE="${{ github.event.before }}"
+          if [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          elif git diff --name-only "$BEFORE" "${{ github.sha }}" 2>/dev/null | grep -q '^functions/'; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Deploy Cloud Functions
+        if: steps.functions-diff.outputs.changed == 'true'
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: /tmp/sa.json
+        run: |
+          cd functions && npm ci
+          npx firebase-tools deploy --only functions --project dtxent-web --non-interactive
+
       # Deploy to Firebase Hosting
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
