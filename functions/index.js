@@ -13,6 +13,14 @@
 const { onRequest } = require('firebase-functions/v2/https');
 const { defineSecret } = require('firebase-functions/params');
 
+// SSR programmatic SEO pages
+const { eventSitemapSSR } = require('./ssr/eventSitemapSSR');
+const { eventIndexSSR } = require('./ssr/eventIndexSSR');
+const { eventPageSSR } = require('./ssr/eventPageSSR');
+exports.eventSitemapSSR = eventSitemapSSR;
+exports.eventIndexSSR = eventIndexSSR;
+exports.eventPageSSR = eventPageSSR;
+
 const ghlNewsletterUrl = defineSecret('GHL_NEWSLETTER_WEBHOOK_URL');
 const ghlVipUrl = defineSecret('GHL_VIP_WEBHOOK_URL');
 const tmApiKey = defineSecret('TM_API_KEY');

@@ -1,0 +1,274 @@
+/* SSR Event Page Styles */
+
+/* ── Breadcrumb ──────────────────────────────────────────────────────────── */
+.ssr-breadcrumb {
+    padding: 1rem 0;
+    margin-top: 80px; /* clear fixed header */
+}
+
+.ssr-breadcrumb ol {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    align-items: center;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+}
+
+.ssr-breadcrumb li + li::before {
+    content: '›';
+    margin-right: 0.25rem;
+    color: var(--text-muted);
+}
+
+.ssr-breadcrumb a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: var(--transition-fast);
+}
+
+.ssr-breadcrumb a:hover {
+    color: var(--primary);
+}
+
+/* ── Event Hero ──────────────────────────────────────────────────────────── */
+.ssr-event-hero {
+    position: relative;
+    min-height: 420px;
+    display: flex;
+    align-items: flex-end;
+    background-color: var(--card-bg);
+    background-size: cover;
+    background-position: center top;
+    margin-bottom: 0;
+}
+
+.ssr-event-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.5) 60%, rgba(10,10,10,0.3) 100%);
+}
+
+.ssr-event-hero-content {
+    position: relative;
+    z-index: 1;
+    padding: 2.5rem 1.5rem;
+}
+
+.ssr-date-badge {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--primary);
+    color: #000;
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 1.25rem;
+    line-height: 1;
+}
+
+.ssr-date-badge .month {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.ssr-date-badge .day {
+    font-size: 1.75rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.ssr-date-badge .year {
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.ssr-event-title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    color: var(--text-main);
+    margin-bottom: 0.5rem;
+    line-height: 1.1;
+}
+
+.ssr-event-tour {
+    font-size: 1.1rem;
+    color: var(--primary);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.ssr-event-venue-line {
+    font-size: 1rem;
+    color: var(--text-muted);
+}
+
+/* ── Hero (index / artist hub) ───────────────────────────────────────────── */
+.ssr-hero {
+    padding-top: calc(80px + 3rem);
+}
+
+/* ── Ticket CTA ──────────────────────────────────────────────────────────── */
+.ssr-tickets {
+    background: var(--card-bg);
+}
+
+.ticket-card {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    background: var(--surface-elevated);
+    border: 1px solid rgba(255,204,0,0.15);
+    border-radius: 12px;
+    padding: 2rem;
+}
+
+.ticket-info h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 0.5rem;
+}
+
+.ticket-date,
+.ticket-venue {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+.ticket-cancelled,
+.ticket-past {
+    color: var(--text-muted);
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+
+.btn-lg {
+    padding: 1rem 2.5rem;
+    font-size: 1.1rem;
+}
+
+/* ── Details Grid ────────────────────────────────────────────────────────── */
+.ssr-details-grid {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 2.5rem;
+    align-items: start;
+}
+
+@media (max-width: 768px) {
+    .ssr-details-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.ssr-description h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--text-main);
+}
+
+.ssr-description p {
+    color: var(--text-muted);
+    line-height: 1.75;
+    font-size: 1rem;
+}
+
+.ssr-detail-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.ssr-detail-card h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.ssr-detail-card dl {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.5rem 1rem;
+}
+
+.ssr-detail-card dt {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.ssr-detail-card dd {
+    color: var(--text-main);
+    font-size: 0.95rem;
+}
+
+.ssr-detail-card p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+/* ── Related Events ──────────────────────────────────────────────────────── */
+.ssr-related {
+    background: var(--card-bg);
+}
+
+/* ── Past events grid dimming ────────────────────────────────────────────── */
+.events-grid--past .event-card {
+    opacity: 0.6;
+    filter: grayscale(0.3);
+}
+
+/* ── Month group headings (events index) ─────────────────────────────────── */
+.ssr-month-group {
+    margin-bottom: 3rem;
+}
+
+.ssr-month-heading {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255,204,0,0.2);
+}
+
+/* ── Empty state ─────────────────────────────────────────────────────────── */
+.ssr-empty {
+    text-align: center;
+    padding: 4rem 1rem;
+    color: var(--text-muted);
+}
+
+.ssr-empty p {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+}
+
+/* ── Event card link wrapper ─────────────────────────────────────────────── */
+.event-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.event-card-actions {
+    padding: 0 1.25rem 1.25rem;
+}

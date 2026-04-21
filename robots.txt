@@ -1,10 +1,14 @@
 User-agent: *
 Allow: /
+Allow: /events/
+Allow: /events
 
-Sitemap: https://dtxent.com/sitemap.xml
-
-# Disallow admin and temp directories
+# Disallow admin, API, and temp directories
 Disallow: /admin/
+Disallow: /api/
 Disallow: /.tmp/
 Disallow: /.claude/
 Disallow: /.agent/
+
+Sitemap: https://dtxent.com/sitemap.xml
+Sitemap: https://dtxent.com/sitemap-events.xml
