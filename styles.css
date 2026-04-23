@@ -1078,7 +1078,7 @@ h3 {
 
 .newsletter-form {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 1rem;
     margin-top: 2rem;
     align-items: stretch;
@@ -1143,9 +1143,6 @@ h3 {
     line-height: 1.4;
 }
 
-.newsletter-form button[type="submit"] {
-    grid-column: 1 / -1;
-}
 
 .consent-label input[type="checkbox"] {
     width: auto;
