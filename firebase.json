@@ -46,10 +46,6 @@
         "function": "vipWebhook"
       },
       {
-        "source": "/api/ticketmaster",
-        "function": "ticketmasterProxy"
-      },
-      {
         "source": "/sitemap-events.xml",
         "function": "eventSitemapSSR"
       },

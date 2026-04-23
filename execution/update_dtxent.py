@@ -1,12 +1,11 @@
 """
 1. Runs scrape_tixplug.py to fetch events from tixplug.com
 2. Runs scrape_paynearena.py to fetch events from paynearena.com
-3. Runs scrape_zaeee.py to fetch events from zaeee.saffire.com
-4. Merges, deduplicates, and sorts events
-5. Downloads event poster images to assets/
-6. Regenerates js/events-data.js with the LOCAL_EVENTS array
-7. Syncs events to Firestore (for admin dashboard functionality)
-8. Commits and pushes changes to GitHub
+3. Merges, deduplicates, and sorts events
+4. Downloads event poster images to assets/
+5. Regenerates js/events-data.js with the LOCAL_EVENTS array
+6. Syncs events to Firestore (for admin dashboard functionality)
+7. Commits and pushes changes to GitHub
 """
 
 import json
@@ -306,7 +305,7 @@ def generate_events_data_js(events: list[dict]):
 
     # Update sources
     sources_pattern = r" \* Sources: .*"
-    sources_replacement = " * Sources: paynearena.com, tixplug.com, zaeee.saffire.com"
+    sources_replacement = " * Sources: paynearena.com, tixplug.com"
     new_content = re.sub(sources_pattern, sources_replacement, new_content)
 
     with open(EVENTS_DATA_FILE, "w", encoding="utf-8") as f:
@@ -470,7 +469,7 @@ def main(skip_git: bool = False):
     print("=" * 60)
 
     # Summary grouped by source
-    for src_label in ["paynearena", "tixplug", "zaeee", "manual"]:
+    for src_label in ["paynearena", "tixplug", "manual"]:
         src_events = [e for e in all_events if e.get("source", "manual") == src_label]
         if src_events:
             print(f"\n  [{src_label.upper()}] {len(src_events)} events:")

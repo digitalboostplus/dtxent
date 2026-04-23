@@ -3,7 +3,6 @@
  * Handles the display of detailed event information, real-time data, and seatmaps.
  */
 
-import { getEventDetails } from './ticketmaster-api.js';
 
 class EventDetailModal {
     constructor() {
@@ -115,20 +114,7 @@ class EventDetailModal {
             this.modal.setAttribute('tabindex', '-1');
             this.modal.focus();
 
-            // If it's a Ticketmaster event, fetch real-time data
-            if (eventData.tmEventId) {
-                this.showLoading();
-                try {
-                    const tmData = await getEventDetails(eventData.tmEventId);
-                    if (tmData && this.modal.classList.contains('active')) {
-                        this.renderTMData(eventData, tmData);
-                    }
-                } catch (tmError) {
-                    console.warn('[Modal] Failed to fetch real-time data:', tmError);
-                } finally {
-                    this.hideLoading();
-                }
-            }
+
         } catch (err) {
             console.error('[Modal] Error opening modal:', err);
             // Restore scrolling if opening fails

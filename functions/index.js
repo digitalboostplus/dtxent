@@ -7,7 +7,6 @@
  * Required secrets (set via Firebase CLI before deploying):
  *   firebase functions:secrets:set GHL_NEWSLETTER_WEBHOOK_URL
  *   firebase functions:secrets:set GHL_VIP_WEBHOOK_URL
- *   firebase functions:secrets:set TM_API_KEY
  */
 
 const { onRequest } = require('firebase-functions/v2/https');
@@ -23,7 +22,6 @@ exports.eventPageSSR = eventPageSSR;
 
 const ghlNewsletterUrl = defineSecret('GHL_NEWSLETTER_WEBHOOK_URL');
 const ghlVipUrl = defineSecret('GHL_VIP_WEBHOOK_URL');
-const tmApiKey = defineSecret('TM_API_KEY');
 
 // Allowed origins for CORS (Firebase Hosting rewrites make these same-origin,
 // but kept here as defence-in-depth for direct function invocations).
@@ -130,39 +128,3 @@ exports.vipWebhook = onRequest(
     }
 );
 
-/**
- * ticketmasterProxy — proxies Ticketmaster Discovery API requests.
- * Called via Firebase Hosting rewrite at /api/ticketmaster?eventId=XXXXX
- */
-exports.ticketmasterProxy = onRequest(
-    { secrets: [tmApiKey] },
-    async (req, res) => {
-        setCorsHeaders(req, res);
-        if (req.method === 'OPTIONS') { res.status(204).send(''); return; }
-        if (req.method !== 'GET') { res.status(405).json({ error: 'Method Not Allowed' }); return; }
-
-        const eventId = req.query.eventId;
-        if (!eventId || !/^[A-Za-z0-9]+$/.test(eventId)) {
-            res.status(400).json({ error: 'Invalid or missing eventId' });
-            return;
-        }
-
-        try {
-            const url = `https://app.ticketmaster.com/discovery/v2/events/${eventId}.json?apikey=${tmApiKey.value()}`;
-            const tmRes = await fetch(url);
-
-            if (!tmRes.ok) {
-                res.status(tmRes.status).json({ error: 'Upstream error' });
-                return;
-            }
-
-            const data = await tmRes.json();
-            // Cache at CDN/browser level for 15 minutes
-            res.set('Cache-Control', 'public, max-age=900');
-            res.json(data);
-        } catch (error) {
-            console.error('ticketmasterProxy error:', error);
-            res.status(500).json({ error: 'Internal server error' });
-        }
-    }
-);

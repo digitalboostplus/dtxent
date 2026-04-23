@@ -9,7 +9,7 @@ const SIX_HOURS_MS = 6 * 60 * 60 * 1000;
 const ONE_MINUTE_MS = 60 * 1000;
 import { LOCAL_EVENTS } from './events-data.js';
 import { eventModal } from './event-detail-modal.js';
-import { getEventDetails } from './ticketmaster-api.js';
+
 
 /**
  * Load and display published events with real-time updates (From Firestore)
@@ -193,9 +193,6 @@ function renderEventsList(displayEvents, container) {
     try { attachEventClickHandlers(displayEvents); }
     catch (err) { console.error('Failed to attach click handlers:', err); }
 
-    try { enrichTicketmasterEvents(displayEvents); }
-    catch (err) { console.error('Failed to enrich TM events:', err); }
-
     try { injectSchemaOrg(displayEvents); }
     catch (err) { console.error('Failed to inject schema:', err); }
 
@@ -352,40 +349,6 @@ function attachEventClickHandlers(events) {
     });
 }
 
-/**
- * Enrich Ticketmaster events with real-time price and status
- */
-async function enrichTicketmasterEvents(events) {
-    const tmEvents = events.filter(e => e.tmEventId);
-
-    // Process in parallel with rate limiting (Discovery API allows 5/sec)
-    for (const event of tmEvents) {
-        getEventDetails(event.tmEventId).then(data => {
-            if (!data) return;
-
-            const priceEl = document.getElementById(`price-${event.id}`);
-            const statusEl = document.getElementById(`status-${event.id}`);
-
-            // Update Price
-            if (data.priceRanges && data.priceRanges.length > 0 && priceEl) {
-                const min = Math.round(data.priceRanges[0].min);
-                priceEl.textContent = `From $${min}`;
-                priceEl.style.display = 'block';
-            }
-
-            // Update Status Badge
-            const statusCode = data?.dates?.status?.code;
-            if (statusCode && statusEl) {
-                const status = statusCode;
-                if (status === 'onsale') {
-                    statusEl.innerHTML = '<span class="badge badge-onsale">On Sale</span>';
-                } else if (status === 'offsale' || status === 'cancelled') {
-                    statusEl.innerHTML = `<span class="badge badge-soldout">${status === 'cancelled' ? 'Cancelled' : 'Sold Out'}</span>`;
-                }
-            }
-        });
-    }
-}
 
 /**
  * Generate and inject Schema.org JSON-LD data for events
