@@ -402,6 +402,15 @@ def main(skip_git: bool = False):
     # Sort by date
     processed_events.sort(key=lambda e: e.get("eventDate") or "9999")
 
+    # Venue overrides (scraper data is sometimes wrong)
+    VENUE_OVERRIDES = {
+        "majo aguilar": {"venueName": "The Box Theater at Payne", "eventName": "Live at The Box Theater at Payne"},
+    }
+    for evt in processed_events:
+        key = evt.get("artistName", "").lower().strip()
+        if key in VENUE_OVERRIDES:
+            evt.update(VENUE_OVERRIDES[key])
+
     # Explicit override: Citrus Break Comedy Show FIRST, High Tide Pool Party SECOND
     high_tide_evt = None
     citrus_evt = None
