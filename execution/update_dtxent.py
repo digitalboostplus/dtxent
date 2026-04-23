@@ -29,7 +29,6 @@ EXCLUDE_ARTISTS = [
     "Los Angeles Lakers",
     "Alex Warren",
     "Tacos, Tequilas",
-    "Snow Tha Product"
 ]
 
 

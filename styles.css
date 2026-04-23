@@ -1078,7 +1078,7 @@ h3 {
 
 .newsletter-form {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: 1fr 1fr;
     gap: 1rem;
     margin-top: 2rem;
     align-items: stretch;
@@ -1135,13 +1135,16 @@ h3 {
 .consent-label {
     grid-column: 1 / -1;
     display: flex;
-    align-items: flex-start;
-    gap: 0.6rem;
+    align-items: center;
+    gap: 0.75rem;
     font-size: 0.85rem;
     color: rgba(255, 255, 255, 0.6);
     cursor: pointer;
-    text-align: left;
     line-height: 1.4;
+}
+
+.newsletter-form button[type="submit"] {
+    grid-column: 1 / -1;
 }
 
 .consent-label input[type="checkbox"] {
